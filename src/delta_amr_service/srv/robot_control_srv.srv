@@ -1,0 +1,12 @@
+# Delta_AMR_Service.srv
+# Request
+
+string robot_mov_type 
+string robot_mov_point
+float32 robot_mov_speed
+
+---
+
+# Response
+
+int32 robot_running_status

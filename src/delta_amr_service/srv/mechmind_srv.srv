@@ -1,0 +1,10 @@
+# Delta_AMR_Service.srv
+# Request
+
+string img_process_type_mechmind 
+
+---
+
+# Response
+
+int32 camera_status

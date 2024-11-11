@@ -1,0 +1,12 @@
+# Delta_AMR_Service.srv
+# Request
+
+string img_process_type_realsense 
+
+---
+
+# Response
+
+float32 human_dist
+
+int32 camera_status_realsense

@@ -1,0 +1,10 @@
+# Delta_AMR_Service.srv
+# Request
+
+string upload_cmd
+
+---
+
+# Response
+
+string upload_status

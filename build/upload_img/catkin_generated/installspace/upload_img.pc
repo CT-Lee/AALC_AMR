@@ -1,0 +1,8 @@
+prefix=/home/ctlee/catkin_ws/install
+
+Name: upload_img
+Description: Description of upload_img
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

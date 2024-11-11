@@ -1,0 +1,10 @@
+# Delta_AMR_Service.srv
+# Request
+
+string move_act
+
+---
+
+# Response
+
+string amr_status

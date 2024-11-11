@@ -1,0 +1,8 @@
+prefix=/home/ctlee/catkin_ws/devel
+
+Name: realsense_camera
+Description: Description of realsense_camera
+Version: 0.0.0
+Cflags: -I/home/ctlee/catkin_ws/src/realsense_camera/include
+Libs: -L${prefix}/lib -lrealsense_camera
+Requires: roscpp rospy std_msgs message_runtime

@@ -1,0 +1,2 @@
+set(Delta_AMR_Service_MESSAGE_FILES "")
+set(Delta_AMR_Service_SERVICE_FILES "/home/ctlee/catkin_ws/src/Delta_AMR_Service/srv/Delta_AMR_Service.srv")
