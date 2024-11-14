@@ -144,7 +144,7 @@ class robot_control_srvResponse {
         this.robot_running_status = initObj.robot_running_status
       }
       else {
-        this.robot_running_status = 0;
+        this.robot_running_status = '';
       }
     }
   }
@@ -152,7 +152,7 @@ class robot_control_srvResponse {
   static serialize(obj, buffer, bufferOffset) {
     // Serializes a message object of type robot_control_srvResponse
     // Serialize message field [robot_running_status]
-    bufferOffset = _serializer.int32(obj.robot_running_status, buffer, bufferOffset);
+    bufferOffset = _serializer.string(obj.robot_running_status, buffer, bufferOffset);
     return bufferOffset;
   }
 
@@ -161,12 +161,14 @@ class robot_control_srvResponse {
     let len;
     let data = new robot_control_srvResponse(null);
     // Deserialize message field [robot_running_status]
-    data.robot_running_status = _deserializer.int32(buffer, bufferOffset);
+    data.robot_running_status = _deserializer.string(buffer, bufferOffset);
     return data;
   }
 
   static getMessageSize(object) {
-    return 4;
+    let length = 0;
+    length += _getByteLength(object.robot_running_status);
+    return length + 4;
   }
 
   static datatype() {
@@ -176,7 +178,7 @@ class robot_control_srvResponse {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return 'b289c94df8f83ec09c8e18144f2e2d9e';
+    return 'ade36ca20dba09160c3384a70217e7ce';
   }
 
   static messageDefinition() {
@@ -185,7 +187,7 @@ class robot_control_srvResponse {
     
     # Response
     
-    int32 robot_running_status
+    string robot_running_status
     
     
     `;
@@ -201,7 +203,7 @@ class robot_control_srvResponse {
       resolved.robot_running_status = msg.robot_running_status;
     }
     else {
-      resolved.robot_running_status = 0
+      resolved.robot_running_status = ''
     }
 
     return resolved;
@@ -211,6 +213,6 @@ class robot_control_srvResponse {
 module.exports = {
   Request: robot_control_srvRequest,
   Response: robot_control_srvResponse,
-  md5sum() { return 'd80efec2e3530caab86fefe684a2fdc0'; },
+  md5sum() { return '0dd95aee29323b73c925a0c69e911119'; },
   datatype() { return 'delta_amr_service/robot_control_srv'; }
 };

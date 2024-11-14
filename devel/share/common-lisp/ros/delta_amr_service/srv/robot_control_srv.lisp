@@ -100,10 +100,10 @@
   "delta_amr_service/robot_control_srvRequest")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql '<robot_control_srv-request>)))
   "Returns md5sum for a message object of type '<robot_control_srv-request>"
-  "d80efec2e3530caab86fefe684a2fdc0")
+  "0dd95aee29323b73c925a0c69e911119")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql 'robot_control_srv-request)))
   "Returns md5sum for a message object of type 'robot_control_srv-request"
-  "d80efec2e3530caab86fefe684a2fdc0")
+  "0dd95aee29323b73c925a0c69e911119")
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql '<robot_control_srv-request>)))
   "Returns full string definition for message of type '<robot_control_srv-request>"
   (cl:format cl:nil "# Delta_AMR_Service.srv~%# Request~%~%string robot_mov_type ~%string robot_mov_point~%float32 robot_mov_speed~%~%~%~%"))
@@ -129,8 +129,8 @@
   ((robot_running_status
     :reader robot_running_status
     :initarg :robot_running_status
-    :type cl:integer
-    :initform 0))
+    :type cl:string
+    :initform ""))
 )
 
 (cl:defclass robot_control_srv-response (<robot_control_srv-response>)
@@ -147,21 +147,23 @@
   (robot_running_status m))
 (cl:defmethod roslisp-msg-protocol:serialize ((msg <robot_control_srv-response>) ostream)
   "Serializes a message object of type '<robot_control_srv-response>"
-  (cl:let* ((signed (cl:slot-value msg 'robot_running_status)) (unsigned (cl:if (cl:< signed 0) (cl:+ signed 4294967296) signed)))
-    (cl:write-byte (cl:ldb (cl:byte 8 0) unsigned) ostream)
-    (cl:write-byte (cl:ldb (cl:byte 8 8) unsigned) ostream)
-    (cl:write-byte (cl:ldb (cl:byte 8 16) unsigned) ostream)
-    (cl:write-byte (cl:ldb (cl:byte 8 24) unsigned) ostream)
-    )
+  (cl:let ((__ros_str_len (cl:length (cl:slot-value msg 'robot_running_status))))
+    (cl:write-byte (cl:ldb (cl:byte 8 0) __ros_str_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 8) __ros_str_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 16) __ros_str_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 24) __ros_str_len) ostream))
+  (cl:map cl:nil #'(cl:lambda (c) (cl:write-byte (cl:char-code c) ostream)) (cl:slot-value msg 'robot_running_status))
 )
 (cl:defmethod roslisp-msg-protocol:deserialize ((msg <robot_control_srv-response>) istream)
   "Deserializes a message object of type '<robot_control_srv-response>"
-    (cl:let ((unsigned 0))
-      (cl:setf (cl:ldb (cl:byte 8 0) unsigned) (cl:read-byte istream))
-      (cl:setf (cl:ldb (cl:byte 8 8) unsigned) (cl:read-byte istream))
-      (cl:setf (cl:ldb (cl:byte 8 16) unsigned) (cl:read-byte istream))
-      (cl:setf (cl:ldb (cl:byte 8 24) unsigned) (cl:read-byte istream))
-      (cl:setf (cl:slot-value msg 'robot_running_status) (cl:if (cl:< unsigned 2147483648) unsigned (cl:- unsigned 4294967296))))
+    (cl:let ((__ros_str_len 0))
+      (cl:setf (cl:ldb (cl:byte 8 0) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 8) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 16) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 24) __ros_str_len) (cl:read-byte istream))
+      (cl:setf (cl:slot-value msg 'robot_running_status) (cl:make-string __ros_str_len))
+      (cl:dotimes (__ros_str_idx __ros_str_len msg)
+        (cl:setf (cl:char (cl:slot-value msg 'robot_running_status) __ros_str_idx) (cl:code-char (cl:read-byte istream)))))
   msg
 )
 (cl:defmethod roslisp-msg-protocol:ros-datatype ((msg (cl:eql '<robot_control_srv-response>)))
@@ -172,19 +174,19 @@
   "delta_amr_service/robot_control_srvResponse")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql '<robot_control_srv-response>)))
   "Returns md5sum for a message object of type '<robot_control_srv-response>"
-  "d80efec2e3530caab86fefe684a2fdc0")
+  "0dd95aee29323b73c925a0c69e911119")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql 'robot_control_srv-response)))
   "Returns md5sum for a message object of type 'robot_control_srv-response"
-  "d80efec2e3530caab86fefe684a2fdc0")
+  "0dd95aee29323b73c925a0c69e911119")
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql '<robot_control_srv-response>)))
   "Returns full string definition for message of type '<robot_control_srv-response>"
-  (cl:format cl:nil "~%# Response~%~%int32 robot_running_status~%~%~%~%"))
+  (cl:format cl:nil "~%# Response~%~%string robot_running_status~%~%~%~%"))
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql 'robot_control_srv-response)))
   "Returns full string definition for message of type 'robot_control_srv-response"
-  (cl:format cl:nil "~%# Response~%~%int32 robot_running_status~%~%~%~%"))
+  (cl:format cl:nil "~%# Response~%~%string robot_running_status~%~%~%~%"))
 (cl:defmethod roslisp-msg-protocol:serialization-length ((msg <robot_control_srv-response>))
   (cl:+ 0
-     4
+     4 (cl:length (cl:slot-value msg 'robot_running_status))
 ))
 (cl:defmethod roslisp-msg-protocol:ros-message-to-list ((msg <robot_control_srv-response>))
   "Converts a ROS message object to a list"

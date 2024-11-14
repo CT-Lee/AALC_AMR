@@ -84,10 +84,10 @@
 (defmethod delta_amr_service::robot_control_srvResponse
   (:init
    (&key
-    ((:robot_running_status __robot_running_status) 0)
+    ((:robot_running_status __robot_running_status) "")
     )
    (send-super :init)
-   (setq _robot_running_status (round __robot_running_status))
+   (setq _robot_running_status (string __robot_running_status))
    self)
   (:robot_running_status
    (&optional __robot_running_status)
@@ -95,21 +95,21 @@
   (:serialization-length
    ()
    (+
-    ;; int32 _robot_running_status
-    4
+    ;; string _robot_running_status
+    4 (length _robot_running_status)
     ))
   (:serialize
    (&optional strm)
    (let ((s (if strm strm
               (make-string-output-stream (send self :serialization-length)))))
-     ;; int32 _robot_running_status
-       (write-long _robot_running_status s)
+     ;; string _robot_running_status
+       (write-long (length _robot_running_status) s) (princ _robot_running_status s)
      ;;
      (if (null strm) (get-output-stream-string s))))
   (:deserialize
    (buf &optional (ptr- 0))
-   ;; int32 _robot_running_status
-     (setq _robot_running_status (sys::peek buf ptr- :integer)) (incf ptr- 4)
+   ;; string _robot_running_status
+     (let (n) (setq n (sys::peek buf ptr- :integer)) (incf ptr- 4) (setq _robot_running_status (subseq buf ptr- (+ ptr- n))) (incf ptr- n))
    ;;
    self)
   )
@@ -118,7 +118,7 @@
   :super ros::object
   :slots ())
 
-(setf (get delta_amr_service::robot_control_srv :md5sum-) "d80efec2e3530caab86fefe684a2fdc0")
+(setf (get delta_amr_service::robot_control_srv :md5sum-) "0dd95aee29323b73c925a0c69e911119")
 (setf (get delta_amr_service::robot_control_srv :datatype-) "delta_amr_service/robot_control_srv")
 (setf (get delta_amr_service::robot_control_srv :request) delta_amr_service::robot_control_srvRequest)
 (setf (get delta_amr_service::robot_control_srv :response) delta_amr_service::robot_control_srvResponse)
@@ -126,7 +126,7 @@
 (defmethod delta_amr_service::robot_control_srvRequest
   (:response () (instance delta_amr_service::robot_control_srvResponse :init)))
 
-(setf (get delta_amr_service::robot_control_srvRequest :md5sum-) "d80efec2e3530caab86fefe684a2fdc0")
+(setf (get delta_amr_service::robot_control_srvRequest :md5sum-) "0dd95aee29323b73c925a0c69e911119")
 (setf (get delta_amr_service::robot_control_srvRequest :datatype-) "delta_amr_service/robot_control_srvRequest")
 (setf (get delta_amr_service::robot_control_srvRequest :definition-)
       "# Delta_AMR_Service.srv
@@ -140,11 +140,11 @@ float32 robot_mov_speed
 
 # Response
 
-int32 robot_running_status
+string robot_running_status
 
 ")
 
-(setf (get delta_amr_service::robot_control_srvResponse :md5sum-) "d80efec2e3530caab86fefe684a2fdc0")
+(setf (get delta_amr_service::robot_control_srvResponse :md5sum-) "0dd95aee29323b73c925a0c69e911119")
 (setf (get delta_amr_service::robot_control_srvResponse :datatype-) "delta_amr_service/robot_control_srvResponse")
 (setf (get delta_amr_service::robot_control_srvResponse :definition-)
       "# Delta_AMR_Service.srv
@@ -158,12 +158,12 @@ float32 robot_mov_speed
 
 # Response
 
-int32 robot_running_status
+string robot_running_status
 
 ")
 
 
 
-(provide :delta_amr_service/robot_control_srv "d80efec2e3530caab86fefe684a2fdc0")
+(provide :delta_amr_service/robot_control_srv "0dd95aee29323b73c925a0c69e911119")
 
 

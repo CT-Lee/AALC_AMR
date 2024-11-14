@@ -193,17 +193,17 @@ import struct
 
 
 class robot_control_srvResponse(genpy.Message):
-  _md5sum = "b289c94df8f83ec09c8e18144f2e2d9e"
+  _md5sum = "ade36ca20dba09160c3384a70217e7ce"
   _type = "delta_amr_service/robot_control_srvResponse"
   _has_header = False  # flag to mark the presence of a Header object
   _full_text = """
 # Response
 
-int32 robot_running_status
+string robot_running_status
 
 """
   __slots__ = ['robot_running_status']
-  _slot_types = ['int32']
+  _slot_types = ['string']
 
   def __init__(self, *args, **kwds):
     """
@@ -223,9 +223,9 @@ int32 robot_running_status
       super(robot_control_srvResponse, self).__init__(*args, **kwds)
       # message fields cannot be None, assign default values for those that are
       if self.robot_running_status is None:
-        self.robot_running_status = 0
+        self.robot_running_status = ''
     else:
-      self.robot_running_status = 0
+      self.robot_running_status = ''
 
   def _get_types(self):
     """
@@ -240,7 +240,11 @@ int32 robot_running_status
     """
     try:
       _x = self.robot_running_status
-      buff.write(_get_struct_i().pack(_x))
+      length = len(_x)
+      if python3 or type(_x) == unicode:
+        _x = _x.encode('utf-8')
+        length = len(_x)
+      buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -255,7 +259,13 @@ int32 robot_running_status
       end = 0
       start = end
       end += 4
-      (self.robot_running_status,) = _get_struct_i().unpack(str[start:end])
+      (length,) = _struct_I.unpack(str[start:end])
+      start = end
+      end += length
+      if python3:
+        self.robot_running_status = str[start:end].decode('utf-8', 'rosmsg')
+      else:
+        self.robot_running_status = str[start:end]
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e)  # most likely buffer underfill
@@ -269,7 +279,11 @@ int32 robot_running_status
     """
     try:
       _x = self.robot_running_status
-      buff.write(_get_struct_i().pack(_x))
+      length = len(_x)
+      if python3 or type(_x) == unicode:
+        _x = _x.encode('utf-8')
+        length = len(_x)
+      buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -285,7 +299,13 @@ int32 robot_running_status
       end = 0
       start = end
       end += 4
-      (self.robot_running_status,) = _get_struct_i().unpack(str[start:end])
+      (length,) = _struct_I.unpack(str[start:end])
+      start = end
+      end += length
+      if python3:
+        self.robot_running_status = str[start:end].decode('utf-8', 'rosmsg')
+      else:
+        self.robot_running_status = str[start:end]
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e)  # most likely buffer underfill
@@ -294,14 +314,8 @@ _struct_I = genpy.struct_I
 def _get_struct_I():
     global _struct_I
     return _struct_I
-_struct_i = None
-def _get_struct_i():
-    global _struct_i
-    if _struct_i is None:
-        _struct_i = struct.Struct("<i")
-    return _struct_i
 class robot_control_srv(object):
   _type          = 'delta_amr_service/robot_control_srv'
-  _md5sum = 'd80efec2e3530caab86fefe684a2fdc0'
+  _md5sum = '0dd95aee29323b73c925a0c69e911119'
   _request_class  = robot_control_srvRequest
   _response_class = robot_control_srvResponse

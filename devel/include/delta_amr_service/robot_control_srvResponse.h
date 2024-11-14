@@ -24,16 +24,16 @@ struct robot_control_srvResponse_
   typedef robot_control_srvResponse_<ContainerAllocator> Type;
 
   robot_control_srvResponse_()
-    : robot_running_status(0)  {
+    : robot_running_status()  {
     }
   robot_control_srvResponse_(const ContainerAllocator& _alloc)
-    : robot_running_status(0)  {
+    : robot_running_status(_alloc)  {
   (void)_alloc;
     }
 
 
 
-   typedef int32_t _robot_running_status_type;
+   typedef std::basic_string<char, std::char_traits<char>, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<char>> _robot_running_status_type;
   _robot_running_status_type robot_running_status;
 
 
@@ -98,12 +98,12 @@ struct IsMessage< ::delta_amr_service::robot_control_srvResponse_<ContainerAlloc
 
 template <class ContainerAllocator>
 struct IsFixedSize< ::delta_amr_service::robot_control_srvResponse_<ContainerAllocator> >
-  : TrueType
+  : FalseType
   { };
 
 template <class ContainerAllocator>
 struct IsFixedSize< ::delta_amr_service::robot_control_srvResponse_<ContainerAllocator> const>
-  : TrueType
+  : FalseType
   { };
 
 template <class ContainerAllocator>
@@ -122,12 +122,12 @@ struct MD5Sum< ::delta_amr_service::robot_control_srvResponse_<ContainerAllocato
 {
   static const char* value()
   {
-    return "b289c94df8f83ec09c8e18144f2e2d9e";
+    return "ade36ca20dba09160c3384a70217e7ce";
   }
 
   static const char* value(const ::delta_amr_service::robot_control_srvResponse_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0xb289c94df8f83ec0ULL;
-  static const uint64_t static_value2 = 0x9c8e18144f2e2d9eULL;
+  static const uint64_t static_value1 = 0xade36ca20dba0916ULL;
+  static const uint64_t static_value2 = 0x0c3384a70217e7ceULL;
 };
 
 template<class ContainerAllocator>
@@ -149,7 +149,7 @@ struct Definition< ::delta_amr_service::robot_control_srvResponse_<ContainerAllo
     return "\n"
 "# Response\n"
 "\n"
-"int32 robot_running_status\n"
+"string robot_running_status\n"
 "\n"
 ;
   }
@@ -189,7 +189,7 @@ struct Printer< ::delta_amr_service::robot_control_srvResponse_<ContainerAllocat
   template<typename Stream> static void stream(Stream& s, const std::string& indent, const ::delta_amr_service::robot_control_srvResponse_<ContainerAllocator>& v)
   {
     s << indent << "robot_running_status: ";
-    Printer<int32_t>::stream(s, indent + "  ", v.robot_running_status);
+    Printer<std::basic_string<char, std::char_traits<char>, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<char>>>::stream(s, indent + "  ", v.robot_running_status);
   }
 };
 

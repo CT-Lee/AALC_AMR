@@ -34,7 +34,7 @@ class Watch_OP(smach.State):
             
         rospy.loginfo('Executing state Watch_OP')
         rospy.sleep(1.0)
-        if self.counter > 5:
+        if self.counter > 1:
             self.counter = 0
             return 'Start_Mov'
         else:
@@ -51,7 +51,7 @@ class AMR_Mov(smach.State):
     def execute(self, userdata):
         rospy.loginfo('Executing state AMR_Mov')
         rospy.sleep(1.0) 
-        if self.counter > 5:
+        if self.counter > 2:
             self.counter = 0
             return 'Start_Pic'
         else:
@@ -77,34 +77,37 @@ class Robot_Pic(smach.State):
         
     def execute(self, userdata):
         rospy.loginfo('Executing state Robot_Pic')
-        rospy.sleep(1.0) 
         
-        robot_mov_type = 'MovL'
-        robot_mov_point = 'P1'
-        robot_mov_speed = 0.25
-        robot_running_status = robot_move(robot_mov_type, robot_mov_point,robot_mov_speed)
-        
-        if robot_running_status is not None:
-            rospy.loginfo("Robot movement done")
-        else:
-            rospy.loginfo("No robot move or service unavailable.")
-        
-        img_process_type_realsense = 'take_pic'
-        human_dist, camera_status_realsense = human_detect(img_process_type_realsense)
-        
-        if human_dist is not None:
-            rospy.loginfo(f"Human detected at distance: {human_dist}")
-        else:
-            rospy.loginfo("No human detected or service unavailable.")
+        num_pic = 4
+        for i in range(num_pic):
+            robot_mov_type = 'MovL'
+            robot_mov_point = 'P' + str(i + 1)
+            robot_mov_speed = 0.25
+            robot_mov_speed_low = 0.01
+            _ = robot_move(robot_mov_type, robot_mov_point,robot_mov_speed)
             
+            while True:
+                '''
+                if LiDAR_status == 'H':
+                    _ = robot_move('stop', robot_mov_point,robot_mov_speed)
+                elif LiDAR_status == 'M':
+                    _ = robot_move('stop', robot_mov_point,robot_mov_speed)
+                    _ = robot_move('MovL', robot_mov_point,robot_mov_speed_low)
+                elif LiDAR_status == 'L':
+                    _ = robot_move('stop', robot_mov_point,robot_mov_speed)
+                    _ = robot_move('MovL', robot_mov_point,robot_mov_speed)
+                '''
+                print(robot_move('is_reached', robot_mov_point,robot_mov_speed))
+                if robot_move('is_reached', robot_mov_point,robot_mov_speed) == 'reached':
+                    break
+                rospy.sleep(0.1)
+            # Take pic
+#            img_process_type_realsense = 'take_pic'
+            img_process_type_realsense = 'human_detect'
+            human_dist, camera_status_realsense = human_detect(img_process_type_realsense)
+            
+        _ = robot_move('MovL', 'P1',robot_mov_speed)
         return 'Start_Back'
-          
-        #if self.counter > 5:
-        #    self.counter = 0
-        #    return 'Start_Back'
-        #else:
-        #    self.counter += 1
-        #    return 'Picturing'
         
         
 # Need to add function: Slow down and stop when human come close

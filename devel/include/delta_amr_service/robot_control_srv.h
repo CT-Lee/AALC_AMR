@@ -40,7 +40,7 @@ template<>
 struct MD5Sum< ::delta_amr_service::robot_control_srv > {
   static const char* value()
   {
-    return "d80efec2e3530caab86fefe684a2fdc0";
+    return "0dd95aee29323b73c925a0c69e911119";
   }
 
   static const char* value(const ::delta_amr_service::robot_control_srv&) { return value(); }

@@ -9,4 +9,4 @@ float32 robot_mov_speed
 
 # Response
 
-int32 robot_running_status
+string robot_running_status

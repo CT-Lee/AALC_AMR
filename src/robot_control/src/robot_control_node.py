@@ -2,6 +2,7 @@
 import rospy
 from delta_amr_service.srv import robot_control_srv, robot_control_srvResponse
 from neurapy.robot import Robot
+import numpy as np
 # import ast
 
 class RobotControlNode:
@@ -13,11 +14,12 @@ class RobotControlNode:
         
         
         # 设置服务
-        self.service = rospy.Service('robot_control_srv', robot_control_srv, self.handle_robot_control)
-        
-        rospy.loginfo("Robot Control Node initialized and service ready.")
+        self.service = rospy.Service('robot_control_srv', robot_control_srv, self.handle_robot_control)\
         # Create the following instance will automatically connect to the robot
-        #self.robot = Robot()
+        self.robot = Robot()
+        rospy.loginfo("Robot Control Node initialized and service ready.")
+        
+        
         
     def handle_robot_control(self, req):
         # 提取请求参数
@@ -30,34 +32,50 @@ class RobotControlNode:
         # 设置运动属性
         joint_property = {
             "speed": robot_mov_speed,
-            "acceleration": 0.1,  # 默认加速度
+            "rotation_speed":robot_mov_speed,
+            "acceleration": 0.25,  # 默认加速度
+            "non_blocking": True
         }
 
         try:
             if robot_mov_type == "MovL":
                 # 将robot_mov_point字符串转换为列表
                 # target_joint = ast.literal_eval(robot_mov_point)
-                joint_property["target_joint"] = [robot_mov_point]
-                #self.robot.move_joint(**joint_property)
+                joint_property["target_pose"] = [robot_mov_point]
+                self.robot.move_linear_from_current_position(**joint_property)
                 rospy.loginfo("Joint move command executed.")
-                #self.robot.stop()
-            #elif robot_mov_type == "MovL":
-                # 将robot_mov_point字符串转换为列表
-                #target_pose = ast.literal_eval(robot_mov_point)
-                #self.robot.move_pose(pose=target_pose, speed=robot_mov_speed)
-                #rospy.loginfo("Pose move command executed.")
+                return robot_control_srvResponse(robot_running_status = 'running')
             
+            elif robot_mov_type == "stop":
+                self.robot.stop()
+                print("Robot Stop")
+                return robot_control_srvResponse(robot_running_status = 'stopped')
+            
+            elif robot_mov_type == "status":
+                status = self.robot.motion_status()
+                return robot_control_srvResponse(robot_running_status = status)
+            
+            elif robot_mov_type == "is_reached":
+                # Return value is list
+                Joint_data_target = self.robot.get_point(robot_mov_point,representation="Joint")
+                Joint_data_now = self.robot.robot_status("jointAngles")
+                error_sum = 0
+                for i in range(6):
+                    error_sum += np.abs(Joint_data_target[i] - Joint_data_now[i])
+                print("error_sum: ", error_sum)
+                if error_sum < 0.001:
+                    return robot_control_srvResponse(robot_running_status = 'reached')
+                else:
+                    return robot_control_srvResponse(robot_running_status = 'not_yet')
+
             else:
                 rospy.logerr("Invalid robot_mov_type specified.")
-                return robot_control_srvResponse(robot_running_status=-1)  # 错误状态码
+                return robot_control_srvResponse(robot_running_status='error')  # 错误状态码
 
-            # 成功执行操作后，返回状态码0
-            return robot_control_srvResponse(robot_running_status=0)
-        
         except Exception as e:
             rospy.logerr(f"Error executing robot movement: {e}")
             # 返回错误状态码
-            return robot_control_srvResponse(robot_running_status=-1)
+            return robot_control_srvResponse(robot_running_status='error')
 
 if __name__ == '__main__':
     try:

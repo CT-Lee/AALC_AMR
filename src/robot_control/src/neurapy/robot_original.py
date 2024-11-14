@@ -77,44 +77,26 @@ def generate_function(function_name, address):
         try:
             sock.connect(address)
         except ConnectionError:
-            raise ConnectionError("Failed to establish communication with the control box. Ensure the robot is reachable or try resetting control from the Teach pendant.")
-        
+            raise ConnectionError("Failed to establish the communication to control box.Please cross check whether the robot is reachable or try reset control from Teach pendant")
         try:
             if OS == 'linux':
-                signal.signal(signal.SIGINT, lambda signal, frame: self.stop())
-                signal.signal(signal.SIGHUP, lambda signal, frame: self.stop())
+                signal.signal(signal.SIGINT,lambda signal, frame: self.stop())
+                signal.signal(signal.SIGHUP,lambda signal, frame: self.stop())
             else:
                 win32api.SetConsoleCtrlHandler(self.stop, True)
-        except Exception:
+        except Exception as e:
             self.logger.debug("Not attaching signal handlers")
-    
+            
         self.logger.info(f"{function_name} called with args {args}, {kwargs}")
         data = {"function": function_name, "args": args, "kwargs": kwargs}
         sock.sendall(json.dumps(data).encode("utf-8"))
-    
-        # Assemble incoming data until the full response is received
-        new_data = b""
-        while True:
-            part = sock.recv(8192)
-            if not part:
-                break
-            new_data += part
-        
+        new_data = sock.recv(8192)
         sock.close()
-    
-        # Handle JSON decoding errors
-        try:
-            response = json.loads(new_data.decode("utf-8"))
-        except json.JSONDecodeError as e:
-            self.logger.error(f"JSON decoding failed: {e}")
-            return None
-    
-        if response.get("error"):
-            self.logger.error(f"{function_name} call failed with exception: {response['error']}")
+        response = json.loads(new_data.decode("utf-8"))
+        if response["error"]:
+            self.logger.error(f"{function_name} call with args {args}, {kwargs}, failed with exception {response['error']}")
             raise Exception(response["error"])
-    
-        return response.get("result")
-
+        return response["result"]
 
     wrapped_function.__name__ = function_name + "_method"
     return wrapped_function
