@@ -78,6 +78,7 @@ class Robot_Pic(smach.State):
     def execute(self, userdata):
         rospy.loginfo('Executing state Robot_Pic')
         
+        normal_speed_bool = True
         num_pic = 4
         for i in range(num_pic):
             robot_mov_type = 'MovL'
@@ -90,12 +91,15 @@ class Robot_Pic(smach.State):
                 '''
                 if LiDAR_status == 'H':
                     _ = robot_move('stop', robot_mov_point,robot_mov_speed)
+                    normal_speed_bool = False
                 elif LiDAR_status == 'M':
                     _ = robot_move('stop', robot_mov_point,robot_mov_speed)
                     _ = robot_move('MovL', robot_mov_point,robot_mov_speed_low)
-                elif LiDAR_status == 'L':
+                    normal_speed_bool = False
+                elif LiDAR_status == 'L' and normal_speed_bool == False:
                     _ = robot_move('stop', robot_mov_point,robot_mov_speed)
                     _ = robot_move('MovL', robot_mov_point,robot_mov_speed)
+                    normal_speed_bool = True
                 '''
                 print(robot_move('is_reached', robot_mov_point,robot_mov_speed))
                 if robot_move('is_reached', robot_mov_point,robot_mov_speed) == 'reached':
