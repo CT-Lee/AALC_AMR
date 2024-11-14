@@ -1,8 +1,0 @@
-prefix=/home/cas-standIPC/AALC_AMR/devel
-
-Name: keyboard
-Description: Description of keyboard
-Version: 0.0.0
-Cflags: -I/home/cas-standIPC/AALC_AMR/src/key_board/include
-Libs: -L${prefix}/lib 
-Requires: sensor_msgs roscpp geometry_msgs

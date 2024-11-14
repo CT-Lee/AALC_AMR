@@ -1,8 +1,0 @@
-prefix=/home/cas-standIPC/AALC_AMR/install
-
-Name: state_machine
-Description: Description of state_machine
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib -lstate_machine
-Requires: roscpp rospy std_msgs message_runtime

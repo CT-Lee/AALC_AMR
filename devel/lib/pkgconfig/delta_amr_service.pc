@@ -1,8 +1,0 @@
-prefix=/home/cas-standIPC/AALC_AMR/devel
-
-Name: delta_amr_service
-Description: Description of delta_amr_service
-Version: 0.0.0
-Cflags: -I/home/cas-standIPC/AALC_AMR/devel/include
-Libs: -L${prefix}/lib -ldelta_amr_service
-Requires: rospy std_msgs message_runtime
