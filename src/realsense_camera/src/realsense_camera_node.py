@@ -12,6 +12,28 @@ import numpy as np
 import open3d as o3d
 import mediapipe as mp
 
+hand_ok = np.array([[ 0.4999115   0.69265487  0],
+            [ 0.42336283  0.67168142 -0.01973451],
+            [ 0.35884956  0.63840708 -0.04628319],
+            [ 0.30504425  0.62955752 -0.07628319],
+            [ 0.26345133  0.6079646  -0.10681416],
+            [ 0.39123894  0.47345133 -0.03283186],
+ [ 0.32663717  0.46176991 -0.0860177 ],
+ [ 0.29716814  0.52451327 -0.13256637],
+ [ 0.28442478  0.58300885 -0.15858407],
+ [ 0.42026549  0.44938053 -0.04920354],
+ [ 0.37362832  0.34964602 -0.08716814],
+ [ 0.33230088  0.28663717 -0.12079646],
+ [ 0.29424779  0.23123894 -0.14486726],
+ [ 0.45964602  0.4579646  -0.06929204],
+ [ 0.44176991  0.35026549 -0.10442478],
+ [ 0.41610619  0.28699115 -0.1280531 ],
+ [ 0.38584071  0.2319469  -0.14353982],
+ [ 0.49867257  0.49460177 -0.09035398],
+ [ 0.51168142  0.4140708  -0.11469027],
+ [ 0.50814159  0.35477876 -0.12079646],
+ [ 0.49707965  0.29840708 -0.12486726]])
+
 # Write a non-closing window display real-time image
 
 class RealsenseCameraNode:
@@ -105,14 +127,14 @@ class RealsenseCameraNode:
                 for landmark in hand_landmarks.landmark:
                     hand_pts = [round(landmark.x, 2), round(landmark.y, 2), round(landmark.z, 2)]
                     hand_arr.append(hand_pts)
-        hand_arr = np.array(hand_arr)
+            hand_arr = np.array(hand_arr)
 
-        self.matrices.append(hand_arr)
-        stacked_matrices = np.stack(self.matrices)
-        average_matrix = np.mean(stacked_matrices, axis=0)
+            self.matrices.append(hand_arr)
+            stacked_matrices = np.stack(self.matrices)
+            average_matrix = np.mean(stacked_matrices, axis=0)
 
-        print(average_matrix)
-        print("===========================")
+            print(average_matrix)
+            print("===========================")
         #cv2.imwrite("Hand Pose"+str(self.count)+".png", color_image)
 
         dist = 5

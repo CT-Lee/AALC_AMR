@@ -1,1 +1,4 @@
-build/*.*
+build/
+devel/
+ddynamic_reconfigure/
+image_transport_plugins/
