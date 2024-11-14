@@ -67,14 +67,14 @@ set(upload_img_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
-  set(upload_img_SOURCE_PREFIX /home/ctlee/catkin_ws/src/upload_img)
-  set(upload_img_DEVEL_PREFIX /home/ctlee/catkin_ws/devel)
+  set(upload_img_SOURCE_PREFIX /home/cas-standIPC/AALC_AMR/src/upload_img)
+  set(upload_img_DEVEL_PREFIX /home/cas-standIPC/AALC_AMR/devel)
   set(upload_img_INSTALL_PREFIX "")
   set(upload_img_PREFIX ${upload_img_DEVEL_PREFIX})
 else()
   set(upload_img_SOURCE_PREFIX "")
   set(upload_img_DEVEL_PREFIX "")
-  set(upload_img_INSTALL_PREFIX /home/ctlee/catkin_ws/install)
+  set(upload_img_INSTALL_PREFIX /home/cas-standIPC/AALC_AMR/install)
   set(upload_img_PREFIX ${upload_img_INSTALL_PREFIX})
 endif()
 
@@ -154,7 +154,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/ctlee/catkin_ws/install/lib;/home/ctlee/catkin_ws/devel/lib;/opt/ros/noetic/lib)
+    foreach(path /home/cas-standIPC/AALC_AMR/install/lib;/home/cas-standIPC/ros1_ws/devel/lib;/opt/ros/noetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)

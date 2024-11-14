@@ -1,5 +1,5 @@
 file(REMOVE_RECURSE
-  "/home/ctlee/catkin_ws/devel/share/roseus/ros/realsense_camera/manifest.l"
+  "/home/cas-standIPC/AALC_AMR/devel/share/roseus/ros/realsense_camera/manifest.l"
   "CMakeFiles/realsense_camera_generate_messages_eus"
 )
 

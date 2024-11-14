@@ -1,4 +1,4 @@
-prefix=/home/ctlee/catkin_ws/install
+prefix=/home/cas-standIPC/AALC_AMR/install
 
 Name: delta_amr_service
 Description: Description of delta_amr_service

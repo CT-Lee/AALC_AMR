@@ -67,14 +67,14 @@ set(delta_amr_service_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("TRUE" STREQUAL "TRUE")
-  set(delta_amr_service_SOURCE_PREFIX /home/ctlee/catkin_ws/src/delta_amr_service)
-  set(delta_amr_service_DEVEL_PREFIX /home/ctlee/catkin_ws/devel)
+  set(delta_amr_service_SOURCE_PREFIX /home/cas-standIPC/AALC_AMR/src/delta_amr_service)
+  set(delta_amr_service_DEVEL_PREFIX /home/cas-standIPC/AALC_AMR/devel)
   set(delta_amr_service_INSTALL_PREFIX "")
   set(delta_amr_service_PREFIX ${delta_amr_service_DEVEL_PREFIX})
 else()
   set(delta_amr_service_SOURCE_PREFIX "")
   set(delta_amr_service_DEVEL_PREFIX "")
-  set(delta_amr_service_INSTALL_PREFIX /home/ctlee/catkin_ws/install)
+  set(delta_amr_service_INSTALL_PREFIX /home/cas-standIPC/AALC_AMR/install)
   set(delta_amr_service_PREFIX ${delta_amr_service_INSTALL_PREFIX})
 endif()
 
@@ -91,9 +91,9 @@ endif()
 # flag project as catkin-based to distinguish if a find_package()-ed project is a catkin project
 set(delta_amr_service_FOUND_CATKIN_PROJECT TRUE)
 
-if(NOT "/home/ctlee/catkin_ws/devel/include;/home/ctlee/catkin_ws/src/delta_amr_service/include " STREQUAL " ")
+if(NOT "/home/cas-standIPC/AALC_AMR/devel/include " STREQUAL " ")
   set(delta_amr_service_INCLUDE_DIRS "")
-  set(_include_dirs "/home/ctlee/catkin_ws/devel/include;/home/ctlee/catkin_ws/src/delta_amr_service/include")
+  set(_include_dirs "/home/cas-standIPC/AALC_AMR/devel/include")
   if(NOT " " STREQUAL " ")
     set(_report "Check the issue tracker '' and consider creating a ticket if the problem has not been reported yet.")
   elseif(NOT " " STREQUAL " ")
@@ -110,7 +110,7 @@ if(NOT "/home/ctlee/catkin_ws/devel/include;/home/ctlee/catkin_ws/src/delta_amr_
         message(FATAL_ERROR "Project 'delta_amr_service' specifies '${idir}' as an include dir, which is not found.  It does not exist in '${include}'.  ${_report}")
       endif()
     else()
-      message(FATAL_ERROR "Project 'delta_amr_service' specifies '${idir}' as an include dir, which is not found.  It does neither exist as an absolute directory nor in '/home/ctlee/catkin_ws/src/delta_amr_service/${idir}'.  ${_report}")
+      message(FATAL_ERROR "Project 'delta_amr_service' specifies '${idir}' as an include dir, which is not found.  It does neither exist as an absolute directory nor in '/home/cas-standIPC/AALC_AMR/src/delta_amr_service/${idir}'.  ${_report}")
     endif()
     _list_append_unique(delta_amr_service_INCLUDE_DIRS ${include})
   endforeach()
@@ -154,7 +154,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/ctlee/catkin_ws/devel/lib;/home/ctlee/catkin_ws/devel/lib;/opt/ros/noetic/lib)
+    foreach(path /home/cas-standIPC/AALC_AMR/devel/lib;/home/cas-standIPC/ros1_ws/devel/lib;/opt/ros/noetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)

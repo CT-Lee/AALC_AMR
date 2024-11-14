@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/ctlee/catkin_ws/src
+CMAKE_SOURCE_DIR = /home/cas-standIPC/AALC_AMR/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/ctlee/catkin_ws/build
+CMAKE_BINARY_DIR = /home/cas-standIPC/AALC_AMR/build
 
 # Utility rule file for std_msgs_generate_messages_nodejs.
 
@@ -63,10 +63,10 @@ delta_amr_service/CMakeFiles/std_msgs_generate_messages_nodejs.dir/build: std_ms
 .PHONY : delta_amr_service/CMakeFiles/std_msgs_generate_messages_nodejs.dir/build
 
 delta_amr_service/CMakeFiles/std_msgs_generate_messages_nodejs.dir/clean:
-	cd /home/ctlee/catkin_ws/build/delta_amr_service && $(CMAKE_COMMAND) -P CMakeFiles/std_msgs_generate_messages_nodejs.dir/cmake_clean.cmake
+	cd /home/cas-standIPC/AALC_AMR/build/delta_amr_service && $(CMAKE_COMMAND) -P CMakeFiles/std_msgs_generate_messages_nodejs.dir/cmake_clean.cmake
 .PHONY : delta_amr_service/CMakeFiles/std_msgs_generate_messages_nodejs.dir/clean
 
 delta_amr_service/CMakeFiles/std_msgs_generate_messages_nodejs.dir/depend:
-	cd /home/ctlee/catkin_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/ctlee/catkin_ws/src /home/ctlee/catkin_ws/src/delta_amr_service /home/ctlee/catkin_ws/build /home/ctlee/catkin_ws/build/delta_amr_service /home/ctlee/catkin_ws/build/delta_amr_service/CMakeFiles/std_msgs_generate_messages_nodejs.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/cas-standIPC/AALC_AMR/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/cas-standIPC/AALC_AMR/src /home/cas-standIPC/AALC_AMR/src/delta_amr_service /home/cas-standIPC/AALC_AMR/build /home/cas-standIPC/AALC_AMR/build/delta_amr_service /home/cas-standIPC/AALC_AMR/build/delta_amr_service/CMakeFiles/std_msgs_generate_messages_nodejs.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : delta_amr_service/CMakeFiles/std_msgs_generate_messages_nodejs.dir/depend
 

@@ -1,4 +1,4 @@
-prefix=/home/ctlee/catkin_ws/install
+prefix=/home/cas-standIPC/AALC_AMR/install
 
 Name: robot_control
 Description: Description of robot_control

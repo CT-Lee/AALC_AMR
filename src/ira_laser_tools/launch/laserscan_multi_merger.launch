@@ -1,0 +1,97 @@
+<!-- DESCRITPION -->
+
+<launch>
+	<node pkg="ira_laser_tools" name="all_scan" type="laserscan_multi_merger" output="screen">
+	<param name="destination_frame" value="base_link"/>
+	<param name="cloud_destination_topic" value="/all_scan_cloud"/>
+	<param name="scan_destination_topic" value="/all_scan_laser"/>
+	<param name="laserscan_topics" value ="/sick_safetyscanners/scanF /sick_safetyscanners/scanB" /> <!-- LIST OF THE LASER SCAN TOPICS TO SUBSCRIBE -->
+	<param name="angle_min" value="-3.14159"/>
+	<param name="angle_max" value="3.14159"/>
+	<param name="angle_increment" value="0.0058"/>
+	<param name="scan_time" value="0.0333333"/>
+	<param name="range_min" value="0.14"/>
+	<param name="range_max" value="50.0"/>
+	</node>
+
+	<!--front scan-->
+	<node pkg="ira_laser_tools" name="front_scan" type="laserscan_multi_merger" output="screen">
+	<param name="destination_frame" value="base_link"/>
+	<param name="cloud_destination_topic" value="/front_scan_cloud"/>
+	<param name="scan_destination_topic" value="/front_scan_laser"/>
+	<param name="laserscan_topics" value ="/sick_safetyscanners/scanF /sick_safetyscanners/scanB" /> <!-- LIST OF THE LASER SCAN TOPICS TO SUBSCRIBE -->
+	<param name="angle_min" value="-0.60997"/>
+	<param name="angle_max" value="0.60997"/>
+	<param name="angle_increment" value="0.0058"/>
+	<param name="scan_time" value="0.0333333"/>
+	<param name="range_min" value="0.14"/>
+	<param name="range_max" value="50.0"/>
+	</node>
+
+	<!--right scan-->
+	<node pkg="ira_laser_tools" name="right_scan" type="laserscan_multi_merger" output="screen">
+	<param name="destination_frame" value="base_link"/>
+	<param name="cloud_destination_topic" value="/right_scan_cloud"/>
+	<param name="scan_destination_topic" value="/right_scan_laser"/>
+	<param name="laserscan_topics" value ="/sick_safetyscanners/scanF /sick_safetyscanners/scanB" /> <!-- LIST OF THE LASER SCAN TOPICS TO SUBSCRIBE -->
+	<param name="angle_min" value="0.60997"/>
+	<param name="angle_max" value="2.53182"/>
+	<param name="angle_increment" value="0.0058"/>
+	<param name="scan_time" value="0.0333333"/>
+	<param name="range_min" value="0.14"/>
+	<param name="range_max" value="50.0"/>
+	</node>
+
+	<!--back scan-->
+	<node pkg="ira_laser_tools" name="backL_scan" type="laserscan_multi_merger" output="screen">
+	<param name="destination_frame" value="base_link"/>
+	<param name="cloud_destination_topic" value="/backL_scan_cloud"/>
+	<param name="scan_destination_topic" value="/backL_scan_laser"/>
+	<param name="laserscan_topics" value ="/sick_safetyscanners/scanF /sick_safetyscanners/scanB" /> <!-- LIST OF THE LASER SCAN TOPICS TO SUBSCRIBE -->
+	<param name="angle_min" value="-3.14159"/>
+	<param name="angle_max" value="-2.53182"/>
+	<param name="angle_increment" value="0.0058"/>
+	<param name="scan_time" value="0.0333333"/>
+	<param name="range_min" value="0.14"/>
+	<param name="range_max" value="50.0"/>
+	</node>
+	<node pkg="ira_laser_tools" name="backR_scan" type="laserscan_multi_merger" output="screen">
+	<param name="destination_frame" value="base_link"/>
+	<param name="cloud_destination_topic" value="/backR_scan_cloud"/>
+	<param name="scan_destination_topic" value="/backR_scan_laser"/>
+	<param name="laserscan_topics" value ="/sick_safetyscanners/scanF /sick_safetyscanners/scanB" /> <!-- LIST OF THE LASER SCAN TOPICS TO SUBSCRIBE -->
+	<param name="angle_min" value="2.53182"/>
+	<param name="angle_max" value="3.14159"/>
+	<param name="angle_increment" value="0.0058"/>
+	<param name="scan_time" value="0.0333333"/>
+	<param name="range_min" value="0.14"/>
+	<param name="range_max" value="50.0"/>
+	</node>
+	<node pkg="ira_laser_tools" name="back_scan" type="laserscan_multi_merger" output="screen">
+	<param name="destination_frame" value="base_link"/>
+	<param name="cloud_destination_topic" value="/back_scan_cloud"/>
+	<param name="scan_destination_topic" value="/back_scan_laser"/>
+	<param name="laserscan_topics" value ="/backL_scan_laser /backR_scan_laser" /> <!-- LIST OF THE LASER SCAN TOPICS TO SUBSCRIBE -->
+	<param name="angle_min" value="-3.14159"/>
+	<param name="angle_max" value="3.14159"/>
+	<param name="angle_increment" value="0.0058"/>
+	<param name="scan_time" value="0.0333333"/>
+	<param name="range_min" value="0.14"/>
+	<param name="range_max" value="50.0"/>
+	</node>
+
+	<!--left scan-->
+	<node pkg="ira_laser_tools" name="left_scan" type="laserscan_multi_merger" output="screen">
+	<param name="destination_frame" value="base_link"/>
+	<param name="cloud_destination_topic" value="/left_scan_cloud"/>
+	<param name="scan_destination_topic" value="/left_scan_laser"/>
+	<param name="laserscan_topics" value ="/sick_safetyscanners/scanF /sick_safetyscanners/scanB" /> <!-- LIST OF THE LASER SCAN TOPICS TO SUBSCRIBE -->
+	<param name="angle_min" value="-2.53182"/>
+	<param name="angle_max" value="-0.60997"/>
+	<param name="angle_increment" value="0.0058"/>
+	<param name="scan_time" value="0.0333333"/>
+	<param name="range_min" value="0.14"/>
+	<param name="range_max" value="50.0"/>
+	</node>
+
+</launch>

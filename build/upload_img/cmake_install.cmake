@@ -1,8 +1,8 @@
-# Install script for directory: /home/ctlee/catkin_ws/src/upload_img
+# Install script for directory: /home/cas-standIPC/AALC_AMR/src/upload_img
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/ctlee/catkin_ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/cas-standIPC/AALC_AMR/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -38,17 +38,17 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/ctlee/catkin_ws/build/upload_img/catkin_generated/installspace/upload_img.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/cas-standIPC/AALC_AMR/build/upload_img/catkin_generated/installspace/upload_img.pc")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/upload_img/cmake" TYPE FILE FILES
-    "/home/ctlee/catkin_ws/build/upload_img/catkin_generated/installspace/upload_imgConfig.cmake"
-    "/home/ctlee/catkin_ws/build/upload_img/catkin_generated/installspace/upload_imgConfig-version.cmake"
+    "/home/cas-standIPC/AALC_AMR/build/upload_img/catkin_generated/installspace/upload_imgConfig.cmake"
+    "/home/cas-standIPC/AALC_AMR/build/upload_img/catkin_generated/installspace/upload_imgConfig-version.cmake"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/upload_img" TYPE FILE FILES "/home/ctlee/catkin_ws/src/upload_img/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/upload_img" TYPE FILE FILES "/home/cas-standIPC/AALC_AMR/src/upload_img/package.xml")
 endif()
 

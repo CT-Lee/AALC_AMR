@@ -1,0 +1,8 @@
+prefix=/home/cas-standIPC/AALC_AMR/install
+
+Name: data_upload_node
+Description: Description of data_upload_node
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

@@ -1,0 +1,12 @@
+<!--
+	@file name : joy_control.launch
+	@author : Tsai,Li-Chun
+	@brief  : 
+-->
+
+<launch>
+
+	<node name="joy_node" pkg="joy" type="joy_node" />
+	<node name="joy_control_node" pkg="keyboard" type="joy_control_node" />
+
+</launch>

@@ -1,8 +1,8 @@
-# Install script for directory: /home/ctlee/catkin_ws/src/realsense_camera
+# Install script for directory: /home/cas-standIPC/AALC_AMR/src/realsense_camera
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/ctlee/catkin_ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/cas-standIPC/AALC_AMR/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -38,37 +38,37 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/realsense_camera/cmake" TYPE FILE FILES "/home/ctlee/catkin_ws/build/realsense_camera/catkin_generated/installspace/realsense_camera-msg-paths.cmake")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/realsense_camera/cmake" TYPE FILE FILES "/home/cas-standIPC/AALC_AMR/build/realsense_camera/catkin_generated/installspace/realsense_camera-msg-paths.cmake")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/roseus/ros" TYPE DIRECTORY FILES "/home/ctlee/catkin_ws/devel/share/roseus/ros/realsense_camera")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/roseus/ros" TYPE DIRECTORY FILES "/home/cas-standIPC/AALC_AMR/devel/share/roseus/ros/realsense_camera")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  execute_process(COMMAND "/usr/bin/python3" -m compileall "/home/ctlee/catkin_ws/devel/lib/python3/dist-packages/realsense_camera")
+  execute_process(COMMAND "/usr/bin/python3" -m compileall "/home/cas-standIPC/AALC_AMR/devel/lib/python3/dist-packages/realsense_camera")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python3/dist-packages" TYPE DIRECTORY FILES "/home/ctlee/catkin_ws/devel/lib/python3/dist-packages/realsense_camera")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python3/dist-packages" TYPE DIRECTORY FILES "/home/cas-standIPC/AALC_AMR/devel/lib/python3/dist-packages/realsense_camera")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/ctlee/catkin_ws/build/realsense_camera/catkin_generated/installspace/realsense_camera.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/cas-standIPC/AALC_AMR/build/realsense_camera/catkin_generated/installspace/realsense_camera.pc")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/realsense_camera/cmake" TYPE FILE FILES "/home/ctlee/catkin_ws/build/realsense_camera/catkin_generated/installspace/realsense_camera-msg-extras.cmake")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/realsense_camera/cmake" TYPE FILE FILES "/home/cas-standIPC/AALC_AMR/build/realsense_camera/catkin_generated/installspace/realsense_camera-msg-extras.cmake")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/realsense_camera/cmake" TYPE FILE FILES
-    "/home/ctlee/catkin_ws/build/realsense_camera/catkin_generated/installspace/realsense_cameraConfig.cmake"
-    "/home/ctlee/catkin_ws/build/realsense_camera/catkin_generated/installspace/realsense_cameraConfig-version.cmake"
+    "/home/cas-standIPC/AALC_AMR/build/realsense_camera/catkin_generated/installspace/realsense_cameraConfig.cmake"
+    "/home/cas-standIPC/AALC_AMR/build/realsense_camera/catkin_generated/installspace/realsense_cameraConfig-version.cmake"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/realsense_camera" TYPE FILE FILES "/home/ctlee/catkin_ws/src/realsense_camera/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/realsense_camera" TYPE FILE FILES "/home/cas-standIPC/AALC_AMR/src/realsense_camera/package.xml")
 endif()
 

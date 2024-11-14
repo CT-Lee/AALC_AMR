@@ -67,14 +67,14 @@ set(state_machine_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
-  set(state_machine_SOURCE_PREFIX /home/ctlee/catkin_ws/src/state_machine)
-  set(state_machine_DEVEL_PREFIX /home/ctlee/catkin_ws/devel)
+  set(state_machine_SOURCE_PREFIX /home/cas-standIPC/AALC_AMR/src/state_machine)
+  set(state_machine_DEVEL_PREFIX /home/cas-standIPC/AALC_AMR/devel)
   set(state_machine_INSTALL_PREFIX "")
   set(state_machine_PREFIX ${state_machine_DEVEL_PREFIX})
 else()
   set(state_machine_SOURCE_PREFIX "")
   set(state_machine_DEVEL_PREFIX "")
-  set(state_machine_INSTALL_PREFIX /home/ctlee/catkin_ws/install)
+  set(state_machine_INSTALL_PREFIX /home/cas-standIPC/AALC_AMR/install)
   set(state_machine_PREFIX ${state_machine_INSTALL_PREFIX})
 endif()
 
@@ -91,9 +91,9 @@ endif()
 # flag project as catkin-based to distinguish if a find_package()-ed project is a catkin project
 set(state_machine_FOUND_CATKIN_PROJECT TRUE)
 
-if(NOT "include " STREQUAL " ")
+if(NOT " " STREQUAL " ")
   set(state_machine_INCLUDE_DIRS "")
-  set(_include_dirs "include")
+  set(_include_dirs "")
   if(NOT " " STREQUAL " ")
     set(_report "Check the issue tracker '' and consider creating a ticket if the problem has not been reported yet.")
   elseif(NOT " " STREQUAL " ")
@@ -154,7 +154,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/ctlee/catkin_ws/install/lib;/home/ctlee/catkin_ws/devel/lib;/opt/ros/noetic/lib)
+    foreach(path /home/cas-standIPC/AALC_AMR/install/lib;/home/cas-standIPC/ros1_ws/devel/lib;/opt/ros/noetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)

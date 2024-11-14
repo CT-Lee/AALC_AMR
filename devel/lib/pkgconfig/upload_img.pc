@@ -1,4 +1,4 @@
-prefix=/home/ctlee/catkin_ws/devel
+prefix=/home/cas-standIPC/AALC_AMR/devel
 
 Name: upload_img
 Description: Description of upload_img

@@ -1,4 +1,4 @@
-prefix=/home/ctlee/catkin_ws/devel
+prefix=/home/cas-standIPC/AALC_AMR/devel
 
 Name: mechmind_camera
 Description: Description of mechmind_camera

@@ -1,8 +1,8 @@
-# Install script for directory: /home/ctlee/catkin_ws/src/state_machine
+# Install script for directory: /home/cas-standIPC/AALC_AMR/src/state_machine
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/ctlee/catkin_ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/cas-standIPC/AALC_AMR/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -38,37 +38,37 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/state_machine/cmake" TYPE FILE FILES "/home/ctlee/catkin_ws/build/state_machine/catkin_generated/installspace/state_machine-msg-paths.cmake")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/state_machine/cmake" TYPE FILE FILES "/home/cas-standIPC/AALC_AMR/build/state_machine/catkin_generated/installspace/state_machine-msg-paths.cmake")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/roseus/ros" TYPE DIRECTORY FILES "/home/ctlee/catkin_ws/devel/share/roseus/ros/state_machine")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/roseus/ros" TYPE DIRECTORY FILES "/home/cas-standIPC/AALC_AMR/devel/share/roseus/ros/state_machine")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  execute_process(COMMAND "/usr/bin/python3" -m compileall "/home/ctlee/catkin_ws/devel/lib/python3/dist-packages/state_machine")
+  execute_process(COMMAND "/usr/bin/python3" -m compileall "/home/cas-standIPC/AALC_AMR/devel/lib/python3/dist-packages/state_machine")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python3/dist-packages" TYPE DIRECTORY FILES "/home/ctlee/catkin_ws/devel/lib/python3/dist-packages/state_machine")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python3/dist-packages" TYPE DIRECTORY FILES "/home/cas-standIPC/AALC_AMR/devel/lib/python3/dist-packages/state_machine")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/ctlee/catkin_ws/build/state_machine/catkin_generated/installspace/state_machine.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/cas-standIPC/AALC_AMR/build/state_machine/catkin_generated/installspace/state_machine.pc")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/state_machine/cmake" TYPE FILE FILES "/home/ctlee/catkin_ws/build/state_machine/catkin_generated/installspace/state_machine-msg-extras.cmake")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/state_machine/cmake" TYPE FILE FILES "/home/cas-standIPC/AALC_AMR/build/state_machine/catkin_generated/installspace/state_machine-msg-extras.cmake")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/state_machine/cmake" TYPE FILE FILES
-    "/home/ctlee/catkin_ws/build/state_machine/catkin_generated/installspace/state_machineConfig.cmake"
-    "/home/ctlee/catkin_ws/build/state_machine/catkin_generated/installspace/state_machineConfig-version.cmake"
+    "/home/cas-standIPC/AALC_AMR/build/state_machine/catkin_generated/installspace/state_machineConfig.cmake"
+    "/home/cas-standIPC/AALC_AMR/build/state_machine/catkin_generated/installspace/state_machineConfig-version.cmake"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/state_machine" TYPE FILE FILES "/home/ctlee/catkin_ws/src/state_machine/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/state_machine" TYPE FILE FILES "/home/cas-standIPC/AALC_AMR/src/state_machine/package.xml")
 endif()
 

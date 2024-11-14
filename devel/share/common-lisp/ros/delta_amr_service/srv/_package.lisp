@@ -1,6 +1,11 @@
 (cl:defpackage delta_amr_service-srv
   (:use )
   (:export
+   "AMR_SRV"
+   "<AMR_SRV-REQUEST>"
+   "AMR_SRV-REQUEST"
+   "<AMR_SRV-RESPONSE>"
+   "AMR_SRV-RESPONSE"
    "MECHMIND_SRV"
    "<MECHMIND_SRV-REQUEST>"
    "MECHMIND_SRV-REQUEST"

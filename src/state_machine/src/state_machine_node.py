@@ -33,8 +33,8 @@ class Watch_OP(smach.State):
             rospy.loginfo("No human detected or service unavailable.")
             
         rospy.loginfo('Executing state Watch_OP')
-        rospy.sleep(1.0)
-        if self.counter > 5:
+        rospy.sleep(0.5)
+        if self.counter > 1000:
             self.counter = 0
             return 'Start_Mov'
         else:

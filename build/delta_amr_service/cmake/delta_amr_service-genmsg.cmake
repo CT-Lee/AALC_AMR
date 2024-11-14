@@ -17,24 +17,24 @@ add_custom_target(delta_amr_service_generate_messages ALL)
 
 
 
-get_filename_component(_filename "/home/ctlee/catkin_ws/src/delta_amr_service/srv/mechmind_srv.srv" NAME_WE)
+get_filename_component(_filename "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/mechmind_srv.srv" NAME_WE)
 add_custom_target(_delta_amr_service_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "delta_amr_service" "/home/ctlee/catkin_ws/src/delta_amr_service/srv/mechmind_srv.srv" ""
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "delta_amr_service" "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/mechmind_srv.srv" ""
 )
 
-get_filename_component(_filename "/home/ctlee/catkin_ws/src/delta_amr_service/srv/realsense_srv.srv" NAME_WE)
+get_filename_component(_filename "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/realsense_srv.srv" NAME_WE)
 add_custom_target(_delta_amr_service_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "delta_amr_service" "/home/ctlee/catkin_ws/src/delta_amr_service/srv/realsense_srv.srv" ""
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "delta_amr_service" "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/realsense_srv.srv" ""
 )
 
-get_filename_component(_filename "/home/ctlee/catkin_ws/src/delta_amr_service/srv/robot_control_srv.srv" NAME_WE)
+get_filename_component(_filename "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/robot_control_srv.srv" NAME_WE)
 add_custom_target(_delta_amr_service_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "delta_amr_service" "/home/ctlee/catkin_ws/src/delta_amr_service/srv/robot_control_srv.srv" ""
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "delta_amr_service" "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/robot_control_srv.srv" ""
 )
 
-get_filename_component(_filename "/home/ctlee/catkin_ws/src/delta_amr_service/srv/upload_srv.srv" NAME_WE)
+get_filename_component(_filename "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/upload_srv.srv" NAME_WE)
 add_custom_target(_delta_amr_service_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "delta_amr_service" "/home/ctlee/catkin_ws/src/delta_amr_service/srv/upload_srv.srv" ""
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "delta_amr_service" "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/upload_srv.srv" ""
 )
 
 #
@@ -46,25 +46,25 @@ add_custom_target(_delta_amr_service_generate_messages_check_deps_${_filename}
 
 ### Generating Services
 _generate_srv_cpp(delta_amr_service
-  "/home/ctlee/catkin_ws/src/delta_amr_service/srv/mechmind_srv.srv"
+  "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/mechmind_srv.srv"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/delta_amr_service
 )
 _generate_srv_cpp(delta_amr_service
-  "/home/ctlee/catkin_ws/src/delta_amr_service/srv/realsense_srv.srv"
+  "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/realsense_srv.srv"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/delta_amr_service
 )
 _generate_srv_cpp(delta_amr_service
-  "/home/ctlee/catkin_ws/src/delta_amr_service/srv/robot_control_srv.srv"
+  "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/robot_control_srv.srv"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/delta_amr_service
 )
 _generate_srv_cpp(delta_amr_service
-  "/home/ctlee/catkin_ws/src/delta_amr_service/srv/upload_srv.srv"
+  "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/upload_srv.srv"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/delta_amr_service
@@ -82,13 +82,13 @@ add_custom_target(delta_amr_service_generate_messages_cpp
 add_dependencies(delta_amr_service_generate_messages delta_amr_service_generate_messages_cpp)
 
 # add dependencies to all check dependencies targets
-get_filename_component(_filename "/home/ctlee/catkin_ws/src/delta_amr_service/srv/mechmind_srv.srv" NAME_WE)
+get_filename_component(_filename "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/mechmind_srv.srv" NAME_WE)
 add_dependencies(delta_amr_service_generate_messages_cpp _delta_amr_service_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/ctlee/catkin_ws/src/delta_amr_service/srv/realsense_srv.srv" NAME_WE)
+get_filename_component(_filename "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/realsense_srv.srv" NAME_WE)
 add_dependencies(delta_amr_service_generate_messages_cpp _delta_amr_service_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/ctlee/catkin_ws/src/delta_amr_service/srv/robot_control_srv.srv" NAME_WE)
+get_filename_component(_filename "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/robot_control_srv.srv" NAME_WE)
 add_dependencies(delta_amr_service_generate_messages_cpp _delta_amr_service_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/ctlee/catkin_ws/src/delta_amr_service/srv/upload_srv.srv" NAME_WE)
+get_filename_component(_filename "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/upload_srv.srv" NAME_WE)
 add_dependencies(delta_amr_service_generate_messages_cpp _delta_amr_service_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -103,25 +103,25 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS delta_amr_service_generate_messages
 
 ### Generating Services
 _generate_srv_eus(delta_amr_service
-  "/home/ctlee/catkin_ws/src/delta_amr_service/srv/mechmind_srv.srv"
+  "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/mechmind_srv.srv"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/delta_amr_service
 )
 _generate_srv_eus(delta_amr_service
-  "/home/ctlee/catkin_ws/src/delta_amr_service/srv/realsense_srv.srv"
+  "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/realsense_srv.srv"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/delta_amr_service
 )
 _generate_srv_eus(delta_amr_service
-  "/home/ctlee/catkin_ws/src/delta_amr_service/srv/robot_control_srv.srv"
+  "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/robot_control_srv.srv"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/delta_amr_service
 )
 _generate_srv_eus(delta_amr_service
-  "/home/ctlee/catkin_ws/src/delta_amr_service/srv/upload_srv.srv"
+  "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/upload_srv.srv"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/delta_amr_service
@@ -139,13 +139,13 @@ add_custom_target(delta_amr_service_generate_messages_eus
 add_dependencies(delta_amr_service_generate_messages delta_amr_service_generate_messages_eus)
 
 # add dependencies to all check dependencies targets
-get_filename_component(_filename "/home/ctlee/catkin_ws/src/delta_amr_service/srv/mechmind_srv.srv" NAME_WE)
+get_filename_component(_filename "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/mechmind_srv.srv" NAME_WE)
 add_dependencies(delta_amr_service_generate_messages_eus _delta_amr_service_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/ctlee/catkin_ws/src/delta_amr_service/srv/realsense_srv.srv" NAME_WE)
+get_filename_component(_filename "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/realsense_srv.srv" NAME_WE)
 add_dependencies(delta_amr_service_generate_messages_eus _delta_amr_service_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/ctlee/catkin_ws/src/delta_amr_service/srv/robot_control_srv.srv" NAME_WE)
+get_filename_component(_filename "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/robot_control_srv.srv" NAME_WE)
 add_dependencies(delta_amr_service_generate_messages_eus _delta_amr_service_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/ctlee/catkin_ws/src/delta_amr_service/srv/upload_srv.srv" NAME_WE)
+get_filename_component(_filename "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/upload_srv.srv" NAME_WE)
 add_dependencies(delta_amr_service_generate_messages_eus _delta_amr_service_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -160,25 +160,25 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS delta_amr_service_generate_messages
 
 ### Generating Services
 _generate_srv_lisp(delta_amr_service
-  "/home/ctlee/catkin_ws/src/delta_amr_service/srv/mechmind_srv.srv"
+  "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/mechmind_srv.srv"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/delta_amr_service
 )
 _generate_srv_lisp(delta_amr_service
-  "/home/ctlee/catkin_ws/src/delta_amr_service/srv/realsense_srv.srv"
+  "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/realsense_srv.srv"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/delta_amr_service
 )
 _generate_srv_lisp(delta_amr_service
-  "/home/ctlee/catkin_ws/src/delta_amr_service/srv/robot_control_srv.srv"
+  "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/robot_control_srv.srv"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/delta_amr_service
 )
 _generate_srv_lisp(delta_amr_service
-  "/home/ctlee/catkin_ws/src/delta_amr_service/srv/upload_srv.srv"
+  "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/upload_srv.srv"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/delta_amr_service
@@ -196,13 +196,13 @@ add_custom_target(delta_amr_service_generate_messages_lisp
 add_dependencies(delta_amr_service_generate_messages delta_amr_service_generate_messages_lisp)
 
 # add dependencies to all check dependencies targets
-get_filename_component(_filename "/home/ctlee/catkin_ws/src/delta_amr_service/srv/mechmind_srv.srv" NAME_WE)
+get_filename_component(_filename "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/mechmind_srv.srv" NAME_WE)
 add_dependencies(delta_amr_service_generate_messages_lisp _delta_amr_service_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/ctlee/catkin_ws/src/delta_amr_service/srv/realsense_srv.srv" NAME_WE)
+get_filename_component(_filename "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/realsense_srv.srv" NAME_WE)
 add_dependencies(delta_amr_service_generate_messages_lisp _delta_amr_service_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/ctlee/catkin_ws/src/delta_amr_service/srv/robot_control_srv.srv" NAME_WE)
+get_filename_component(_filename "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/robot_control_srv.srv" NAME_WE)
 add_dependencies(delta_amr_service_generate_messages_lisp _delta_amr_service_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/ctlee/catkin_ws/src/delta_amr_service/srv/upload_srv.srv" NAME_WE)
+get_filename_component(_filename "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/upload_srv.srv" NAME_WE)
 add_dependencies(delta_amr_service_generate_messages_lisp _delta_amr_service_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -217,25 +217,25 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS delta_amr_service_generate_messages
 
 ### Generating Services
 _generate_srv_nodejs(delta_amr_service
-  "/home/ctlee/catkin_ws/src/delta_amr_service/srv/mechmind_srv.srv"
+  "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/mechmind_srv.srv"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/delta_amr_service
 )
 _generate_srv_nodejs(delta_amr_service
-  "/home/ctlee/catkin_ws/src/delta_amr_service/srv/realsense_srv.srv"
+  "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/realsense_srv.srv"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/delta_amr_service
 )
 _generate_srv_nodejs(delta_amr_service
-  "/home/ctlee/catkin_ws/src/delta_amr_service/srv/robot_control_srv.srv"
+  "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/robot_control_srv.srv"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/delta_amr_service
 )
 _generate_srv_nodejs(delta_amr_service
-  "/home/ctlee/catkin_ws/src/delta_amr_service/srv/upload_srv.srv"
+  "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/upload_srv.srv"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/delta_amr_service
@@ -253,13 +253,13 @@ add_custom_target(delta_amr_service_generate_messages_nodejs
 add_dependencies(delta_amr_service_generate_messages delta_amr_service_generate_messages_nodejs)
 
 # add dependencies to all check dependencies targets
-get_filename_component(_filename "/home/ctlee/catkin_ws/src/delta_amr_service/srv/mechmind_srv.srv" NAME_WE)
+get_filename_component(_filename "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/mechmind_srv.srv" NAME_WE)
 add_dependencies(delta_amr_service_generate_messages_nodejs _delta_amr_service_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/ctlee/catkin_ws/src/delta_amr_service/srv/realsense_srv.srv" NAME_WE)
+get_filename_component(_filename "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/realsense_srv.srv" NAME_WE)
 add_dependencies(delta_amr_service_generate_messages_nodejs _delta_amr_service_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/ctlee/catkin_ws/src/delta_amr_service/srv/robot_control_srv.srv" NAME_WE)
+get_filename_component(_filename "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/robot_control_srv.srv" NAME_WE)
 add_dependencies(delta_amr_service_generate_messages_nodejs _delta_amr_service_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/ctlee/catkin_ws/src/delta_amr_service/srv/upload_srv.srv" NAME_WE)
+get_filename_component(_filename "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/upload_srv.srv" NAME_WE)
 add_dependencies(delta_amr_service_generate_messages_nodejs _delta_amr_service_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -274,25 +274,25 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS delta_amr_service_generate_messages
 
 ### Generating Services
 _generate_srv_py(delta_amr_service
-  "/home/ctlee/catkin_ws/src/delta_amr_service/srv/mechmind_srv.srv"
+  "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/mechmind_srv.srv"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/delta_amr_service
 )
 _generate_srv_py(delta_amr_service
-  "/home/ctlee/catkin_ws/src/delta_amr_service/srv/realsense_srv.srv"
+  "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/realsense_srv.srv"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/delta_amr_service
 )
 _generate_srv_py(delta_amr_service
-  "/home/ctlee/catkin_ws/src/delta_amr_service/srv/robot_control_srv.srv"
+  "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/robot_control_srv.srv"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/delta_amr_service
 )
 _generate_srv_py(delta_amr_service
-  "/home/ctlee/catkin_ws/src/delta_amr_service/srv/upload_srv.srv"
+  "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/upload_srv.srv"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/delta_amr_service
@@ -310,13 +310,13 @@ add_custom_target(delta_amr_service_generate_messages_py
 add_dependencies(delta_amr_service_generate_messages delta_amr_service_generate_messages_py)
 
 # add dependencies to all check dependencies targets
-get_filename_component(_filename "/home/ctlee/catkin_ws/src/delta_amr_service/srv/mechmind_srv.srv" NAME_WE)
+get_filename_component(_filename "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/mechmind_srv.srv" NAME_WE)
 add_dependencies(delta_amr_service_generate_messages_py _delta_amr_service_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/ctlee/catkin_ws/src/delta_amr_service/srv/realsense_srv.srv" NAME_WE)
+get_filename_component(_filename "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/realsense_srv.srv" NAME_WE)
 add_dependencies(delta_amr_service_generate_messages_py _delta_amr_service_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/ctlee/catkin_ws/src/delta_amr_service/srv/robot_control_srv.srv" NAME_WE)
+get_filename_component(_filename "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/robot_control_srv.srv" NAME_WE)
 add_dependencies(delta_amr_service_generate_messages_py _delta_amr_service_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/ctlee/catkin_ws/src/delta_amr_service/srv/upload_srv.srv" NAME_WE)
+get_filename_component(_filename "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/upload_srv.srv" NAME_WE)
 add_dependencies(delta_amr_service_generate_messages_py _delta_amr_service_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility

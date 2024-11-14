@@ -1,0 +1,8 @@
+prefix=/home/cas-standIPC/AALC_AMR/devel
+
+Name: ira_laser_tools
+Description: Description of ira_laser_tools
+Version: 1.0.7
+Cflags: -I/home/cas-standIPC/AALC_AMR/devel/include
+Libs: -L${prefix}/lib 
+Requires: 

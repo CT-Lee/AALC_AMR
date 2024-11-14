@@ -1,8 +1,8 @@
-# Install script for directory: /home/ctlee/catkin_ws/src/delta_amr_service
+# Install script for directory: /home/cas-standIPC/AALC_AMR/src/delta_amr_service
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/ctlee/catkin_ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/cas-standIPC/AALC_AMR/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -39,57 +39,57 @@ endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/delta_amr_service/srv" TYPE FILE FILES
-    "/home/ctlee/catkin_ws/src/delta_amr_service/srv/mechmind_srv.srv"
-    "/home/ctlee/catkin_ws/src/delta_amr_service/srv/realsense_srv.srv"
-    "/home/ctlee/catkin_ws/src/delta_amr_service/srv/robot_control_srv.srv"
-    "/home/ctlee/catkin_ws/src/delta_amr_service/srv/upload_srv.srv"
+    "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/mechmind_srv.srv"
+    "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/realsense_srv.srv"
+    "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/robot_control_srv.srv"
+    "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/upload_srv.srv"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/delta_amr_service/cmake" TYPE FILE FILES "/home/ctlee/catkin_ws/build/delta_amr_service/catkin_generated/installspace/delta_amr_service-msg-paths.cmake")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/delta_amr_service/cmake" TYPE FILE FILES "/home/cas-standIPC/AALC_AMR/build/delta_amr_service/catkin_generated/installspace/delta_amr_service-msg-paths.cmake")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "/home/ctlee/catkin_ws/devel/include/delta_amr_service")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "/home/cas-standIPC/AALC_AMR/devel/include/delta_amr_service")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/roseus/ros" TYPE DIRECTORY FILES "/home/ctlee/catkin_ws/devel/share/roseus/ros/delta_amr_service")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/roseus/ros" TYPE DIRECTORY FILES "/home/cas-standIPC/AALC_AMR/devel/share/roseus/ros/delta_amr_service")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/common-lisp/ros" TYPE DIRECTORY FILES "/home/ctlee/catkin_ws/devel/share/common-lisp/ros/delta_amr_service")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/common-lisp/ros" TYPE DIRECTORY FILES "/home/cas-standIPC/AALC_AMR/devel/share/common-lisp/ros/delta_amr_service")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/gennodejs/ros" TYPE DIRECTORY FILES "/home/ctlee/catkin_ws/devel/share/gennodejs/ros/delta_amr_service")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/gennodejs/ros" TYPE DIRECTORY FILES "/home/cas-standIPC/AALC_AMR/devel/share/gennodejs/ros/delta_amr_service")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  execute_process(COMMAND "/usr/bin/python3" -m compileall "/home/ctlee/catkin_ws/devel/lib/python3/dist-packages/delta_amr_service")
+  execute_process(COMMAND "/usr/bin/python3" -m compileall "/home/cas-standIPC/AALC_AMR/devel/lib/python3/dist-packages/delta_amr_service")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python3/dist-packages" TYPE DIRECTORY FILES "/home/ctlee/catkin_ws/devel/lib/python3/dist-packages/delta_amr_service")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python3/dist-packages" TYPE DIRECTORY FILES "/home/cas-standIPC/AALC_AMR/devel/lib/python3/dist-packages/delta_amr_service")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/ctlee/catkin_ws/build/delta_amr_service/catkin_generated/installspace/delta_amr_service.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/cas-standIPC/AALC_AMR/build/delta_amr_service/catkin_generated/installspace/delta_amr_service.pc")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/delta_amr_service/cmake" TYPE FILE FILES "/home/ctlee/catkin_ws/build/delta_amr_service/catkin_generated/installspace/delta_amr_service-msg-extras.cmake")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/delta_amr_service/cmake" TYPE FILE FILES "/home/cas-standIPC/AALC_AMR/build/delta_amr_service/catkin_generated/installspace/delta_amr_service-msg-extras.cmake")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/delta_amr_service/cmake" TYPE FILE FILES
-    "/home/ctlee/catkin_ws/build/delta_amr_service/catkin_generated/installspace/delta_amr_serviceConfig.cmake"
-    "/home/ctlee/catkin_ws/build/delta_amr_service/catkin_generated/installspace/delta_amr_serviceConfig-version.cmake"
+    "/home/cas-standIPC/AALC_AMR/build/delta_amr_service/catkin_generated/installspace/delta_amr_serviceConfig.cmake"
+    "/home/cas-standIPC/AALC_AMR/build/delta_amr_service/catkin_generated/installspace/delta_amr_serviceConfig-version.cmake"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/delta_amr_service" TYPE FILE FILES "/home/ctlee/catkin_ws/src/delta_amr_service/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/delta_amr_service" TYPE FILE FILES "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/package.xml")
 endif()
 

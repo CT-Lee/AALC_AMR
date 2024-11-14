@@ -1,7 +1,7 @@
 # generated from genmsg/cmake/pkg-genmsg.context.in
 
 messages_str = ""
-services_str = "/home/ctlee/catkin_ws/src/delta_amr_service/srv/mechmind_srv.srv;/home/ctlee/catkin_ws/src/delta_amr_service/srv/realsense_srv.srv;/home/ctlee/catkin_ws/src/delta_amr_service/srv/robot_control_srv.srv;/home/ctlee/catkin_ws/src/delta_amr_service/srv/upload_srv.srv"
+services_str = "/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/mechmind_srv.srv;/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/realsense_srv.srv;/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/robot_control_srv.srv;/home/cas-standIPC/AALC_AMR/src/delta_amr_service/srv/upload_srv.srv"
 pkg_name = "delta_amr_service"
 dependencies_str = "std_msgs"
 langs = "gencpp;geneus;genlisp;gennodejs;genpy"
