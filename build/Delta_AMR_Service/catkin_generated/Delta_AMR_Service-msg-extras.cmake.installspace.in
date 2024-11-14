@@ -1,2 +1,0 @@
-set(Delta_AMR_Service_MESSAGE_FILES "")
-set(Delta_AMR_Service_SERVICE_FILES "srv/Delta_AMR_Service.srv")
