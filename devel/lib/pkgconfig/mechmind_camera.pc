@@ -1,8 +1,0 @@
-prefix=/home/ctlee/catkin_ws/devel
-
-Name: mechmind_camera
-Description: Description of mechmind_camera
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

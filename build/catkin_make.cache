@@ -1,2 +1,0 @@
-delta_amr_service:mechmind_camera:realsense_camera:robot_control:state_machine:upload_img
--DCATKIN_DEVEL_PREFIX=/home/ctlee/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/ctlee/catkin_ws/install -G Unix Makefiles
