@@ -78,7 +78,8 @@
         "controlcan.h": "c",
         "bit": "cpp",
         "regex": "cpp",
-        "shared_mutex": "cpp"
+        "shared_mutex": "cpp",
+        "cerrno": "cpp"
     },
     "cmake.sourceDirectory": "${workspaceFolder}/src/hipnuc_imu_ch110/serial_imu",
     "python.analysis.extraPaths": [

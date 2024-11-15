@@ -6,10 +6,12 @@
         "limitSymbolsToIncludedHeaders": false
       },
       "includePath": [
+        "${workspaceFolder}/src/cas2ndagv_io_controller/include/cas2ndagv_io_controller",
         "/opt/ros/noetic/include/**",
         "/opt/ros/melodic/include/**",
-        "/usr/include/**",
-        "/usr/local/include/modbus/**"
+        "/usr/include/modbus",
+        "/usr/include"
+
       ],
       "name": "ROS",
       "intelliSenseMode": "gcc-x64",
