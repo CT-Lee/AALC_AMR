@@ -1,69 +1,84 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import rospy
-from std_msgs.msg import String
-from ftplib import FTP
+import cv2
+from sensor_msgs.msg import Image
+from cv_bridge import CvBridge
+import ftplib
+import tempfile
 import os
+from pathlib import Path
+from delta_amr_service.srv import upload_srv, upload_srvResponse
 
-# FTP server connection function
-def connect_to_ftp_server(host, port, username, password):
-    ftp = FTP()
-    ftp.connect(host, port)
-    print("here")
-    ftp.login(username, password)
-    rospy.loginfo(f"Connected to FTP server at {host}")
-    return ftp
+class ImageUploader:
+    def __init__(self):
+        # Initialize the CvBridge for converting ROS images
+        self.bridge = CvBridge()
 
-# Function to upload a PNG file to the FTP server
-def upload_png_file(ftp):
-    directory_path = "/home/cas-standIPC/ros1_ws/src/data_upload_node/pngs"
-    #local_filename = "231128_2_delta_8f.pgm"
-    #remote_filename = local_filename
-    for filename in os.listdir(directory_path):
-        file_path = os.path.join(directory_path, filename)
-        remote_filename = filename
-        if os.path.isfile(file_path):
-            try:
-                # Open the PNG file in binary mode for reading
-                with open(file_path, 'rb') as f:
-                    # Use the STOR command to upload the file
-                    ftp.storbinary(f"STOR {remote_filename}", f)
-                rospy.loginfo(f"Successfully uploaded {filename} to {remote_filename}")
-            except Exception as e:
-                rospy.logerr(f"Error uploading file: {e}")
+        # container which saves images for each iteration
+        self.img_storage = []
 
-# Callback function to handle FTP commands
-def ftp_callback(msg):
-    # The command message is expected to contain the local and remote file names
-    command = msg.data
-    if command == "upload":
-        upload_png_file(ftp)
-    else:
-        rospy.logwarn(f"Unrecognized command: {command}")
+        # FTP server information
+        self.ftp_host = "192.168.1.254"  # Replace with your FTP server address
+        self.ftp_port = 21
+        self.ftp_user = "user"    # FTP username
+        self.ftp_pass = "password"  # FTP password
+        self.absolute_path = os.path.dirname(__file__)
+        self.relative_path = "realsense_imgs"
+        self.ftp_dir = os.path.join(self.absolute_path[:-4], self.relative_path)# Remote directory for image upload
+        
+        # Connect to the FTP server
+        self.ftp = ftplib.FTP()
+        self.ftp.connect(self.ftp_host,self.ftp_port)
+        self.ftp.login(self.ftp_user, self.ftp_pass)
 
-# Main function for the ROS node
-def ftp_client_node():
-    # Initialize the ROS node
-    rospy.init_node('ftp_client_node', anonymous=True)
+        # Subscribe to the image topic
+        self.image_sub = rospy.Subscriber('realsense_rgb_img', Image, self.image_callback)
+        self.service = rospy.Service('upload_srv', upload_srv, self.upload_srv_callback)
 
-    # FTP server information
-    ftp_host = "192.168.1.254"  # Replace with your FTP server address
-    ftp_port = 21
-    ftp_username = "user"    # FTP username
-    ftp_password = "password"  # FTP password
+    def upload_srv_callback(self, req):
+        rospy.loginfo(f"State machine triggered: {req.upload_cmd}")
+        for cv_image in self.img_storage:
+            _, img_path = tempfile.mkstemp(suffix='.png', dir = self.ftp_dir)  # Create a temporary file to save the image
+            cv2.imwrite(img_path, cv_image)
+            rospy.loginfo(f"Image saved to temporary file: {img_path}")
+            # Upload the image to the FTP server
+            self.upload_image(img_path)
+            # Clean up by removing the temporary file after upload
+            #os.remove(img_path)
+        self.img_storage = []
+        return upload_srvResponse(upload_status = "done")
 
-    # Connect to the FTP server
-    global ftp
-    ftp = connect_to_ftp_server(ftp_host, ftp_port, ftp_username, ftp_password)
+    def image_callback(self, msg):
+        try:
+            print('get_rgb_img')
+            # Convert the ROS image message to an OpenCV image
+            cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
+            self.img_storage.append(cv_image)
+        except Exception as e:
+            rospy.logerr(f"Error processing image: {str(e)}")
 
-    # Subscribe to the "ftp_upload" topic to receive upload commands
-    rospy.Subscriber("ftp_upload", String, ftp_callback)
+    def upload_image(self, img_path):
+        try:
+            # Open the image file in binary mode
+            with open(img_path, 'rb') as f:
+                filename = os.path.basename(img_path)
+                remote_file_path = os.path.join(self.ftp_dir, filename)
+                print(remote_file_path)
+                # Upload the image to the FTP server using STOR command
+                self.ftp.storbinary(f"STOR {remote_file_path}", f)
+                rospy.loginfo(f"Image uploaded to {remote_file_path} on the FTP server")
 
-    # Keep the node running and listening for messages
-    rospy.spin()
+        except Exception as e:
+            rospy.logerr(f"Error uploading image to FTP: {str(e)}")
 
 if __name__ == '__main__':
-    try:
-        ftp_client_node()
-    except rospy.ROSInterruptException:
-        rospy.logerr("FTP Client Node interrupted")
+    # Initialize the ROS node
+    rospy.init_node('image_uploader_node', anonymous=True)
+
+    # Create the ImageUploader instance
+    uploader = ImageUploader()
+
+    # Keep the node running
+    rospy.spin()
+

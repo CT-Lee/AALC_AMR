@@ -19,7 +19,7 @@ find_package(catkin REQUIRED COMPONENTS
 # find_package(Boost)
 
 catkin_package(
-  INCLUDE_DIRS include
+#  INCLUDE_DIRS include
 #  LIBRARIES simple_car
   CATKIN_DEPENDS ${catkin_deps}
 #  DEPENDS system_lib

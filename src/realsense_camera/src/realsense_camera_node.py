@@ -12,27 +12,7 @@ import numpy as np
 import open3d as o3d
 import mediapipe as mp
 
-hand_ok = np.array([[ 0.4999115   0.69265487  0],
-            [ 0.42336283  0.67168142 -0.01973451],
-            [ 0.35884956  0.63840708 -0.04628319],
-            [ 0.30504425  0.62955752 -0.07628319],
-            [ 0.26345133  0.6079646  -0.10681416],
-            [ 0.39123894  0.47345133 -0.03283186],
- [ 0.32663717  0.46176991 -0.0860177 ],
- [ 0.29716814  0.52451327 -0.13256637],
- [ 0.28442478  0.58300885 -0.15858407],
- [ 0.42026549  0.44938053 -0.04920354],
- [ 0.37362832  0.34964602 -0.08716814],
- [ 0.33230088  0.28663717 -0.12079646],
- [ 0.29424779  0.23123894 -0.14486726],
- [ 0.45964602  0.4579646  -0.06929204],
- [ 0.44176991  0.35026549 -0.10442478],
- [ 0.41610619  0.28699115 -0.1280531 ],
- [ 0.38584071  0.2319469  -0.14353982],
- [ 0.49867257  0.49460177 -0.09035398],
- [ 0.51168142  0.4140708  -0.11469027],
- [ 0.50814159  0.35477876 -0.12079646],
- [ 0.49707965  0.29840708 -0.12486726]])
+hand_ok = np.array([[ 0.4999115,   0.69265487,  0],[ 0.42336283,  0.67168142, -0.01973451],[ 0.35884956,  0.63840708, -0.04628319],[ 0.30504425,  0.62955752, -0.07628319],[ 0.26345133,  0.6079646,  -0.10681416],[ 0.39123894,  0.47345133, -0.03283186],[ 0.32663717,  0.46176991, -0.0860177 ],[ 0.29716814,  0.52451327, -0.13256637],[ 0.28442478,  0.58300885, -0.15858407],[ 0.42026549,  0.44938053, -0.04920354],[ 0.37362832,  0.34964602, -0.08716814],[ 0.33230088,  0.28663717, -0.12079646],[ 0.29424779,  0.23123894, -0.14486726],[ 0.45964602,  0.4579646,  -0.06929204],[ 0.44176991,  0.35026549, -0.10442478],[ 0.41610619,  0.28699115, -0.1280531 ],[ 0.38584071,  0.2319469,  -0.14353982],[ 0.49867257,  0.49460177, -0.09035398],[ 0.51168142,  0.4140708,  -0.11469027],[ 0.50814159,  0.35477876, -0.12079646],[ 0.49707965,  0.29840708, -0.12486726]])
 
 # Write a non-closing window display real-time image
 
@@ -42,17 +22,19 @@ class RealsenseCameraNode:
         
         # 設定回應 'human_detect' 服務
         self.service = rospy.Service('realsense_srv', realsense_srv, self.camera_action_callback)
+        self.pub_image = rospy.Publisher('/realsense_rgb_img', Image, queue_size=10)
         
         rospy.loginfo("Realsense Camera Node initialized.")
         
-        self.image_publisher = rospy.Publisher('/camera/image', Image, queue_size=10)
         self.bridge = CvBridge()
 
         # setup realsense
+        self.bag = 'realsense_1124.bag'
         self.pipeline = rs.pipeline()
         self.config = rs.config()
-        self.config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)  # Color stream at 640x480 resolution
-        self.config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)  # Depth stream at 640x480 resolution
+        #config.enable_device_from_file(bag_file)# for bag testing
+        self.config.enable_stream(rs.stream.color, 1280, 720, rs.format.bgr8, 30)  # Color stream at 640x480 resolution
+        self.config.enable_stream(rs.stream.depth, 1280, 720, rs.format.z16, 30)  # Depth stream at 640x480 resolution
         self.pipeline.start(self.config)
         self.align_to = rs.stream.color
         self.align = rs.align(self.align_to)
@@ -74,22 +56,12 @@ class RealsenseCameraNode:
         rospy.loginfo(f"Received human detection request with process type: {req.img_process_type_realsense}")
         
         if req.img_process_type_realsense == 'human_detect':
-               human_dist = self.hand_pose_detection()
-               self.count+=1
-               return realsense_srvResponse(camera_status_realsense=0, human_dist=human_dist)
+               op = self.hand_pose_detection()
+               return realsense_srvResponse(camera_status_realsense=0, human_dist=op)
 		
         elif req.img_process_type_realsense == 'take_pic':
-            # 發送圖片（依序發送cat1.jpg, cat2.jpg, cat3.jpg）
-            for image_path in self.image_paths:
-                if os.path.exists(image_path):
-                    image = cv2.imread(image_path)
-                    image_message = self.bridge.cv2_to_imgmsg(image, encoding="bgr8")
-                    self.image_publisher.publish(image_message)
-                    rospy.loginfo(f"Published image from {image_path}")
-                    rospy.sleep(1)  # 等待1秒發送下一張圖片
-                else:
-                    rospy.logwarn(f"Image {image_path} not found!")
-            
+            self.take_pic()
+            print("realsense take pic!!!")
             return realsense_srvResponse(camera_status_realsense=1, human_dist=0.0)
 
         else:
@@ -120,6 +92,7 @@ class RealsenseCameraNode:
         rgb_image = cv2.cvtColor(color_image, cv2.COLOR_BGR2RGB)
         results = self.hands.process(rgb_image)
         hand_arr = []
+        op = 1
         if results.multi_hand_landmarks:
             for hand_landmarks in results.multi_hand_landmarks:
                 # Draw the hand landmarks
@@ -128,20 +101,29 @@ class RealsenseCameraNode:
                     hand_pts = [round(landmark.x, 2), round(landmark.y, 2), round(landmark.z, 2)]
                     hand_arr.append(hand_pts)
             hand_arr = np.array(hand_arr)
-
-            self.matrices.append(hand_arr)
-            stacked_matrices = np.stack(self.matrices)
-            average_matrix = np.mean(stacked_matrices, axis=0)
-
-            print(average_matrix)
-            print("===========================")
+            score = np.linalg.norm(hand_arr - hand_ok, 'fro')
+            print(score)
+            if score < 0.45:
+                print("ok_hand!!!!")
+                op = 0
+            else:
+                op = 1
         #cv2.imwrite("Hand Pose"+str(self.count)+".png", color_image)
 
-        dist = 5
+        return op
 
-        return dist
-
-    def safty_detection(self):
+    def take_pic(self):
+        while True:
+            # Wait for a frame
+            frames = self.pipeline.wait_for_frames()
+            # Align the depth frame to the color frame
+            color_frame = frames.get_color_frame()
+            if color_frame:
+                color_image = np.asanyarray(color_frame.get_data())
+                break
+        ros_image = self.bridge.cv2_to_imgmsg(color_image, encoding="bgr8")
+        self.pub_image.publish(ros_image)
+        print('PUB!!!!')
         return 0
 		
 
