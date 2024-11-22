@@ -4,7 +4,7 @@ import rospy
 import cv2
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
-import ftplib
+from ftplib import FTP
 import tempfile
 import os
 from pathlib import Path
@@ -23,14 +23,15 @@ class ImageUploader:
         self.ftp_port = 21
         self.ftp_user = "user"    # FTP username
         self.ftp_pass = "password"  # FTP password
+        global ftp
         self.absolute_path = os.path.dirname(__file__)
         self.relative_path = "realsense_imgs"
         self.ftp_dir = os.path.join(self.absolute_path[:-4], self.relative_path)# Remote directory for image upload
         
         # Connect to the FTP server
-        self.ftp = ftplib.FTP()
-        self.ftp.connect(self.ftp_host,self.ftp_port)
-        self.ftp.login(self.ftp_user, self.ftp_pass)
+        ftp = FTP()
+        ftp.connect(self.ftp_host,self.ftp_port)
+        ftp.login(self.ftp_user, self.ftp_pass)
 
         # Subscribe to the image topic
         self.image_sub = rospy.Subscriber('realsense_rgb_img', Image, self.image_callback)
@@ -45,7 +46,7 @@ class ImageUploader:
             # Upload the image to the FTP server
             self.upload_image(img_path)
             # Clean up by removing the temporary file after upload
-            #os.remove(img_path)
+            os.remove(img_path)
         self.img_storage = []
         return upload_srvResponse(upload_status = "done")
 
@@ -66,7 +67,7 @@ class ImageUploader:
                 remote_file_path = os.path.join(self.ftp_dir, filename)
                 print(remote_file_path)
                 # Upload the image to the FTP server using STOR command
-                self.ftp.storbinary(f"STOR {remote_file_path}", f)
+                ftp.storbinary(f"STOR {remote_file_path}", f)
                 rospy.loginfo(f"Image uploaded to {remote_file_path} on the FTP server")
 
         except Exception as e:

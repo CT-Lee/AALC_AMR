@@ -60,6 +60,7 @@ add_service_files(
    realsense_srv.srv
    robot_control_srv.srv
    upload_srv.srv
+   amr_srv.srv
 )
 
 ## Generate actions in the 'action' folder

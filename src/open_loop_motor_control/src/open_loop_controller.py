@@ -21,23 +21,23 @@ class OpenLoopControllerNode:
         velocity_msg.linear.x = vel_x
         rate = rospy.Rate(10)
         start_time = rospy.get_time()
-        while rospy.get_time() - start_time < 1.0:
+        while rospy.get_time() - start_time < 3.0:
             self.pub_vel.publish(velocity_msg)
             rate.sleep()
         stop_msg = Twist()  # Empty message to stop the robot
-        pub.publish(stop_msg)
+        self.pub_vel.publish(stop_msg)
         return None
 
     def state_machine_srv_callback(self, req):
         if req.move_act == 'forward':
             self.amr_status = 'moving'
-            self.pub_cmd_vel(0.3)
+            self.pub_cmd_vel(-0.1)
             self.amr_status = 'stop'
             return amr_srvResponse(amr_status = self.amr_status)
 
         elif req.move_act == 'backward':
             self.amr_status = 'moving'
-            self.pub_cmd_vel(-0.3)
+            self.pub_cmd_vel(0.1)
             self.amr_status = 'stop'
             return amr_srvResponse(amr_status = self.amr_status)
 
