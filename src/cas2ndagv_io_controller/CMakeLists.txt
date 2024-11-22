@@ -8,9 +8,9 @@ project(cas2ndagv_io_controller)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  roscpp
-  rospy
-  std_msgs
+	roscpp
+	rospy
+	std_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -117,7 +117,9 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
 # include
-  ${catkin_INCLUDE_DIRS}
+	${catkin_INCLUDE_DIRS}
+	./include/${PROJECT_NAME}
+	/usr/include/modbus
 )
 
 ## Declare a C++ library
@@ -204,3 +206,10 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+add_executable(	cas2ndagv_io_ctl_node
+				src/cas2ndagv_io_ctl.cpp
+				src/cas2ndagv_io_ctl_ROS.cpp
+				src/ADAM_HandShake.cpp       	 )
+add_dependencies(cas2ndagv_io_ctl_node ${catkin_EXPORTED_TARGETS} )
+target_link_libraries(cas2ndagv_io_ctl_node ${catkin_LIBRARIES} modbus )

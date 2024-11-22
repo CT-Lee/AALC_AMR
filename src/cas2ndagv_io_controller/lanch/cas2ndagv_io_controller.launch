@@ -1,0 +1,9 @@
+<launch>
+
+	<node name="cas2ndagv_io_ctl_node" 
+		  pkg="cas2ndagv_io_controller"
+		  type="cas2ndagv_io_ctl_node"
+		  output="screen" >
+	</node>
+
+</launch>

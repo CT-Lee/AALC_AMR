@@ -1,5 +1,5 @@
 /** ******************************************************
-	* @file		cas2ndagv_io_ctl_ROS.cpp
+	* @file		cas2ndagv_io2status_ROS.cpp
 	* @author	Tsai,Li-chun
 	******************************************************
 **/
@@ -7,11 +7,9 @@
 
 /* System Includes ------------------------------------------*/
 /* System Includes Begin */
-#include <ros/ros.h>
 /* System Includes End */
 /* User Includes --------------------------------------------*/
 /* User Includes Begin */
-#include "cas2ndagv_io_ctl.hpp"
 /* User Includes End */
 
 /* namespace ------------------------------------------------*/
@@ -50,27 +48,10 @@
 /* ---------------------------------------------------------*/
 /* Program Begin */
 
-/** * @brief  Program entry point.
-	* @param argc(int) Number of input parameters
- 	* @param argv(int) input parameters
- 	* @return (int) Program Error.
-**	**/
-int main(int argc, char **argv)
-{
-	ros::init(argc, argv, "cas2ndagv_io_ctl_ROS");
-
-	try
-	{
-		cas2ndagv_io_ctl io_ctl;
-	}
-	catch(const std::exception& err)
-	{
-		ROS_ERROR("%s", err.what());
-	}
-
-	while(ros::ok())
-	{}
-}
+/** * @brief
+	* @param
+ 	* @return
+**/
 
 /* Program End */
 /* ---------------------------------------------------------*/
@@ -78,4 +59,4 @@ int main(int argc, char **argv)
 /* ---------------------------------------------------------*/
 
 
-/* ***** END OF cas2ndagv_io_ctl_ROS.cpp ***** */
+/* ***** END OF cas2ndagv_io2status_ROS.cpp ***** */

@@ -60,6 +60,7 @@
 **	**/
 ADAM_HandShake::ADAM_HandShake(const char* ip,const int port,const int slave)
 {
+	throw_msg = "[ADAM_HandShake]";
 	/* 初始化modbus通訊設定 */
 	adam = modbus_new_tcp(ip,port);
 	/* 初始化是否成功判斷 */
@@ -69,10 +70,14 @@ ADAM_HandShake::ADAM_HandShake(const char* ip,const int port,const int slave)
         /* 若初始化失敗,打印訊息,退出程序 */
 		std::cout << TC_ERROR << modbus_strerror(errno) << TC_RESET << std::endl;
 #endif
-		exit(EXIT_FAILURE);
+		// exit(ADAM_HS_structure_ERROR);
+		throw_msg += " create modbus_t structure fail";
+		throw std::runtime_error(throw_msg.c_str());
 	}
+#ifdef raw_message
 	else	/* 若初始化成功,打印訊息 */
 		std::cout << "Initialize modbus_t Structure Success" << std::endl;
+#endif
 
 	/* 設定欲通訊的modbus-slaveID */
 	rc = modbus_set_slave(adam,slave);
@@ -82,7 +87,9 @@ ADAM_HandShake::ADAM_HandShake(const char* ip,const int port,const int slave)
         /* 若設定失敗,打印訊息,退出建構函數 */
 		std::cout << TC_ERROR << "set modbus slave Failure!" << TC_RESET << std::endl;
 #endif
-		exit(EXIT_FAILURE);
+		// exit(ADAM_HS_set_slave_ERROR);
+		throw_msg += " set modbus slave fail";
+		throw std::runtime_error(throw_msg.c_str());
 	}
 #ifdef raw_message
 	else	/* 若slaveID設定成功,打印訊息 */
@@ -98,7 +105,9 @@ ADAM_HandShake::ADAM_HandShake(const char* ip,const int port,const int slave)
 		std::cout << TC_ERROR << "connect modbus Failure!" << std::endl;
 		std::cout << "    ==> " << modbus_strerror(errno) << TC_RESET << std::endl;
 #endif
-		exit(EXIT_FAILURE);
+		// exit(ADAM_HS_connect_ERROR);
+		throw_msg += " connect modbus fail";
+		throw std::runtime_error(throw_msg.c_str());
 	}
 #ifdef raw_message
 	else	/* 若連結成功,打印訊息 */
