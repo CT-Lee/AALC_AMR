@@ -58,18 +58,18 @@
 int main(int argc, char **argv)
 {
 	ros::init(argc, argv, "cas2ndagv_io_ctl_ROS");
+	
 
 	try
 	{
 		cas2ndagv_io_ctl io_ctl;
+		ros::spin();
 	}
 	catch(const std::exception& err)
 	{
 		ROS_ERROR("%s", err.what());
 	}
 
-	while(ros::ok())
-	{}
 }
 
 /* Program End */

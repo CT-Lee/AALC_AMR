@@ -51,6 +51,8 @@ private:
 	ADAM_HandShake ADAM_HS;
 	/* create ros node handle */
 	ros::NodeHandle nh;
+	/* create ros loop rate */
+	ros::Rate loop_rate;
 	/* create ADAM input publisher object */
 	ros::Publisher pub_adam_input;
 	/* create ADAM output subscriber object */

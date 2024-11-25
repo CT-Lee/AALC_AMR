@@ -55,7 +55,8 @@
  	* @return none
 **/
 cas2ndagv_io_ctl::cas2ndagv_io_ctl():
-	nh()
+	nh(),
+	loop_rate(1)
 {
 	/* init ADAM input publisher object */
 	pub_adam_input = nh.advertise<delta_amr_message::cas2ndagv_input_pin>(cas2ndagv_input_pin_topic, cas2ndagv_pin_queue_size, this);
@@ -170,6 +171,8 @@ void cas2ndagv_io_ctl::time_interrupter_callback(const ros::TimerEvent& time)
 **/
 void cas2ndagv_io_ctl::run(void)
 {
+	ROS_INFO("cas 2nd agv io control object main runing...");
+	loop_rate.sleep();
 }
 
 
