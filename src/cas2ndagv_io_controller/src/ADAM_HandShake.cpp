@@ -148,9 +148,9 @@ int ADAM_HandShake::adam_readDI(CAS2ndAGV_input_pin pin, uint8_t *io_status)
  	* @param bool on or off
  	* @return int, result execution
 **	**/
-int ADAM_HandShake::adam_setDO(CAS2ndAGV_output_pin pin, bool status)
+int ADAM_HandShake::adam_setDO(CAS2ndAGV_output_pin pin, uint8_t status)
 {
-	rc = modbus_write_bit(adam, static_cast<int>(pin), status);
+	rc = modbus_write_bit(adam, static_cast<int>(pin), static_cast<int>(status));
 	return rc;
 }
 /** * @brief read single digital output

@@ -39,16 +39,16 @@ enum class CAS2ndAGV_input_pin: uint16_t
 	in_lidar_F_OSSD2 = 17,	/* slot2-DI1 */
 	in_lidar_B_OSSD1 = 18,	/* slot2-DI2 */
 	in_lidar_B_OSSD2 = 19,	/* slot2-DI3 */
-	in_EMS 		  = 21,		/* slot2-DI5 */
-	in_manual 		  = 22,	/* slot2-DI6 */
-	in_lidar_SlowStop = 23 /* slot2-DI7 */
+	in_EMS 		  	 = 21,	/* slot2-DI5 */
+	in_manual 		 = 22,	/* slot2-DI6 */
+	in_lidar_SlowStop= 23	/* slot2-DI7 */
 };
 enum class CAS2ndAGV_output_pin: uint16_t
 {
-	out_green_light = 32,	/* slot3-DI0 */
-	out_red_light_R = 33,	/* slot3-DI1 */
-	out_red_light_L = 34,	/* slot3-DI2 */
-	out_lidar_mapSW = 35	/* slot3-DI3 */
+	out_green_light_L = 32,	/* slot3-DI0 */
+	out_green_light_R = 33,	/* slot3-DI0 */
+	out_red_light 	  = 34,	/* slot3-DI2 */
+	out_lidar_mapSW   = 35	/* slot3-DI3 */
 };
 /* define CAS 2nd AGV LiDAR OSSD pin status. */
 enum class AGV_PIN_status_lidar_OSSD: uint8_t

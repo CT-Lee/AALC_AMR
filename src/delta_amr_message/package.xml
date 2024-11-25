@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>cas2ndagv_io_controller</name>
+  <name>delta_amr_message</name>
   <version>0.0.0</version>
-  <description>The cas2ndagv_io_controller package</description>
+  <description>The delta_amr_message package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
   <!-- <maintainer email="jane.doe@example.com">Jane Doe</maintainer> -->
-  <maintainer email="cas-standIPC@todo.todo">cas-standIPC</maintainer>
+  <maintainer email="richie@todo.todo">richie</maintainer>
 
 
   <!-- One license tag required, multiple allowed, one license per tag -->
@@ -19,7 +19,7 @@
   <!-- Url tags are optional, but multiple are allowed, one per tag -->
   <!-- Optional attribute type can be: website, bugtracker, or repository -->
   <!-- Example: -->
-  <!-- <url type="website">http://wiki.ros.org/cas2ndagv_io_controller</url> -->
+  <!-- <url type="website">http://wiki.ros.org/delta_amr_message</url> -->
 
 
   <!-- Author tags are optional, multiple are allowed, one per tag -->
@@ -48,24 +48,16 @@
   <!--   <test_depend>gtest</test_depend> -->
   <!-- Use doc_depend for packages you need only for building documentation: -->
   <!--   <doc_depend>doxygen</doc_depend> -->
+
   <buildtool_depend>catkin</buildtool_depend>
-
-  <build_depend>roscpp</build_depend>
-  <build_export_depend>roscpp</build_export_depend>
-  <exec_depend>roscpp</exec_depend>
-
-  <build_depend>rospy</build_depend>
-  <build_export_depend>rospy</build_export_depend>
-  <exec_depend>rospy</exec_depend>
 
   <build_depend>std_msgs</build_depend>
   <build_export_depend>std_msgs</build_export_depend>
   <exec_depend>std_msgs</exec_depend>
 
-  <build_depend>delta_amr_message</build_depend>
-	<build_export_depend>delta_amr_message</build_export_depend>
-	<exec_depend>delta_amr_message</exec_depend>
-
+  <build_depend>message_generation</build_depend>
+  <build_export_depend>message_generation</build_export_depend>
+  <exec_depend>message_runtime</exec_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

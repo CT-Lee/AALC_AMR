@@ -12,6 +12,7 @@
 /* System Includes ------------------------------------------*/
 /* System Includes Begin */
 #include <stdint.h>
+#include <string>
 /* System Includes End */
 /* User Includes --------------------------------------------*/
 /* User Includes Begin */
@@ -27,34 +28,42 @@
 /* Extern Class Begin */
 
 /* define LiDAR current OSSD running status */
-enum class CAS2ndAGV_IO_status_lidarOSSD: uint16_t
+struct CAS2ndAGV_IO_status_lidarOSSD
 {
-	normal = 0,
-	slow_stop = 1,
-	emergency_stop = 2
+	const std::string normal = "normal";
+	const std::string slow_stop = "slow_stop";
+	const std::string emergency_stop = "emergency_stop";
 };
 /* define current LiDAR map in use */
-enum class CAS2ndAGV_IO_status_lidarMAP: uint16_t
+struct CAS2ndAGV_IO_status_lidarMAP
 {
-	normal_walking = 0,
-	workstation1 = 1
+	const std::string normal_walking = "normal_walking";
+	const std::string workstation1 = "workstation1";
 };
 /* define emergency stop button status */
-enum class CAS2ndAGV_IO_status_EMS: uint16_t
+struct CAS2ndAGV_IO_status_EMS
 {
-	normal = 0,
-	emergency_stop = 1,
-	bypass = 2
+	const std::string normal = "normal";
+	const std::string emergency_stop = "emergency_stop";
+	const std::string bypass = "bypass";
 };
 /* define emergency stop button status */
-enum class CAS2ndAGV_IO_status_carlights: uint16_t
+struct CAS2ndAGV_IO_status_carlights
 {
-	straight = 0,
-	reverse = 1,
-	left = 2,
-	right = 3,
-	workstation = 4,
-	error = 5,
+	const std::string straight = "straight";
+	const std::string reverse = "reverse";
+	const std::string left = "left";
+	const std::string right = "right";
+	const std::string workstation = "workstation";
+	const std::string error = "error";
+};
+/* define cas2ndagv top state */
+struct CAS2ndAGV_IO_status_struct
+{
+	const CAS2ndAGV_IO_status_lidarOSSD lidarOSSD;
+	const CAS2ndAGV_IO_status_lidarMAP lidarMAP;
+	const CAS2ndAGV_IO_status_EMS EMS;
+	const CAS2ndAGV_IO_status_carlights light;
 };
 
 /* Extern Class End */
@@ -62,16 +71,6 @@ enum class CAS2ndAGV_IO_status_carlights: uint16_t
 
 /* Extern Typedef -------------------------------------------*/
 /* Extern Typedef Begin */
-
-/*  */
-struct CAS2ndAGV_IO_status_struct
-{
-	CAS2ndAGV_IO_status_lidarOSSD lidarOSSD;
-	CAS2ndAGV_IO_status_lidarMAP lidarMAP;
-	CAS2ndAGV_IO_status_EMS EMS;
-	CAS2ndAGV_IO_status_carlights light;
-};
-
 /* Extern Typedef End */
 
 /* Extern Variables -----------------------------------------*/

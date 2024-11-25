@@ -68,7 +68,7 @@ public:
 	
 
 	int adam_readDI(CAS2ndAGV_input_pin pin, uint8_t *io_status);/* read single digital input */
-	int adam_setDO(CAS2ndAGV_output_pin pin, bool status); /* set single digital output */
+	int adam_setDO(CAS2ndAGV_output_pin pin, uint8_t status); /* set single digital output */
 	int adam_readDO(CAS2ndAGV_output_pin pin, uint8_t *io_status);	/* read single digital output */
 };
 

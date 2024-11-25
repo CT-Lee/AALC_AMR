@@ -7,6 +7,7 @@
       },
       "includePath": [
         "${workspaceFolder}/src/cas2ndagv_io_controller/include/cas2ndagv_io_controller",
+        "${workspaceFolder}/devel/include",
         "/opt/ros/noetic/include/**",
         "/opt/ros/melodic/include/**",
         "/usr/include/modbus",
