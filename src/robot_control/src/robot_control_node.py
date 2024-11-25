@@ -62,8 +62,9 @@ class RobotControlNode:
                 error_sum = 0
                 for i in range(6):
                     error_sum += np.abs(Joint_data_target[i] - Joint_data_now[i])
-                print("error_sum: ", error_sum)
+                # print("error_sum: ", error_sum)
                 if error_sum < 0.001:
+                    print("Reached!")
                     return robot_control_srvResponse(robot_running_status = 'reached')
                 else:
                     return robot_control_srvResponse(robot_running_status = 'not_yet')
