@@ -4,8 +4,10 @@ import smach
 import smach_ros
 from std_msgs.msg import String
 from std_srvs.srv import Empty, EmptyResponse
+from delta_amr_service.srv import amr_srv, amr_srvResponse
 from delta_amr_service.srv import realsense_srv, realsense_srvResponse
 from delta_amr_service.srv import robot_control_srv, robot_control_srvResponse
+from delta_amr_service.srv import upload_srv, upload_srvResponse
 
 # Need to add function: Realsense detect human distance
 def human_detect(img_process_type_realsense):
@@ -26,19 +28,14 @@ class Watch_OP(smach.State):
     def execute(self, userdata):
         img_process_type_realsense = 'human_detect'
         human_dist, camera_status_realsense = human_detect(img_process_type_realsense)
-        
-        if human_dist is not None:
-            rospy.loginfo(f"Human detected at distance: {human_dist}")
-        else:
-            rospy.loginfo("No human detected or service unavailable.")
             
         rospy.loginfo('Executing state Watch_OP')
-        rospy.sleep(0.5)
-        if self.counter > 1000:
-            self.counter = 0
+        rospy.sleep(1)
+        if human_dist == 0:
+            rospy.loginfo('OP has leaved')
             return 'Start_Mov'
         else:
-            self.counter += 1
+            rospy.loginfo('OP is working')
             return 'watching'
         
 
@@ -50,12 +47,14 @@ class AMR_Mov(smach.State):
         
     def execute(self, userdata):
         rospy.loginfo('Executing state AMR_Mov')
-        rospy.sleep(1.0) 
-        if self.counter > 2:
-            self.counter = 0
-            return 'Start_Pic'
-        else:
-            self.counter += 1
+        try:
+            rospy.wait_for_service('amr_srv', timeout = None)
+            amr_move = rospy.ServiceProxy('amr_srv', amr_srv)
+            response = amr_move('forward')
+            if response.amr_status == 'stop':
+                return 'Start_Pic'
+        except rospy.ROSException as e:
+            rospy.logerr(f"Service call failed: {e}")
             return 'Moving'
 
 
@@ -85,10 +84,9 @@ class Robot_Pic(smach.State):
             robot_mov_point = 'P' + str(i + 1)
             robot_mov_speed = 0.25
             robot_mov_speed_low = 0.01
-            _ = robot_move(robot_mov_type, robot_mov_point,robot_mov_speed)
-            
+            #_ = robot_move(robot_mov_type, robot_mov_point,robot_mov_speed)
+            '''
             while True:
-                '''
                 if LiDAR_status == 'H':
                     _ = robot_move('stop', robot_mov_point,robot_mov_speed)
                     normal_speed_bool = False
@@ -100,17 +98,17 @@ class Robot_Pic(smach.State):
                     _ = robot_move('stop', robot_mov_point,robot_mov_speed)
                     _ = robot_move('MovL', robot_mov_point,robot_mov_speed)
                     normal_speed_bool = True
-                '''
                 print(robot_move('is_reached', robot_mov_point,robot_mov_speed))
                 if robot_move('is_reached', robot_mov_point,robot_mov_speed) == 'reached':
                     break
                 rospy.sleep(0.1)
+            '''
             # Take pic
 #            img_process_type_realsense = 'take_pic'
-            img_process_type_realsense = 'human_detect'
+            img_process_type_realsense = 'take_pic'
             human_dist, camera_status_realsense = human_detect(img_process_type_realsense)
             
-        _ = robot_move('MovL', 'P1',robot_mov_speed)
+        #_ = robot_move('MovL', 'P1',robot_mov_speed)
         return 'Start_Back'
         
         
@@ -123,14 +121,26 @@ class AMR_Back(smach.State):
     def execute(self, userdata):
         rospy.loginfo('Executing state AMR_Back')
         rospy.sleep(1.0)
-        if self.counter > 5:
-            self.counter = 0
-            return 'Start_Upload'
-        else:
-            self.counter += 1
+        try:
+            rospy.wait_for_service('amr_srv', timeout = None)
+            amr_move = rospy.ServiceProxy('amr_srv', amr_srv)
+            response = amr_move('backward')
+            if response.amr_status == 'stop':
+                return 'Start_Upload'
+        except rospy.ROSException as e:
+            rospy.logerr(f"Service call failed: {e}")
             return 'Moving'
          
-        
+def upload_img():
+    try:
+        rospy.wait_for_service('upload_srv', timeout = 2)
+        upload = rospy.ServiceProxy('upload_srv', upload_srv)
+        response = upload("start")
+        return response.upload_status
+    except rospy.ROSException as e:
+        rospy.logerr(f"Service call failed: {e}")
+        return None
+
 class IPC_Upload(smach.State):
     def __init__(self):
         smach.State.__init__(self, outcomes=['Uploading','Start_Watch_OP'])
@@ -138,11 +148,16 @@ class IPC_Upload(smach.State):
         
     def execute(self, userdata):
         rospy.loginfo('Executing state IPC_Upload')
+        upload_result = upload_img()
         rospy.sleep(1.0)
-        if self.counter > 5:
-            self.counter = 0
+        if upload_result == 'done':
+            rospy.loginfo("data upload completed!!!")
+            return 'Start_Watch_OP'
+        elif self.counter > 5:
+            rospy.loginfo("Too many fails")
             return 'Start_Watch_OP'
         else:
+            rospy.logerr(f"upload failed")
             self.counter += 1
             return 'Uploading'
          
