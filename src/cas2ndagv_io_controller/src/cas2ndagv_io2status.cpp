@@ -120,6 +120,10 @@ void cas2ndagv_io2status::Sub_TOPIC_adam_input_callback(const delta_amr_message:
 		{
 			cas2ndagv_io2status_msg.EMS = CAS2ndAGV_IO_status.EMS.normal;
 		}
+		else
+		{
+			cas2ndagv_io2status_msg.EMS = CAS2ndAGV_IO_status.EMS.unknown;
+		}
 
 		/* determine Lidar OSSD status */
 		if( (cas2ndagv_in_pin_msg.in_lidar_F_OSSD == static_cast<uint8_t>(AGV_PIN_status_lidar_OSSD::error)) ||
@@ -131,9 +135,15 @@ void cas2ndagv_io2status::Sub_TOPIC_adam_input_callback(const delta_amr_message:
 		{
 			cas2ndagv_io2status_msg.lidarOSSD = CAS2ndAGV_IO_status.lidarOSSD.slow_stop;
 		}
-		else
+		else if( (cas2ndagv_in_pin_msg.in_lidar_SlowStop == static_cast<uint8_t>(AGV_PIN_status_lidar_SlowStop::pass)) ||
+				 (cas2ndagv_in_pin_msg.in_lidar_F_OSSD == static_cast<uint8_t>(AGV_PIN_status_lidar_OSSD::error)) ||
+				 (cas2ndagv_in_pin_msg.in_lidar_B_OSSD == static_cast<uint8_t>(AGV_PIN_status_lidar_OSSD::error)) 		)
 		{
 			cas2ndagv_io2status_msg.lidarOSSD = CAS2ndAGV_IO_status.lidarOSSD.normal;
+		}
+		else
+		{
+			cas2ndagv_io2status_msg.lidarOSSD = CAS2ndAGV_IO_status.lidarOSSD.unknown;
 		}
 	}
 }
@@ -159,6 +169,9 @@ void cas2ndagv_io2status::Sub_TOPIC_cas2ndagv_io2state_callback(const delta_amr_
 **/
 void cas2ndagv_io2status::time_interrupter_callback(const ros::TimerEvent& time)
 {
+	Pub_TOPIC_adam_output();
+	Pub_TOPIC_cas2ndagv_io2status();
+	
 	/* determine Lidar map input status */
 	if( cas2ndagv_io2status_msg.lidarMAP == CAS2ndAGV_IO_status.lidarMAP.normal_walking )
 		cas2ndagv_out_pin_msg.out_lidar_mapSW = static_cast<uint8_t>(AGV_PIN_status_lidar_mapSW::normal);
@@ -208,7 +221,6 @@ void cas2ndagv_io2status::time_interrupter_callback(const ros::TimerEvent& time)
 	{	/* red light stays on */
 		carlight_ctl_error(0);
 	}
-
 
 	flash_count++;
 }

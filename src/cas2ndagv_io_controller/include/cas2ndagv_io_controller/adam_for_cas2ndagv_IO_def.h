@@ -33,6 +33,7 @@ struct CAS2ndAGV_IO_status_lidarOSSD
 	const std::string normal = "normal";
 	const std::string slow_stop = "slow_stop";
 	const std::string emergency_stop = "emergency_stop";
+	const std::string unknown = "unknown";
 };
 /* define current LiDAR map in use */
 struct CAS2ndAGV_IO_status_lidarMAP
@@ -46,6 +47,7 @@ struct CAS2ndAGV_IO_status_EMS
 	const std::string normal = "normal";
 	const std::string emergency_stop = "emergency_stop";
 	const std::string bypass = "bypass";
+	const std::string unknown = "unknown";
 };
 /* define emergency stop button status */
 struct CAS2ndAGV_IO_status_carlights
