@@ -50,7 +50,8 @@ add_message_files(
 	FILES
 	cas2ndagv_input_pin.msg
 	cas2ndagv_output_pin.msg
-	cas2ndagv_io2state.msg
+	cas2ndagv_io2state_in.msg
+	cas2ndagv_io2state_out.msg
 )
 
 ## Generate services in the 'srv' folder

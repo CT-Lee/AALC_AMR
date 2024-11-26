@@ -17,7 +17,8 @@
 /* User Includes Begin */
 #include "adam_for_cas2ndagv_IO_def.h"
 #include "adam_for_cas2ndagv_PIN_def.h"
-#include "delta_amr_message/cas2ndagv_io2state.h"
+#include "delta_amr_message/cas2ndagv_io2state_in.h"
+#include "delta_amr_message/cas2ndagv_io2state_out.h"
 #include "delta_amr_message/cas2ndagv_input_pin.h"
 #include "delta_amr_message/cas2ndagv_output_pin.h"
 /* User Includes End */
@@ -26,7 +27,8 @@
 /* Define ---------------------------------------------------*/
 /* Define Begin */
 
-#define cas2ndagv_io2state_topic "TOPIC_cas2ndagv_io2state"
+#define cas2ndagv_io2state_in_topic "TOPIC_cas2ndagv_io2state_in"
+#define cas2ndagv_io2state_out_topic "TOPIC_cas2ndagv_io2state_out"
 #define cas2ndagv_input_pin_topic "TOPIC_cas2ndagv_input_pin"
 #define cas2ndagv_output_pin_topic "TOPIC_cas2ndagv_output_pin"
 #define cas2ndagv_io2state_queue_size 100
@@ -61,25 +63,26 @@ private:
 	ros::NodeHandle nh;
 	/* create ros loop rate */
 	ros::Rate loop_rate;
-	/* create cas2ndagv io2state info publisher object */
-	ros::Publisher pub_io2status;
+	/* create cas2ndagv io2state in publisher object */
+	ros::Publisher pub_io2status_in;
 	/* create ADAM output publisher object */
 	ros::Publisher pub_adam_output;
-	/* create cas2ndagv io2state info subscriber object */
-	ros::Subscriber sub_io2status;
+	/* create cas2ndagv io2state out subscriber object */
+	ros::Subscriber sub_io2status_out;
 	/* create ADAM input subscriber object */
 	ros::Subscriber sub_adam_input;
 	/* create ros timer interrupt object */
 	ros::Timer time_interrupter;
 
-	delta_amr_message::cas2ndagv_io2state cas2ndagv_io2status_msg;
+	delta_amr_message::cas2ndagv_io2state_in cas2ndagv_io2status_in_msg;
+	delta_amr_message::cas2ndagv_io2state_out cas2ndagv_io2status_out_msg;
 	delta_amr_message::cas2ndagv_input_pin cas2ndagv_in_pin_msg;
 	delta_amr_message::cas2ndagv_output_pin cas2ndagv_out_pin_msg;
 
 	void Pub_TOPIC_adam_output(void);
-	void Pub_TOPIC_cas2ndagv_io2status(void);
+	void Pub_TOPIC_cas2ndagv_io2status_in(void);
 	void Sub_TOPIC_adam_input_callback(const delta_amr_message::cas2ndagv_input_pin& in);
-	void Sub_TOPIC_cas2ndagv_io2state_callback(const delta_amr_message::cas2ndagv_io2state& io2s);
+	void Sub_TOPIC_cas2ndagv_io2state_out_callback(const delta_amr_message::cas2ndagv_io2state_out& io2s_out);
 	void time_interrupter_callback(const ros::TimerEvent& time);
 
 	void carlight_ctl_standby(const int& count);
