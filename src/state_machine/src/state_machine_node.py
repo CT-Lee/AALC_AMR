@@ -84,10 +84,10 @@ class Robot_Pic(smach.State):
             robot_mov_point = 'P' + str(i + 1)
             robot_mov_speed = 0.25
             robot_mov_speed_low = 0.01
-            _ = robot_move(robot_mov_type, robot_mov_point,robot_mov_speed)
-            
+            #_ = robot_move(robot_mov_type, robot_mov_point,robot_mov_speed)
+            '''
             while True:
-                '''
+                
                 if LiDAR_status == 'H':
                     _ = robot_move('stop', robot_mov_point,robot_mov_speed)
                     normal_speed_bool = False
@@ -99,17 +99,18 @@ class Robot_Pic(smach.State):
                     _ = robot_move('stop', robot_mov_point,robot_mov_speed)
                     _ = robot_move('MovL', robot_mov_point,robot_mov_speed)
                     normal_speed_bool = True
-                '''
+                
                 print(robot_move('is_reached', robot_mov_point,robot_mov_speed))
                 if robot_move('is_reached', robot_mov_point,robot_mov_speed) == 'reached':
                     break
                 rospy.sleep(0.1)
+            '''
             # Take pic
 #            img_process_type_realsense = 'take_pic'
-            img_process_type_realsense = 'human_detect'
+            img_process_type_realsense = 'take_pic'
             human_dist, camera_status_realsense = human_detect(img_process_type_realsense)
             
-        _ = robot_move('MovL', 'P1',robot_mov_speed)
+        #_ = robot_move('MovL', 'P1',robot_mov_speed)
         return 'Start_Back'
         
         

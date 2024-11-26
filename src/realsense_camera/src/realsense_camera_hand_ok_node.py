@@ -4,9 +4,9 @@ from std_msgs.msg import String
 from delta_amr_service.srv import realsense_srv, realsense_srvResponse
 import cv2
 from cv_bridge import CvBridge
-from sensor_msgs.msg import Image
 import os
 import time
+import uuid
 import pyrealsense2 as rs
 import numpy as np
 import open3d as o3d
@@ -33,8 +33,8 @@ class RealsenseCameraNode:
         self.pipeline = rs.pipeline()
         self.config = rs.config()
         #config.enable_device_from_file(bag_file)# for bag testing
-        self.config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)  # Color stream at 640x480 resolution
-        self.config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)  # Depth stream at 640x480 resolution
+        self.config.enable_stream(rs.stream.color, 1280, 720, rs.format.bgr8, 30)  # Color stream at 640x480 resolution
+        self.config.enable_stream(rs.stream.depth, 1280, 720, rs.format.z16, 30)  # Depth stream at 640x480 resolution
         self.pipeline.start(self.config)
         self.align_to = rs.stream.color
         self.align = rs.align(self.align_to)
@@ -49,8 +49,9 @@ class RealsenseCameraNode:
         self.matrices = []
 
         # 圖像存儲路徑（可自定義）
-        self.image_paths = ['/home/ctlee/catkin_ws/src/realsense_camera/src/cat1.jpg',
-        '/home/ctlee/catkin_ws/src/realsense_camera/src/cat2.jpeg', '/home/ctlee/catkin_ws/src/realsense_camera/src/cat3.jpg']
+        self.absolute_path = os.path.dirname(__file__)
+        self.relative_path = "data_upload_node/realsense_imgs"
+        self.ftp_dir = os.path.join(self.absolute_path[:-21], self.relative_path)# Remote directory for image upload
         
     def camera_action_callback(self, req):
         rospy.loginfo(f"Received human detection request with process type: {req.img_process_type_realsense}")
@@ -88,6 +89,7 @@ class RealsenseCameraNode:
         #cv2.imwrite('Aligned RealSense'+str(self.count)+'.png', aligned_depth_image, [cv2.IMWRITE_PNG_COMPRESSION, 5])
         
         # hand pose estimation with mediapipe
+        color_image = cv2.resize(color_image, (640, 480), interpolation=cv2.INTER_CUBIC)
         color_image = cv2.flip(color_image, 1)
         rgb_image = cv2.cvtColor(color_image, cv2.COLOR_BGR2RGB)
         results = self.hands.process(rgb_image)
@@ -108,7 +110,6 @@ class RealsenseCameraNode:
                 op = 0
             else:
                 op = 1
-        #cv2.imwrite("Hand Pose"+str(self.count)+".png", color_image)
 
         return op
 
@@ -121,9 +122,10 @@ class RealsenseCameraNode:
             if color_frame:
                 color_image = np.asanyarray(color_frame.get_data())
                 break
-        ros_image = self.bridge.cv2_to_imgmsg(color_image, encoding="bgr8")
-        self.pub_image.publish(ros_image)
-        print('PUB!!!!')
+        
+        filename = os.path.join(self.ftp_dir, str(uuid.uuid4()) + '_color.png')
+        cv2.imwrite(filename, color_image, [cv2.IMWRITE_PNG_COMPRESSION, 5])
+        rospy.loginfo(f"Image saved to temporary file: {img_path}")
         return 0
 		
 
