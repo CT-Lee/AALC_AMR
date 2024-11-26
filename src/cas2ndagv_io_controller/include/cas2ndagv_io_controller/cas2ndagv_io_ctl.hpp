@@ -23,17 +23,17 @@
 
 /* Define ---------------------------------------------------*/
 /* Define Begin */
+
+#define cas2ndagv_input_pin_topic "TOPIC_cas2ndagv_input_pin"
+#define cas2ndagv_output_pin_topic "TOPIC_cas2ndagv_output_pin"
+#define cas2ndagv_pin_queue_size 100
+#define running_cycle 0.1
+
 /* Define End */
 
 
 /* Extern Typedef -------------------------------------------*/
 /* Extern Typedef Begin */
-
-#define cas2ndagv_input_pin_topic "cas2ndagv_input_pin"
-#define cas2ndagv_output_pin_topic "cas2ndagv_output_pin"
-#define cas2ndagv_pin_queue_size 100
-#define running_cycle 0.1
-
 /* Extern Typedef End */
 
 
@@ -60,8 +60,8 @@ private:
 	/* create ros timer interrupt object */
 	ros::Timer time_interrupter;
 
-	delta_amr_message::cas2ndagv_input_pin cas2ndagv_in_pin;
-	delta_amr_message::cas2ndagv_output_pin cas2ndagv_out_pin;
+	delta_amr_message::cas2ndagv_input_pin cas2ndagv_in_pin_msg;
+	delta_amr_message::cas2ndagv_output_pin cas2ndagv_out_pin_msg;
 
 	void cas2ndagv_in_program(void);
 	void read_in_lidar_F_OSS(void);
@@ -77,7 +77,7 @@ private:
 	void write_out_lidar_mapSW(AGV_PIN_status_lidar_mapSW);
 
 	void Pub_TOPIC_adam_input(void);
-	void Sub_TOPIC_adam_output_callback(const delta_amr_message::cas2ndagv_output_pin& in);
+	void Sub_TOPIC_adam_output_callback(const delta_amr_message::cas2ndagv_output_pin& out);
 	void time_interrupter_callback(const ros::TimerEvent& time);
 
 /* public member */

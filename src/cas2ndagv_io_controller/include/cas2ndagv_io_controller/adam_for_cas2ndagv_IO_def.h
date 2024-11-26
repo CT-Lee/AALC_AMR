@@ -50,12 +50,15 @@ struct CAS2ndAGV_IO_status_EMS
 /* define emergency stop button status */
 struct CAS2ndAGV_IO_status_carlights
 {
-	const std::string straight = "straight";
-	const std::string reverse = "reverse";
-	const std::string left = "left";
-	const std::string right = "right";
-	const std::string workstation = "workstation";
-	const std::string error = "error";
+	const std::string standby = "standby";			/*  */
+	const std::string straight = "straight";		/* all g */
+	const std::string reverse = "reverse";			/* flash g */
+	const std::string left = "left";				/* left g */
+	const std::string right = "right";				/* right g */
+	const std::string charging = "charging";		/*  */
+	const std::string workstation = "workstation";	/*  */
+	const std::string handshake = "handshake";		/* flash y */
+	const std::string error = "error";				/* all r */
 };
 /* define cas2ndagv top state */
 struct CAS2ndAGV_IO_status_struct

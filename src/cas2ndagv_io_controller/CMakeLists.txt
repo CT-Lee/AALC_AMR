@@ -214,3 +214,9 @@ add_executable(	cas2ndagv_io_ctl_node
 				src/ADAM_HandShake.cpp       	 )
 add_dependencies(cas2ndagv_io_ctl_node ${catkin_EXPORTED_TARGETS} )
 target_link_libraries(cas2ndagv_io_ctl_node ${catkin_LIBRARIES} modbus )
+
+add_executable(	cas2ndagv_io2status_node
+				src/cas2ndagv_io2status.cpp
+				src/cas2ndagv_io2status_ROS.cpp	)
+add_dependencies(cas2ndagv_io2status_node ${catkin_EXPORTED_TARGETS} )
+target_link_libraries(cas2ndagv_io2status_node ${catkin_LIBRARIES} )

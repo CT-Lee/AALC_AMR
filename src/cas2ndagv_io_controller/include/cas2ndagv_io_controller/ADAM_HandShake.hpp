@@ -19,7 +19,7 @@
 /* User Includes --------------------------------------------*/
 /* User Includes Begin */
 #include "modbus.h"
-#include "adam_for_cas2ndagv_IO_def.h"
+// #include "adam_for_cas2ndagv_IO_def.h"
 #include "adam_for_cas2ndagv_PIN_def.h"
 /* User Includes End */
 

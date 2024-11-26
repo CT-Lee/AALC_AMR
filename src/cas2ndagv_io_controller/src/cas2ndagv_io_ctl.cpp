@@ -89,23 +89,23 @@ void cas2ndagv_io_ctl::cas2ndagv_in_program(void)
 }
 void cas2ndagv_io_ctl::read_in_lidar_F_OSS(void)
 {
-	ADAM_HS.adam_readDI(CAS2ndAGV_input_pin::in_lidar_F_OSSD1, &cas2ndagv_in_pin.in_lidar_F_OSSD);
+	ADAM_HS.adam_readDI(CAS2ndAGV_input_pin::in_lidar_F_OSSD1, &cas2ndagv_in_pin_msg.in_lidar_F_OSSD);
 }
 void cas2ndagv_io_ctl::read_in_lidar_B_OSS(void)
 {
-	ADAM_HS.adam_readDI(CAS2ndAGV_input_pin::in_lidar_B_OSSD1, &cas2ndagv_in_pin.in_lidar_B_OSSD);
+	ADAM_HS.adam_readDI(CAS2ndAGV_input_pin::in_lidar_B_OSSD1, &cas2ndagv_in_pin_msg.in_lidar_B_OSSD);
 }
 void cas2ndagv_io_ctl::read_in_EMS(void)
 {
-	ADAM_HS.adam_readDI(CAS2ndAGV_input_pin::in_EMS, &cas2ndagv_in_pin.in_EMS);
+	ADAM_HS.adam_readDI(CAS2ndAGV_input_pin::in_EMS, &cas2ndagv_in_pin_msg.in_EMS);
 }
 void cas2ndagv_io_ctl::read_in_manual(void)
 {
-	ADAM_HS.adam_readDI(CAS2ndAGV_input_pin::in_manual, &cas2ndagv_in_pin.in_manual);
+	ADAM_HS.adam_readDI(CAS2ndAGV_input_pin::in_manual, &cas2ndagv_in_pin_msg.in_manual);
 }
 void cas2ndagv_io_ctl::read_in_lidar_SlowSto(void)
 {
-	ADAM_HS.adam_readDI(CAS2ndAGV_input_pin::in_lidar_SlowStop, &cas2ndagv_in_pin.in_lidar_SlowStop);
+	ADAM_HS.adam_readDI(CAS2ndAGV_input_pin::in_lidar_SlowStop, &cas2ndagv_in_pin_msg.in_lidar_SlowStop);
 }
 
 /** * @brief cas2ndagv_io_ctl object handle the ADAM output program
@@ -114,10 +114,10 @@ void cas2ndagv_io_ctl::read_in_lidar_SlowSto(void)
 **/
 void cas2ndagv_io_ctl::cas2ndagv_out_program(void)
 {
-	write_out_green_light_L(static_cast<AGV_PIN_status_light>(cas2ndagv_out_pin.out_green_light_L));
-	write_out_green_light_R(static_cast<AGV_PIN_status_light>(cas2ndagv_out_pin.out_green_light_R));
-	write_out_red_light(static_cast<AGV_PIN_status_light>(cas2ndagv_out_pin.out_red_light));
-	write_out_lidar_mapSW(static_cast<AGV_PIN_status_lidar_mapSW>(cas2ndagv_out_pin.out_lidar_mapSW));
+	write_out_green_light_L(static_cast<AGV_PIN_status_light>(cas2ndagv_out_pin_msg.out_green_light_L));
+	write_out_green_light_R(static_cast<AGV_PIN_status_light>(cas2ndagv_out_pin_msg.out_green_light_R));
+	write_out_red_light(static_cast<AGV_PIN_status_light>(cas2ndagv_out_pin_msg.out_red_light));
+	write_out_lidar_mapSW(static_cast<AGV_PIN_status_lidar_mapSW>(cas2ndagv_out_pin_msg.out_lidar_mapSW));
 }
 void cas2ndagv_io_ctl::write_out_green_light_L(AGV_PIN_status_light light_status)
 {
@@ -142,7 +142,7 @@ void cas2ndagv_io_ctl::write_out_lidar_mapSW(AGV_PIN_status_lidar_mapSW mapSW_st
 **/
 void cas2ndagv_io_ctl::Pub_TOPIC_adam_input(void)
 {
-	pub_adam_input.publish(cas2ndagv_in_pin);
+	pub_adam_input.publish(cas2ndagv_in_pin_msg);
 }
 
 /** * @brief cas2ndagv_io_ctl object subscribe callback function
@@ -151,7 +151,7 @@ void cas2ndagv_io_ctl::Pub_TOPIC_adam_input(void)
 **/
 void cas2ndagv_io_ctl::Sub_TOPIC_adam_output_callback(const delta_amr_message::cas2ndagv_output_pin& out)
 {
-	cas2ndagv_out_pin = out;
+	cas2ndagv_out_pin_msg = out;
 }
 
 /** * @brief cas2ndagv_io_ctl object timer interrupt callback function

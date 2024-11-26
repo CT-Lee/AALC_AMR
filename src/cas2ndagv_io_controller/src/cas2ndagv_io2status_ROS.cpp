@@ -7,9 +7,11 @@
 
 /* System Includes ------------------------------------------*/
 /* System Includes Begin */
+#include <ros/ros.h>
 /* System Includes End */
 /* User Includes --------------------------------------------*/
 /* User Includes Begin */
+#include "cas2ndagv_io2status.hpp"
 /* User Includes End */
 
 /* namespace ------------------------------------------------*/
@@ -48,10 +50,17 @@
 /* ---------------------------------------------------------*/
 /* Program Begin */
 
-/** * @brief
-	* @param
- 	* @return
-**/
+/** * @brief  Program entry point.
+	* @param argc(int) Number of input parameters
+ 	* @param argv(int) input parameters
+ 	* @return (int) Program Error.
+**	**/
+int main(int argc, char **argv)
+{
+	ros::init(argc, argv, "cas2ndagv_io_ctl_ROS");
+	cas2ndagv_io2status io2s_ctl;
+	ros::spin();
+}
 
 /* Program End */
 /* ---------------------------------------------------------*/
