@@ -64,6 +64,8 @@ cas2ndagv_io_ctl::cas2ndagv_io_ctl():
 	sub_adam_output = nh.subscribe(cas2ndagv_output_pin_topic, cas2ndagv_pin_queue_size, &cas2ndagv_io_ctl::Sub_TOPIC_adam_output_callback, this);
 	/* init timer interrupt object */
 	time_interrupter = nh.createTimer(ros::Duration(running_cycle), &cas2ndagv_io_ctl::time_interrupter_callback, this);
+	/* display program running */
+	ROS_INFO("[cas2ndagv_io_ctl_ROS] node startup completed. cas2ndagv_io_ctl_ROS running...");
 }
 
 /** * @brief cas2ndagv_io_ctl object destructor
@@ -125,15 +127,15 @@ void cas2ndagv_io_ctl::write_out_green_light_L(AGV_PIN_status_light light_status
 }
 void cas2ndagv_io_ctl::write_out_green_light_R(AGV_PIN_status_light light_status)
 {
-	ADAM_HS.adam_setDO(CAS2ndAGV_output_pin::out_green_light_L, static_cast<uint8_t>(light_status));
+	ADAM_HS.adam_setDO(CAS2ndAGV_output_pin::out_green_light_R, static_cast<uint8_t>(light_status));
 }
 void cas2ndagv_io_ctl::write_out_red_light(AGV_PIN_status_light light_status)
 {
-	ADAM_HS.adam_setDO(CAS2ndAGV_output_pin::out_green_light_L, static_cast<uint8_t>(light_status));
+	ADAM_HS.adam_setDO(CAS2ndAGV_output_pin::out_red_light, static_cast<uint8_t>(light_status));
 }
 void cas2ndagv_io_ctl::write_out_lidar_mapSW(AGV_PIN_status_lidar_mapSW mapSW_status)
 {
-	ADAM_HS.adam_setDO(CAS2ndAGV_output_pin::out_green_light_L, static_cast<uint8_t>(mapSW_status));
+	ADAM_HS.adam_setDO(CAS2ndAGV_output_pin::out_lidar_mapSW, static_cast<uint8_t>(mapSW_status));
 }
 
 /** * @brief cas2ndagv_io_ctl object publishe function

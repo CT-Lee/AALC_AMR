@@ -5,5 +5,17 @@
 		  type="cas2ndagv_io_ctl_node"
 		  output="screen" >
 	</node>
+	
+	<node name="cas2ndagv_io2status_node" 
+		  pkg="cas2ndagv_io_controller"
+		  type="cas2ndagv_io2status_node"
+		  output="screen" >
+	</node>
+
+	<node name="pub_io2status_dummy" 
+		  pkg="cas2ndagv_io_controller"
+		  type="pub_io2status_dummy"
+		  output="screen" >
+	</node>
 
 </launch>

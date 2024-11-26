@@ -45,8 +45,8 @@ enum class CAS2ndAGV_input_pin: uint16_t
 };
 enum class CAS2ndAGV_output_pin: uint16_t
 {
-	out_green_light_L = 32,	/* slot3-DI0 */
-	out_green_light_R = 33,	/* slot3-DI0 */
+	out_green_light_R = 32,	/* slot3-DI1 */
+	out_green_light_L = 33,	/* slot3-DI0 */
 	out_red_light 	  = 34,	/* slot3-DI2 */
 	out_lidar_mapSW   = 35	/* slot3-DI3 */
 };
