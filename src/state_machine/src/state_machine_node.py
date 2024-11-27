@@ -3,6 +3,8 @@ import rospy
 import smach
 import smach_ros
 from std_msgs.msg import String
+from delta_amr_message.msg import cas2ndagv_io2state_out
+from delta_amr_message.msg import cas2ndagv_io2state_in
 from std_srvs.srv import Empty, EmptyResponse
 from delta_amr_service.srv import amr_srv, amr_srvResponse
 from delta_amr_service.srv import realsense_srv, realsense_srvResponse
@@ -28,7 +30,21 @@ class Watch_OP(smach.State):
     def execute(self, userdata):
         img_process_type_realsense = 'human_detect'
         human_dist, camera_status_realsense = human_detect(img_process_type_realsense)
-            
+        if cas2ndag_in.lidarOSSD == 'emergency_stop':
+            rospy.loginfo('lidarOSSD = emergency_stop')
+            cas2ndag_out.lidarMAP = 'workstation1'
+            cas2ndag_out.light = 'reverse'
+            pub_cas2ndagv_io2status_out.publish(cas2ndag_out)
+        elif cas2ndag_in.lidarOSSD == 'slow_stop':
+            rospy.loginfo('lidarOSSD = slow_stop')
+            cas2ndag_out.lidarMAP = 'workstation1'
+            cas2ndag_out.light = 'handshake'
+            pub_cas2ndagv_io2status_out.publish(cas2ndag_out)
+        elif cas2ndag_in.lidarOSSD == 'normal':
+            rospy.loginfo('lidarOSSD = normal')
+            cas2ndag_out.lidarMAP = 'workstation1'
+            cas2ndag_out.light = 'standby'
+            pub_cas2ndagv_io2status_out.publish(cas2ndag_out)
         rospy.loginfo('Executing state Watch_OP')
         rospy.sleep(1)
         if human_dist == 0:
@@ -78,37 +94,39 @@ class Robot_Pic(smach.State):
         rospy.loginfo('Executing state Robot_Pic')
         
         normal_speed_bool = True
-        num_pic = 4
+        num_pic = 3
         for i in range(num_pic):
             robot_mov_type = 'MovL'
-            robot_mov_point = 'P' + str(i + 1)
+            robot_mov_point = 'P' + str(i + 2)
             robot_mov_speed = 0.25
             robot_mov_speed_low = 0.01
-            #_ = robot_move(robot_mov_type, robot_mov_point,robot_mov_speed)
-            '''
+            _ = robot_move(robot_mov_type, robot_mov_point,robot_mov_speed)
+            
             while True:
-                if LiDAR_status == 'H':
+                
+                if cas2ndag_in.lidarOSSD  == 'emergency_stop':
                     _ = robot_move('stop', robot_mov_point,robot_mov_speed)
                     normal_speed_bool = False
-                elif LiDAR_status == 'M':
+                elif cas2ndag_in.lidarOSSD  == 'slow_stop':
                     _ = robot_move('stop', robot_mov_point,robot_mov_speed)
                     _ = robot_move('MovL', robot_mov_point,robot_mov_speed_low)
                     normal_speed_bool = False
-                elif LiDAR_status == 'L' and normal_speed_bool == False:
+                elif cas2ndag_in.lidarOSSD  == 'normal' and normal_speed_bool == False:
                     _ = robot_move('stop', robot_mov_point,robot_mov_speed)
                     _ = robot_move('MovL', robot_mov_point,robot_mov_speed)
                     normal_speed_bool = True
+                
                 print(robot_move('is_reached', robot_mov_point,robot_mov_speed))
                 if robot_move('is_reached', robot_mov_point,robot_mov_speed) == 'reached':
                     break
                 rospy.sleep(0.1)
-            '''
+            
             # Take pic
 #            img_process_type_realsense = 'take_pic'
             img_process_type_realsense = 'take_pic'
             human_dist, camera_status_realsense = human_detect(img_process_type_realsense)
             
-        #_ = robot_move('MovL', 'P1',robot_mov_speed)
+        _ = robot_move('MovL', 'P1',robot_mov_speed)
         return 'Start_Back'
         
         
@@ -206,9 +224,19 @@ def main():
     rospy.spin()
     sis.stop()
 
+def sub_cas2ndagv_io2status_in_callback(data):
+    cas2ndag_in.lidarOSSD = data.lidarOSSD
+    cas2ndag_in.EMS = data.lidarOSSD
+    # rospy.loginfo('lidarOSSD = %s', data.lidarOSSD)
+    # rospy.loginfo('lidarMAP = %s', data.EMS)
 
+cas2ndag_out = cas2ndagv_io2state_out()
+cas2ndag_in = cas2ndagv_io2state_in()
+pub_cas2ndagv_io2status_out = rospy.Publisher('TOPIC_cas2ndagv_io2state_out', cas2ndagv_io2state_out, queue_size=100)
+sub_cas2ndagv_io2status_in = rospy.Subscriber('TOPIC_cas2ndagv_io2state_in', cas2ndagv_io2state_in, sub_cas2ndagv_io2status_in_callback)
 if __name__ == '__main__':
     main()
+
 '''
 def talker():
     pub = rospy.Publisher('/realsense_camera/command', String, queue_size=10)

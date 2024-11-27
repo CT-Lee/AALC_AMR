@@ -1,0 +1,33 @@
+<!--
+	@file name : testrun.launch
+	@author : Tsai,Li-Chun
+	@brief  : 
+-->
+
+<launch>
+
+	<!-- AMR walk -->
+	<node name="main_motorController" 
+		  pkg="motor_controller"
+		  type="main_motorController"
+		  output="screen" >
+	</node>
+	<node name="open_loop_controller" 
+		  pkg="open_loop_motor_control"
+		  type="open_loop_controller.py" >
+	</node>
+
+	<!-- D-bot control -->
+	<node name="robot_control_node" 
+		  pkg="robot_control"
+		  type="robot_control_node.py" >
+	</node>
+
+	<!-- state_machine -->
+	<node name="state_machine_node" 
+		  pkg="state_machine"
+		  type="state_machine_node.py"
+		  output="screen" >
+	</node>
+	
+</launch>

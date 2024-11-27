@@ -29,13 +29,13 @@ def check_gesture(left_shoulder, left_elbow, left_wrist,
     shoulder_distance = abs(left_shoulder[0] - right_shoulder[0])
     elbow_distance = abs(left_elbow[0] - right_elbow[0])
     elbows_wider = elbow_distance > x_factor * shoulder_distance
-    #print("shoulder_distance: ", shoulder_distance)
-    #print("elbow_distance: ", elbow_distance)
+    print("shoulder_distance: ", shoulder_distance)
+    print("elbow_distance: ", elbow_distance)
     
     # 條件 3: 左右手腕距離 < 左右肩膀距離的 y 倍
     wrist_distance = calculate_distance(left_wrist, right_wrist)
     wrists_closer = wrist_distance < y_factor * shoulder_distance
-    #print("wrist_distance: ", wrist_distance)
+    print("wrist_distance: ", wrist_distance)
     return elbows_higher and elbows_wider and wrists_closer
 
 class RealsenseCameraNode:

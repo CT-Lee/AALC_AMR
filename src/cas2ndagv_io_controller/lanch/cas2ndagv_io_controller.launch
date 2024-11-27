@@ -12,9 +12,9 @@
 		  output="screen" >
 	</node>
 
-	<node name="pub_io2status_dummy" 
-		  pkg="cas2ndagv_io_controller"
-		  type="pub_io2status_dummy"
+	<node name="state_machine_node" 
+		  pkg="state_machine"
+		  type="state_machine_node.py"
 		  output="screen" >
 	</node>
 

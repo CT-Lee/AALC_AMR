@@ -8,6 +8,7 @@ from ftplib import FTP
 import os
 from pathlib import Path
 from delta_amr_service.srv import upload_srv, upload_srvResponse
+import time
 
 class ImageUploader:
     def __init__(self):
@@ -15,7 +16,7 @@ class ImageUploader:
         self.bridge = CvBridge()
 
         # FTP server information
-        self.ftp_host = "192.168.56.1"  # Replace with your FTP server address
+        self.ftp_host = "192.168.1.88"  # Replace with your FTP server address
         self.ftp_port = 21
         self.ftp_user = "user"    # FTP username
         self.ftp_pass = "password"  # FTP password
@@ -40,6 +41,7 @@ class ImageUploader:
         return upload_srvResponse(upload_status = "done")
 
     def upload_image(self):
+        start_time = time.time()
         for filename in os.listdir(self.ftp_dir):
             file_path = os.path.join(self.ftp_dir, filename)
             remote_filename = filename
@@ -53,6 +55,9 @@ class ImageUploader:
                     os.remove(file_path)
                 except Exception as e:
                     rospy.logerr(f"Error uploading file: {e}")
+        end_time = time.time()
+        e_time = end_time - start_time
+        print("send all png with FTP needs: "+str(e_time)+" secs")
 
 if __name__ == '__main__':
     # Initialize the ROS node
