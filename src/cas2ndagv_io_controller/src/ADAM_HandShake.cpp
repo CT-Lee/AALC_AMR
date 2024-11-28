@@ -64,7 +64,7 @@ ADAM_HandShake::ADAM_HandShake(const char* ip,const int port,const int slave)
 	/* 初始化modbus通訊設定 */
 	adam = modbus_new_tcp(ip,port);
 	/* 初始化是否成功判斷 */
-	if( adam == 0 )
+	if( adam == NULL )
 	{	
 #ifdef raw_message
         /* 若初始化失敗,打印訊息,退出程序 */

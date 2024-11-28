@@ -8,9 +8,10 @@ project(open_loop_motor_control)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  geometry_msgs
-  rospy
-  std_msgs
+	roscpp
+	rospy
+	std_msgs
+	geometry_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -103,10 +104,10 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES open_loop_motor_control
-#  CATKIN_DEPENDS geometry_msgs rospy std_msgs
-#  DEPENDS system_lib
+	# INCLUDE_DIRS include
+	# LIBRARIES open_loop_motor_control
+	CATKIN_DEPENDS roscpp rospy std_msgs geometry_msgs
+	# DEPENDS system_lib
 )
 
 ###########
@@ -117,7 +118,8 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
 # include
-  ${catkin_INCLUDE_DIRS}
+	${catkin_INCLUDE_DIRS}
+	./include/${PROJECT_NAME}
 )
 
 ## Declare a C++ library
@@ -204,3 +206,14 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+add_executable(	movement_control_Node
+				src/movement_control.cpp
+				src/movement_control_Node.cpp      	 )
+add_dependencies(movement_control_Node ${catkin_EXPORTED_TARGETS} )
+target_link_libraries(movement_control_Node ${catkin_LIBRARIES} )
+
+add_executable(	pub_cmdvel2odom_dummy
+				src/pub_cmdvel2odom_dummy.cpp      	 )
+add_dependencies(pub_cmdvel2odom_dummy ${catkin_EXPORTED_TARGETS} )
+target_link_libraries(pub_cmdvel2odom_dummy ${catkin_LIBRARIES} )

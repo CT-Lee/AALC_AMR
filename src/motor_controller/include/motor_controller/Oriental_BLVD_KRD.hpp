@@ -16,7 +16,6 @@
 /* System Includes End */
 /* User Includes --------------------------------------------*/
 /* User Includes Begin */
-#include <ros/ros.h>
 #include "modbus/modbus.h"
 #include "register_address_table.hpp"
 /* User Includes End */
@@ -24,6 +23,27 @@
 
 /* Define ---------------------------------------------------*/
 /* Define Begin */
+
+#define TC_RESET "\033[0m"			// Normal 
+#define TC_ERROR "\033[31m[ERROR] " // Red
+#define TC_CLOSE "\x1B[2J\x1B[H "	// close
+
+#define BLVD_KRD_structure_ERROR 1
+#define BLVD_KRD_set_slave_ERROR 2
+#define BLVD_KRD_connect_ERROR 3
+#define BLVD_KRD_SetupOType_ERROR 4
+#define BLVD_KRD_SetupAcc_ERROR 5
+#define BLVD_KRD_SetupDec_ERROR 6
+#define BLVD_KRD_SetupTorque_ERROR 7
+#define BLVD_KRD_SetupTrigger_ERROR 8
+#define BLVD_KRD_ServoON_ERROR 9
+#define BLVD_KRD_Output_ERROR 10
+
+#define BLVD_KRD_OpType  (uint32_t)48
+#define BLVD_KRD_MAX_acc (uint32_t)1000
+#define BLVD_KRD_MAX_dec (uint32_t)1000
+#define BLVD_KRD_Trigger (int32_t)-4
+
 /* Define End */
 
 
@@ -57,8 +77,6 @@ public:
 
 	/* motor initialize */
 	int motorInit(uint32_t OpType, uint32_t Acc, uint32_t Dec, int32_t Trigger);
-	/* 直接資料傳輸設定初始化 */
-	int BLVD_KRD_DirectDataOperation_setup(uint32_t OpType, uint32_t Acc, uint32_t Dec, int32_t Trigger);
 	/* 確認輸出狀態 */
 	bool BLVD_KRD_DriverOutputStatus_check(void);
 
@@ -136,10 +154,8 @@ private:
 	int32_t motorStatus[2];
 	// /* 32bit to 16bit[2] 轉換結構體  */
 	// modbus_32FormatTo16Format buffer_32to16;
-
-
-	/* Setup SlaveID & Connect */
-	int Modbus_slave_connect(int);
+	/* store error message from try&catch block */
+	std::string throw_msg;
 
 	/* 讀取Int32t資料 */
 	int readInt32t(uint16_t Adr, int32_t *v);

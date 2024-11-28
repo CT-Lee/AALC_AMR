@@ -7,6 +7,7 @@
 
 /* System Includes ------------------------------------------*/
 /* System Includes Begin */
+#include <unistd.h>
 /* System Includes End */
 /* User Includes --------------------------------------------*/
 /* User Includes Begin */
@@ -49,7 +50,6 @@
 /* ---------------------------------------------------------*/
 /* Program Begin */
 
-#if 1 /* system setup */
 /** * @brief Constructor - modbusRTU mode setup
  	* @param device(char*) Modbus Device File path
  	* @param BR(int) Baud Rate
@@ -63,63 +63,65 @@ BLVD_KRD_Control::BLVD_KRD_Control(const char* device,int slave,
 									 int BR, char parity,
 									 int data_bit, int stop_bit )
 {
+	throw_msg = "[BLVD_KRD_Control]";
 	/* 初始化modbus通訊設定 */
 	mb = modbus_new_rtu(device,BR,parity,data_bit,stop_bit);
-	if( Modbus_slave_connect(slave) != 0 )
-		ROS_INFO("BLVD-KRD Modbus RTU Mode Setup Failure!");
-		// printf("BLVD-KRD Modbus RTU Mode Setup Failure!\n");
-}
-
-/** * @brief Setup SlaveID & Connect
- 	* @param slave(int) Modbus Device ID, default 1
- 	* @return int 
-**	**/
-int BLVD_KRD_Control::Modbus_slave_connect(int slave)
-{
 	/* 初始化是否成功判斷 */
 	if( mb == NULL )
-	{	/* 若初始化失敗,打印訊息,退出程序 */
-		ROS_INFO("%s",modbus_strerror(errno));
-		// printf("%s\n",modbus_strerror(errno));
-		exit(EXIT_FAILURE);
+	{	
+#ifdef raw_message
+		/* 若初始化失敗,打印訊息,退出程序 */
+		std::cout << TC_ERROR << modbus_strerror(errno) << TC_RESET << std::endl;
+#endif
+		// exit(BLVD_KRD_structure_ERROR);
+		throw_msg += " create modbus_t structure fail";
+		throw std::runtime_error(throw_msg.c_str());
 	}
 	else
-	{	/* 若初始化成功,打印訊息 */
-		ROS_INFO("Initialize BLVD-KRD modbus_t Structure Success!");
-		// printf("Initialize BLVD-KRD modbus_t Structure Success\n");
-	}
+	{	
+#ifdef raw_message
+		/* 若初始化成功,打印訊息 */
+		std::cout << "Initialize BLVD-KRD modbus_t Structure Success!" << std::endl;
+#endif
+	}	
 
 	/* 設定欲通訊的modbus-slaveID */
 	rc = modbus_set_slave(mb,slave);
 	if( rc != 0 )
-	{	/* 若設定失敗,打印訊息,退出建構函數 */
+	{	
+#ifdef raw_message
+		/* 若設定失敗,打印訊息,退出建構函數 */
 		ROS_INFO("BLVD-KRD modbus set slave Failure!");
 		// printf("BLVD-KRD modbus set slave Failure!\n");
-		return rc;
+#endif
+		// exit(BLVD_KRD_set_slave_ERROR);
+		throw_msg += " set modbus slave fail";
+		throw std::runtime_error(throw_msg.c_str());
 	}
-	else
-	{	/* 若slaveID設定成功,打印訊息 */
-		ROS_INFO("BLVD-KRD Setup Slave ID \"%d\" Success!",slave);
-		// printf("BLVD-KRD Setup Slave ID \"%d\" Success\n", slave);
-	}
+#ifdef raw_message
+	else	/* 若slaveID設定成功,打印訊息 */
+		std::cout << "set modbus slave [" << slave << "] Success!" << std::endl;
+#endif
+
 
 	/* 建立連結 */
 	rc = modbus_connect(mb);
 	if( rc != 0 )
-	{	/* 若設定失敗,打印訊息,退出建構函數 */
-		ROS_INFO("BLVD-KRD modbus connect Failure!");
-		// printf("BLVD-KRD modbus connect Failure!\n");
-		return rc;
+	{	
+#ifdef raw_message
+        /* 若設定失敗,打印訊息,退出建構函數 */
+		std::cout << TC_ERROR << "BLVD-KRD modbus connect Failure!" << std::endl;
+		std::cout << "    ==> " << modbus_strerror(errno) << TC_RESET << std::endl;
+#endif
+		// exit(BLVD_KRD_connect_ERROR);
+		throw_msg += " connect modbus fail";
+		throw std::runtime_error(throw_msg.c_str());
 	}
-	else
-	{	/* 若連結成功,打印訊息 */
-		ROS_INFO("BLVD-KRD Slave ID \"%d\" Connect Success!",slave);
-		// printf("BLVD-KRD Slave ID \"%d\" Connect Success\n", slave);
-		// printf("%s\n",modbus_strerror(errno));
-	}
+#ifdef raw_message
+	else	/* 若連結成功,打印訊息 */
+		std::cout << "[Create Oriental_BLVD_KRD] connect modbus slave [" << slave << "] Success!" << std::endl;
+#endif
 
-	/* 程式正常結束,返回0 */
-	return 0;
 }
 
 /** * @brief Destructor
@@ -132,96 +134,39 @@ BLVD_KRD_Control::~BLVD_KRD_Control()
 	modbus_close(mb);
 	/* 釋放modbus通訊結構體的位址 */
 	modbus_free(mb);
+#ifdef raw_message
 	/* 打印關閉訊息 */
-	ROS_INFO("BLVD-KRD modbus connect close!");
+	std::cout << "BLVD-KRD modbus connect close!" << std::endl;
 	// printf("BLVD-KRD modbus connect close\n");
+#endif
 }
-#endif /* system setup */
 
-#if 1 /* setup configuration and simple test */
 /** * @brief motor initialize
 	* @param None
  	* @return (int)
 **	**/
 int BLVD_KRD_Control::motorInit(uint32_t OpType, uint32_t Acc, uint32_t Dec, int32_t Trigger)
 {
-	rc = BLVD_KRD_DirectDataOperation_setup(OpType, Acc, Dec, Trigger);
-	if(rc>0) 
-	{
-		ROS_INFO("BLVD KRD direct data operation setup Success!");
-		// printf("BLVD KRD direct data operation setup Success!\n");
-	}
-	else 	
-	{
-		ROS_INFO("BLVD KRD direct data operation setup Failure!");
-		// printf("BLVD KRD direct data operation setup Failure!\n");
-		return 0;
-	}
+	if( writeSetupType(OpType)<=0 )
+		return BLVD_KRD_SetupOType_ERROR;
+	if( writeAcceleration(Acc)<=0 )
+		return BLVD_KRD_SetupAcc_ERROR;
+	if( writeDecelerate(Dec)<=0 )
+		return BLVD_KRD_SetupDec_ERROR;
+	if( writeTorque(1000)<=0 )
+		return BLVD_KRD_SetupTorque_ERROR;
+	if( writeTrigger(Trigger)<=0 )
+		return BLVD_KRD_SetupTrigger_ERROR;
+
+	if( motorSON()<=0 )
+		return BLVD_KRD_ServoON_ERROR;
+
 	sleep(5);
 
-	if( BLVD_KRD_DriverOutputStatus_check() )
-	{
-		ROS_INFO("BLVD KRD driver output status check Success!");
-		// printf("BLVD KRD driver output status check Success!\n");
-		return rc;
-	}
-	else
-	{
-		ROS_INFO("BLVD KRD driver output status check Failur!");
-		// printf("BLVD KRD driver output status check Failure!\n");
-		return 0;
-	}
-}
-
-/** * @brief Direct data operation setup,
-             事先將工作模式,加減速,觸發方式(-4)設定好,後續更新速度即可即時變化
-	* @param OpType(uint32_t) Operation type
-	* @param Acc(uint32_t) Acceleration rate
-	* @param Dec(uint32_t) Deceleration rate
-	* @param Trigger(uint32_t) Trigger
- 	* @return (int)
-**	**/
-int BLVD_KRD_Control::BLVD_KRD_DirectDataOperation_setup(uint32_t OpType, uint32_t Acc, uint32_t Dec, int32_t Trigger)
-{
-	int set_count=5;
-	if( writeSetupType(OpType)<=0 )
-	{
-		ROS_INFO("BLVD-KRD set Operation type Failure!");
-		// printf("BLVD-KRD set Operation type Failure!\n");
-		set_count--;
-	}
-	if( writeAcceleration(Acc)<=0 )
-	{
-		ROS_INFO("BLVD-KRD set Acceleration Failure!");
-		// printf("BLVD-KRD set Acceleration Failure!\n");
-		set_count--;
-	}
-	if( writeDecelerate(Dec)<=0 )
-	{
-		ROS_INFO("BLVD-KRD set Decelerate Failure!");
-		// printf("BLVD-KRD set Decelerate Failure!\n");
-		set_count--;
-	}
-	if( writeTorque(1000)<=0 )
-	{
-		ROS_INFO("BLVD-KRD set Torque Failure!");
-		// printf("BLVD-KRD set Torque Failure!\n");
-		set_count--;
-	}
-	if( writeTrigger(Trigger)<=0 )
-	{
-		ROS_INFO("BLVD-KRD set Trigger Failure!");
-		// printf("BLVD-KRD set Trigger Failure!\n");
-		set_count--;
-	}
-	if(set_count<5)
-	{ 
-		ROS_INFO("%d, BLVD-KRD direct data operation setup Failure!",set_count); 
-		// printf("%d, BLVD-KRD direct data operation setup Failure\n",set_count); 
-		return 0;
-	}
-	rc = motorSON();
-	return rc;
+	if( BLVD_KRD_DriverOutputStatus_check()<=0 )
+		return BLVD_KRD_Output_ERROR;
+	
+	return 0;
 }
 
 /** * @brief check driver output status
@@ -324,7 +269,7 @@ int BLVD_KRD_Control::motorRturn(int32_t w)
 {
 return 0;
 }
-#endif /* setup configuration and simple test END */
+
 
 #if 1 /* read simple parameter */
 /** * @brief 讀取速度設定值

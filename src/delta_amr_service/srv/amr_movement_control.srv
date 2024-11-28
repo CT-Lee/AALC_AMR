@@ -1,0 +1,14 @@
+# amr_movement_control.srv
+
+# Request
+
+int64 targetSpeed
+int64 endVx
+int64 distance
+int64 acc_dec
+
+---
+
+# Response
+
+int64 endVx

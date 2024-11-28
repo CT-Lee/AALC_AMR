@@ -1,0 +1,20 @@
+<!--
+	@file name : straight_test.launch
+	@author : Tsai,Li-Chun
+	@brief  : 
+-->
+
+<launch>
+	<node name="pub_cmdvel2odom_dummy" 
+		  pkg="open_loop_motor_control"
+		  type="pub_cmdvel2odom_dummy"
+		  output="screen" >
+	</node>
+
+	<node name="movement_control_Node" 
+		  pkg="open_loop_motor_control"
+		  type="movement_control_Node"
+		  output="screen" >
+	</node>
+</launch>
+

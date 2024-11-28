@@ -218,8 +218,8 @@ include_directories(
 # message(${libmodbus_LIB})
 
 add_executable(main_motorController
-					src/main_motorController.cpp
-					include/${PROJECT_NAME}/Oriental_BLVD_KRD.cpp)
+			   src/main_motorController.cpp
+			   src/Oriental_BLVD_KRD.cpp		)
 add_dependencies(main_motorController ${catkin_EXPORTED_TARGETS} )
 target_link_libraries(main_motorController ${catkin_LIBRARIES} modbus )
 

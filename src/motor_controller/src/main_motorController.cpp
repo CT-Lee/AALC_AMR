@@ -104,7 +104,7 @@ int main(int argc, char **argv)
 
 	sleep(1);
 	/* motor Init - 事先將觸發方式(-4)等參數set,後續更新速度即可即時變化 */
-	rc = BKC.motorInit(48,300,300,(-4));
+	rc = BKC.motorInit(BLVD_KRD_OpType, BLVD_KRD_MAX_acc, BLVD_KRD_MAX_dec, BLVD_KRD_Trigger);
 	sleep(1);
 
 	current_time = ros::Time::now();

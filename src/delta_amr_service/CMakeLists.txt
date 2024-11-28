@@ -8,9 +8,10 @@ project(delta_amr_service)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  rospy
-  std_msgs
-  message_generation
+	roscpp
+	rospy
+	std_msgs
+	message_generation
 )
 
 ## System dependencies are found with CMake's conventions
@@ -55,12 +56,13 @@ find_package(catkin REQUIRED COMPONENTS
 
 ## Generate services in the 'srv' folder
 add_service_files(
-   FILES
-   mechmind_srv.srv
-   realsense_srv.srv
-   robot_control_srv.srv
-   upload_srv.srv
-   amr_srv.srv
+	 FILES
+	 mechmind_srv.srv
+	 realsense_srv.srv
+	 robot_control_srv.srv
+	 upload_srv.srv
+	 amr_srv.srv
+	 amr_movement_control.srv
 )
 
 ## Generate actions in the 'action' folder
@@ -72,8 +74,8 @@ add_service_files(
 
 ## Generate added messages and services with any dependencies listed here
 generate_messages(
-   DEPENDENCIES
-   std_msgs
+	 DEPENDENCIES
+	 std_msgs
 )
 
 ################################################
@@ -106,8 +108,8 @@ generate_messages(
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-  LIBRARIES delta_amr_service
-  CATKIN_DEPENDS rospy std_msgs message_runtime
+	LIBRARIES delta_amr_service
+	CATKIN_DEPENDS roscpp rospy std_msgs message_runtime
 )
 
 ###########
@@ -118,7 +120,7 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
 # include
-  ${catkin_INCLUDE_DIRS}
+	${catkin_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
