@@ -20,5 +20,7 @@
 		  type="main_motorController"
 		  output="screen" >
 	</node>
+
+	<node name="main_tf_odometry"  pkg="odometry_transform" type="main_tf_odometry" output="screen" />
 	
 </launch>

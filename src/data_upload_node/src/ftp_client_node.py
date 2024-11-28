@@ -9,6 +9,7 @@ import os
 from pathlib import Path
 from delta_amr_service.srv import upload_srv, upload_srvResponse
 import time
+from ftplib import FTP, error_perm
 
 class ImageUploader:
     def __init__(self):
@@ -16,19 +17,25 @@ class ImageUploader:
         self.bridge = CvBridge()
 
         # FTP server information
-        self.ftp_host = "192.168.1.88"  # Replace with your FTP server address
-        self.ftp_port = 21
+        self.ftp_host = "192.168.1.66"  # Replace with your FTP server address
+        self.ftp_port = 2121
         self.ftp_user = "user"    # FTP username
         self.ftp_pass = "password"  # FTP password
         global ftp
         self.absolute_path = os.path.dirname(__file__)
         self.relative_path = "realsense_imgs"
-        self.ftp_dir = os.path.join(self.absolute_path[:-4], self.relative_path)# Remote directory for image upload
-        
+        self.ftp_dir = os.path.join(self.absolute_path[:-4], self.relative_path)  # Remote directory for image upload
+
         # Connect to the FTP server
-        ftp = FTP()
-        ftp.connect(self.ftp_host,self.ftp_port)
-        ftp.login(self.ftp_user, self.ftp_pass)
+        try:
+            ftp = FTP()
+            ftp.connect(self.ftp_host, self.ftp_port)
+            ftp.login(self.ftp_user, self.ftp_pass)
+            rospy.loginfo(f"Connected to FTP server at {self.ftp_host}:{self.ftp_port}")
+            rospy.loginfo(f"Current FTP directory: {ftp.pwd()}")
+        except Exception as e:
+            rospy.logerr(f"Failed to connect to FTP server: {e}")
+            raise
 
         # Subscribe to the image topic
         self.service = rospy.Service('upload_srv', upload_srv, self.upload_srv_callback)
@@ -38,7 +45,7 @@ class ImageUploader:
 
         # Upload the image to the FTP server
         self.upload_image()
-        return upload_srvResponse(upload_status = "done")
+        return upload_srvResponse(upload_status="done")
 
     def upload_image(self):
         start_time = time.time()
@@ -53,11 +60,13 @@ class ImageUploader:
                         ftp.storbinary(f"STOR {remote_filename}", f)
                     rospy.loginfo(f"Successfully uploaded {filename} to {remote_filename}")
                     os.remove(file_path)
+                except error_perm as perm_err:
+                    rospy.logerr(f"Permission error during upload: {perm_err}")
                 except Exception as e:
                     rospy.logerr(f"Error uploading file: {e}")
         end_time = time.time()
         e_time = end_time - start_time
-        print("send all png with FTP needs: "+str(e_time)+" secs")
+        rospy.loginfo(f"Send all PNGs with FTP needs: {e_time:.2f} seconds")
 
 if __name__ == '__main__':
     # Initialize the ROS node
@@ -68,4 +77,3 @@ if __name__ == '__main__':
 
     # Keep the node running
     rospy.spin()
-

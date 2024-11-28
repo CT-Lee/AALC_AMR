@@ -23,11 +23,36 @@
 		  type="robot_control_node.py" >
 	</node>
 
+	<!-- realsense -->
+	<node name="realsense_camera_node" 
+		  pkg="realsense_camera"
+		  type="realsense_camera_body_pose_node.py" >
+	</node>
+
+	<!-- upload -->
+	<node name="data_upload_node" 
+		  pkg="data_upload_node"
+		  type="ftp_client_node.py" 
+		  output="screen">
+	</node>
+
 	<!-- state_machine -->
 	<node name="state_machine_node" 
 		  pkg="state_machine"
 		  type="state_machine_node.py"
 		  output="screen" >
 	</node>
+
+	<node name="cas2ndagv_io_ctl_node" 
+		  pkg="cas2ndagv_io_controller"
+		  type="cas2ndagv_io_ctl_node"
+		  output="screen" >
+	</node>
 	
+	<node name="cas2ndagv_io2status_node" 
+		  pkg="cas2ndagv_io_controller"
+		  type="cas2ndagv_io2status_node"
+		  output="screen" >
+	</node>
+
 </launch>

@@ -32,17 +32,17 @@ class Watch_OP(smach.State):
         human_dist, camera_status_realsense = human_detect(img_process_type_realsense)
         if cas2ndag_in.lidarOSSD == 'emergency_stop':
             rospy.loginfo('lidarOSSD = emergency_stop')
-            cas2ndag_out.lidarMAP = 'workstation1'
+            cas2ndag_out.lidarMAP = 'normal_walking'
             cas2ndag_out.light = 'reverse'
             pub_cas2ndagv_io2status_out.publish(cas2ndag_out)
         elif cas2ndag_in.lidarOSSD == 'slow_stop':
             rospy.loginfo('lidarOSSD = slow_stop')
-            cas2ndag_out.lidarMAP = 'workstation1'
+            cas2ndag_out.lidarMAP = 'normal_walking'
             cas2ndag_out.light = 'handshake'
             pub_cas2ndagv_io2status_out.publish(cas2ndag_out)
         elif cas2ndag_in.lidarOSSD == 'normal':
             rospy.loginfo('lidarOSSD = normal')
-            cas2ndag_out.lidarMAP = 'workstation1'
+            cas2ndag_out.lidarMAP = 'normal_walking'
             cas2ndag_out.light = 'standby'
             pub_cas2ndagv_io2status_out.publish(cas2ndag_out)
         rospy.loginfo('Executing state Watch_OP')
@@ -94,6 +94,7 @@ class Robot_Pic(smach.State):
         rospy.loginfo('Executing state Robot_Pic')
         
         normal_speed_bool = True
+        slow_speed_bool = False
         num_pic = 3
         for i in range(num_pic):
             robot_mov_type = 'MovL'
@@ -101,25 +102,35 @@ class Robot_Pic(smach.State):
             robot_mov_speed = 0.25
             robot_mov_speed_low = 0.01
             _ = robot_move(robot_mov_type, robot_mov_point,robot_mov_speed)
-            
+            robot_cnt = 0
             while True:
-                
+                robot_cnt += 1
+                print("cas2ndag_in.lidarOSSD: ", cas2ndag_in.lidarOSSD)
                 if cas2ndag_in.lidarOSSD  == 'emergency_stop':
+                    print("Change to Emergency stop")
                     _ = robot_move('stop', robot_mov_point,robot_mov_speed)
                     normal_speed_bool = False
-                elif cas2ndag_in.lidarOSSD  == 'slow_stop':
+                    slow_speed_bool = False
+                
+                elif cas2ndag_in.lidarOSSD  == 'slow_stop' and slow_speed_bool == False:
+                    print("Change to Slow stop")
                     _ = robot_move('stop', robot_mov_point,robot_mov_speed)
-                    _ = robot_move('MovL', robot_mov_point,robot_mov_speed_low)
+                   # _ = robot_move('MovL', robot_mov_point,robot_mov_speed_low)
+                    slow_speed_bool = True
                     normal_speed_bool = False
+                
                 elif cas2ndag_in.lidarOSSD  == 'normal' and normal_speed_bool == False:
+                    print("Change to normal")
                     _ = robot_move('stop', robot_mov_point,robot_mov_speed)
                     _ = robot_move('MovL', robot_mov_point,robot_mov_speed)
+                    slow_speed_bool = False
                     normal_speed_bool = True
-                
-                print(robot_move('is_reached', robot_mov_point,robot_mov_speed))
-                if robot_move('is_reached', robot_mov_point,robot_mov_speed) == 'reached':
-                    break
-                rospy.sleep(0.1)
+
+                # print(robot_move('is_reached', robot_mov_point,robot_mov_speed))
+                if robot_cnt % 50:
+                    if robot_move('is_reached', robot_mov_point,robot_mov_speed) == 'reached':
+                        break
+                rospy.sleep(0.01)
             
             # Take pic
 #            img_process_type_realsense = 'take_pic'

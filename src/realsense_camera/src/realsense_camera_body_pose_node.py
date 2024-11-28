@@ -69,8 +69,8 @@ class RealsenseCameraNode:
         self.hand_ok = None
         self.matrices = []
 
-        self.x_factor = 1.5
-        self.y_factor = 0.85
+        self.x_factor = 1.2
+        self.y_factor = 1.0
         # 圖像存儲路徑（可自定義）
         self.absolute_path = os.path.dirname(__file__)
         self.relative_path = "data_upload_node/realsense_imgs"
