@@ -62,6 +62,8 @@ movement_control::movement_control():
 	pub_cmd_vel = nh.advertise<geometry_msgs::Twist>(TOPIC_cmd_vel, queue_size, this);
 	/* initialization sub_odometry */
 	sub_odometry = nh.subscribe(TOPIC_odom, queue_size, &movement_control::Sub_TOPIC_odometry_callback, this);
+	/* initialization straight_profile */
+	ser_amr_movement_control_straight = nh.advertiseService(SERVICE_amr_movement_control_straight, &movement_control::ser_straight_profile_callbac, this);
 	/* init timer interrupt object */
 	time_interrupter = nh.createTimer(ros::Duration(running_cycle), &movement_control::time_interrupter_callback, this);
 
@@ -70,6 +72,8 @@ movement_control::movement_control():
 	twist_msg.angular.x = 0;
 	twist_msg.angular.y = 0;
 	twist_msg.angular.z = 0;
+
+	ROS_INFO("[movement_control_Node] node startup completed. movement_control_Node running...");
 }
 
 /** * @brief movement_control object destructor
@@ -88,27 +92,34 @@ movement_control::~movement_control()
 	* @param int(dec) deceleration
  	* @return none
 **/
-void movement_control::straight_profile(int64_t targetSpeed, int64_t endVx, int64_t distance, int64_t acc_dec)
+bool movement_control::ser_straight_profile_callbac(delta_amr_service::amr_movement_control::Request &amr_movement_control_req,
+													delta_amr_service::amr_movement_control::Response &amr_movement_control_res)
+
 {
-	long decelerationRequired;
-	long curVx = odom_msg.twist.twist.linear.x;
+	straight_profile(amr_movement_control_req.targetSpeed,
+					 amr_movement_control_req.endVx,
+					 amr_movement_control_req.distance,
+					 amr_movement_control_req.acc_dec	);
+	return true;
+}
+void movement_control::straight_profile(double targetSpeed, double endVx, double distance, double acc_dec)
+{
+	double decelerationRequired;
+	double curVx = 0;
 	wait_running_cycle=true;
-	ROS_INFO("%ld",curVx);
 	while( distance>0 )
 	{
-		while(wait_running_cycle){}	wait_running_cycle=true;
+		while(wait_running_cycle){ros::spinOnce();}	wait_running_cycle=true;
 		decelerationRequired = ( (curVx*curVx)-(endVx*endVx) )/(2*distance);
 		if( decelerationRequired >= acc_dec ) targetSpeed = endVx;
 		if(curVx < targetSpeed) curVx += acc_dec;
 		if(curVx > targetSpeed) curVx -= acc_dec;
-		distance = distance- curVx;
-		if(curVx<=0)	{distance=0;curVx=0;}
+		distance = distance - curVx;
+		if(curVx<=0) {distance=0;curVx=0;}
 		twist_msg.linear.x = curVx;
-		ROS_INFO("%ld",curVx);
 		pub_cmd_vel.publish(twist_msg);
 	}
 	twist_msg.linear.x = endVx;
-	ROS_INFO("%lf",twist_msg.linear.x);
 	pub_cmd_vel.publish(twist_msg);
 }
 
@@ -127,13 +138,19 @@ void movement_control::Sub_TOPIC_odometry_callback(const nav_msgs::Odometry& odo
 **/
 void movement_control::time_interrupter_callback(const ros::TimerEvent& time)
 {
+	// ROS_INFO("%lf",twist_msg.linear.x);
 	wait_running_cycle = false;
-
-	// odom.twist.twist.linear.x = vx;
-	// odom.twist.twist.linear.y = vy;
-	// odom.twist.twist.angular.z = vth;
 }
 
+/** * @brief cas 2nd agv movement control object main runing
+	* @param None
+ 	* @return none
+**/
+void movement_control::run(void)
+{
+	ROS_INFO("cas 2nd agv movement control object main runing...");
+	loop_rate.sleep();
+}
 
 /* Program End */
 /* ---------------------------------------------------------*/

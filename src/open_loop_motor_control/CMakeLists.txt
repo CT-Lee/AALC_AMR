@@ -12,6 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
 	rospy
 	std_msgs
 	geometry_msgs
+	delta_amr_service
 )
 
 ## System dependencies are found with CMake's conventions
@@ -106,7 +107,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 	# INCLUDE_DIRS include
 	# LIBRARIES open_loop_motor_control
-	CATKIN_DEPENDS roscpp rospy std_msgs geometry_msgs
+	CATKIN_DEPENDS roscpp rospy std_msgs geometry_msgs delta_amr_service
 	# DEPENDS system_lib
 )
 
@@ -217,3 +218,8 @@ add_executable(	pub_cmdvel2odom_dummy
 				src/pub_cmdvel2odom_dummy.cpp      	 )
 add_dependencies(pub_cmdvel2odom_dummy ${catkin_EXPORTED_TARGETS} )
 target_link_libraries(pub_cmdvel2odom_dummy ${catkin_LIBRARIES} )
+
+add_executable(	ser_call_straight_profile_dummy_node
+				src/ser_call_straight_profile_dummy.cpp      	 )
+add_dependencies(ser_call_straight_profile_dummy_node ${catkin_EXPORTED_TARGETS} )
+target_link_libraries(ser_call_straight_profile_dummy_node ${catkin_LIBRARIES} )

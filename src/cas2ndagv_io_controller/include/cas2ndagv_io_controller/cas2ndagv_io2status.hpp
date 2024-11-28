@@ -27,10 +27,6 @@
 /* Define ---------------------------------------------------*/
 /* Define Begin */
 
-#define cas2ndagv_io2state_in_topic "TOPIC_cas2ndagv_io2state_in"
-#define cas2ndagv_io2state_out_topic "TOPIC_cas2ndagv_io2state_out"
-#define cas2ndagv_input_pin_topic "TOPIC_cas2ndagv_input_pin"
-#define cas2ndagv_output_pin_topic "TOPIC_cas2ndagv_output_pin"
 #define cas2ndagv_io2state_queue_size 100
 #define running_cycle 0.1
 #define light_high_flash 2

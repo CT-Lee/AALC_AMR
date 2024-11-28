@@ -5,6 +5,12 @@
 -->
 
 <launch>
+	<!-- <node name="main_motorController" 
+		  pkg="motor_controller"
+		  type="main_motorController"
+		  output="screen" >
+	</node> -->
+
 	<node name="pub_cmdvel2odom_dummy" 
 		  pkg="open_loop_motor_control"
 		  type="pub_cmdvel2odom_dummy"

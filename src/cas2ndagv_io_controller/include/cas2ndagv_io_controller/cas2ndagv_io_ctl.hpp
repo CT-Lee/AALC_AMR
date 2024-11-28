@@ -24,8 +24,8 @@
 /* Define ---------------------------------------------------*/
 /* Define Begin */
 
-#define cas2ndagv_input_pin_topic "TOPIC_cas2ndagv_input_pin"
-#define cas2ndagv_output_pin_topic "TOPIC_cas2ndagv_output_pin"
+// #define cas2ndagv_input_pin_topic "TOPIC_cas2ndagv_input_pin"
+// #define cas2ndagv_output_pin_topic "TOPIC_cas2ndagv_output_pin"
 #define cas2ndagv_pin_queue_size 100
 #define running_cycle 0.1
 

@@ -14,6 +14,7 @@
 #include <ros/ros.h>
 #include <nav_msgs/Odometry.h>
 #include <geometry_msgs/Twist.h>
+#include <delta_amr_service/amr_movement_control.h>
 /* System Includes End */
 /* User Includes --------------------------------------------*/
 /* User Includes Begin */
@@ -23,6 +24,7 @@
 /* Define ---------------------------------------------------*/
 /* Define Begin */
 
+#define SERVICE_amr_movement_control_straight "ser_amr_movement_control_straight"
 #define TOPIC_cmd_vel "cmd_vel"
 #define TOPIC_odom "odom"
 #define queue_size 100
@@ -56,6 +58,8 @@ private:
 	ros::Publisher pub_cmd_vel;
 	/* create odometry subscriber object */
 	ros::Subscriber sub_odometry;
+	/* create straight_profile serviceServer object */
+	ros::ServiceServer ser_amr_movement_control_straight;
 	/* create ros timer interrupt object */
 	ros::Timer time_interrupter;
 
@@ -64,15 +68,21 @@ private:
 	/* create cmd_vel(twist) data structure */
 	geometry_msgs::Twist twist_msg;
 
+	/*  */
+	bool ser_straight_profile_callbac(delta_amr_service::amr_movement_control::Request &amr_movement_control_req,
+									  delta_amr_service::amr_movement_control::Response &amr_movement_control_res);
+	void straight_profile(double targetSpeed, double endSpeed, double distance, double acc_dec);
+
+	void Sub_TOPIC_odometry_callback(const nav_msgs::Odometry& odom);
+	void time_interrupter_callback(const ros::TimerEvent& time);
+
 /* public member */
 public:
 	movement_control();	/* constructor */
 	~movement_control();	/* destructor */
+	
+	void run(void);	/* cas 2nd agv movement control object main runing */
 
-	void straight_profile(int64_t targetSpeed, int64_t endSpeed, int64_t distance, int64_t acc_dec);
-
-	void Sub_TOPIC_odometry_callback(const nav_msgs::Odometry& odom);
-	void time_interrupter_callback(const ros::TimerEvent& time);
 };
 
 /* Extern Class End */

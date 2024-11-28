@@ -22,9 +22,13 @@
 /* Define Begin */
 
 /* define adam modbus net information */
+
 #define adam_modbus_IP "192.168.1.122"
 #define adam_modbus_port 502
 #define adam_modbus_slave 1
+
+#define cas2ndagv_input_pin_topic "TOPIC_cas2ndagv_input_pin"
+#define cas2ndagv_output_pin_topic "TOPIC_cas2ndagv_output_pin"
 
 /* Define End */
 

@@ -21,6 +21,10 @@
 
 /* Define ---------------------------------------------------*/
 /* Define Begin */
+
+#define cas2ndagv_io2state_in_topic "TOPIC_cas2ndagv_io2state_in"
+#define cas2ndagv_io2state_out_topic "TOPIC_cas2ndagv_io2state_out"
+
 /* Define End */
 
 
