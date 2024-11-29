@@ -31,6 +31,7 @@
 #define TOPIC_odom "odom"
 #define queue_size 100
 #define running_cycle (double)0.1
+#define slow_stop_speed (double)0.1
 
 /* Define End */
 

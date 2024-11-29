@@ -43,7 +43,7 @@
 /* Variables Begin */
 
 /* enc to mm to M parameter */
-const double rpm_to_ms = 0.0003420833333333333333;
+const double rpm_to_ms = 0.000341180484476288;
 const double enc_to_mm = 0.0005599597921296297;
 const double mm_to_M = 0.001;
 const double AMR_width = 0.5476;

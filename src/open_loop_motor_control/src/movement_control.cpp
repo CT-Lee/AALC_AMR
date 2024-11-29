@@ -107,26 +107,49 @@ bool movement_control::ser_straight_profile_callbac(delta_amr_service::amr_movem
 void movement_control::straight_profile(double targetSpeed, double endVx, double distance, double acc_dec)
 {
 	double decelerationRequired;
-	double curVx = 0;
+	double curVx = twist_msg.linear.x*running_cycle;
+	double targetSpeed_true = targetSpeed;
+	bool sw = false;
 	wait_running_cycle=true;
-	ROS_INFO("%lf, %lf, %lf, %lf", targetSpeed, endVx, distance, acc_dec);
 	while( distance>0 )
 	{
+		/* wait running cycle */
 		while(wait_running_cycle){ros::spinOnce();}	wait_running_cycle=true;
+		/* calculate deceleration */
 		decelerationRequired = ( (curVx*curVx)-(endVx*endVx) )/(2*distance);
-		if( decelerationRequired >= acc_dec ) targetSpeed = endVx;
-		if(curVx < targetSpeed) curVx += acc_dec;
-		if(curVx > targetSpeed) curVx -= acc_dec;
-		distance = distance - curVx;
-		if(curVx<=0) {distance=0;curVx=0;}
-		if(cas2ndagv_io2status_in_msg.lidarOSSD == CAS2ndAGV_IO_status.lidarOSSD.slow_stop) 
+		if( decelerationRequired >= acc_dec ) targetSpeed_true = endVx;
+		/* lidar OSSD mechanism  */
+		if(targetSpeed_true != 0)
 		{
-			ROS_INFO("%s",cas2ndagv_io2status_in_msg.lidarOSSD.c_str());
-			curVx = curVx/10.0;
+			if( cas2ndagv_io2status_in_msg.lidarOSSD == CAS2ndAGV_IO_status.lidarOSSD.normal )
+				targetSpeed_true = targetSpeed;
+			else if(cas2ndagv_io2status_in_msg.lidarOSSD == CAS2ndAGV_IO_status.lidarOSSD.slow_stop)
+			{
+				ROS_INFO("%s",cas2ndagv_io2status_in_msg.lidarOSSD.c_str());
+				if( targetSpeed>0 )
+					targetSpeed_true = slow_stop_speed*running_cycle;
+				else
+					targetSpeed_true = (double)(-1.0)*(slow_stop_speed*running_cycle);
+			}
+			else if( cas2ndagv_io2status_in_msg.lidarOSSD == CAS2ndAGV_IO_status.lidarOSSD.emergency_stop )
+				curVx = 0;
 		}
+
+		/* update curVx command */
+		if( cas2ndagv_io2status_in_msg.lidarOSSD != CAS2ndAGV_IO_status.lidarOSSD.emergency_stop )
+		{
+			if(curVx < targetSpeed_true) curVx += acc_dec;
+			if(curVx > targetSpeed_true) curVx -= acc_dec;
+		}
+
+		/* update distance */
+		if(sw) distance = distance - fabs(curVx);
+		if(distance<=0) {distance=0;curVx=0;}
+
 		twist_msg.linear.x = curVx/running_cycle;
-		ROS_INFO("%lf,%lf",twist_msg.linear.x, odom_msg.twist.twist.linear.x);
+		ROS_INFO("%lf,%lf,%lf,%lf",distance,targetSpeed_true,twist_msg.linear.x, odom_msg.twist.twist.linear.x);
 		pub_cmd_vel.publish(twist_msg);
+		sw = true;
 	}
 	twist_msg.linear.x = endVx;
 	pub_cmd_vel.publish(twist_msg);
