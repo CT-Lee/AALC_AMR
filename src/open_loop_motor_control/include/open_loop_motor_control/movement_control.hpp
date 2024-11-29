@@ -18,6 +18,8 @@
 /* System Includes End */
 /* User Includes --------------------------------------------*/
 /* User Includes Begin */
+#include "adam_for_cas2ndagv_IO_def.h"
+#include "delta_amr_message/cas2ndagv_io2state_in.h"
 /* User Includes End */
 
 
@@ -58,15 +60,21 @@ private:
 	ros::Publisher pub_cmd_vel;
 	/* create odometry subscriber object */
 	ros::Subscriber sub_odometry;
+	/* create sub_io2status_in subscriber object */
+	ros::Subscriber sub_io2status_in;
 	/* create straight_profile serviceServer object */
 	ros::ServiceServer ser_amr_movement_control_straight;
 	/* create ros timer interrupt object */
 	ros::Timer time_interrupter;
+	/*  */
+	CAS2ndAGV_IO_status_struct CAS2ndAGV_IO_status;
 
-	/* create Odometry data structure */
+	/* create Odometry message data structure */
 	nav_msgs::Odometry odom_msg;
-	/* create cmd_vel(twist) data structure */
+	/* create cmd_vel(twist) message data structure */
 	geometry_msgs::Twist twist_msg;
+	/* create cmd_vel(twist) message data structure */
+	delta_amr_message::cas2ndagv_io2state_in cas2ndagv_io2status_in_msg;
 
 	/*  */
 	bool ser_straight_profile_callbac(delta_amr_service::amr_movement_control::Request &amr_movement_control_req,
@@ -75,6 +83,7 @@ private:
 
 	void Sub_TOPIC_odometry_callback(const nav_msgs::Odometry& odom);
 	void time_interrupter_callback(const ros::TimerEvent& time);
+	void Sub_TOPIC_cas2ndagv_io2state_in_callback(const delta_amr_message::cas2ndagv_io2state_in& io2s_in);
 
 /* public member */
 public:

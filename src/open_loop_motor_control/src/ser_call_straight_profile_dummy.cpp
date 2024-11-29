@@ -67,10 +67,10 @@ int main(int argc, char **argv)
 	ros::NodeHandle nh;
 	ros::ServiceClient client = nh.serviceClient<delta_amr_service::amr_movement_control>(SERVICE_amr_movement_control_straight);
 	delta_amr_service::amr_movement_control ser_mc;
-	ser_mc.request.targetSpeed = atol(argv[1]);
-	ser_mc.request.endVx = atol(argv[2]);
-	ser_mc.request.distance = atol(argv[3]);
-	ser_mc.request.acc_dec = atol(argv[4]);
+	ser_mc.request.targetSpeed = atof(argv[1]);
+	ser_mc.request.endVx = atof(argv[2]);
+	ser_mc.request.distance = atof(argv[3]);
+	ser_mc.request.acc_dec = atof(argv[4]);
 	// ROS_INFO("%5ld, %5ld, %5ld, %5ld", ser_mc.request.targetSpeed, ser_mc.request.endVx, ser_mc.request.distance, ser_mc.request.acc_dec);
 	if (client.call(ser_mc))
 	{

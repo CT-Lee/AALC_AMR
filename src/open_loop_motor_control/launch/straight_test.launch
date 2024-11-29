@@ -5,17 +5,29 @@
 -->
 
 <launch>
-	<!-- <node name="main_motorController" 
+	<node name="cas2ndagv_io_ctl_node" 
+		  pkg="cas2ndagv_io_controller"
+		  type="cas2ndagv_io_ctl_node"
+		  output="screen" >
+	</node>
+	
+	<node name="cas2ndagv_io2status_node" 
+		  pkg="cas2ndagv_io_controller"
+		  type="cas2ndagv_io2status_node"
+		  output="screen" >
+	</node>
+
+	<node name="main_motorController" 
 		  pkg="motor_controller"
 		  type="main_motorController"
 		  output="screen" >
-	</node> -->
+	</node>
 
-	<node name="pub_cmdvel2odom_dummy" 
+	<!-- <node name="pub_cmdvel2odom_dummy" 
 		  pkg="open_loop_motor_control"
 		  type="pub_cmdvel2odom_dummy"
 		  output="screen" >
-	</node>
+	</node> -->
 
 	<node name="movement_control_Node" 
 		  pkg="open_loop_motor_control"

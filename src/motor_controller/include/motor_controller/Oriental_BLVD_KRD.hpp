@@ -40,8 +40,8 @@
 #define BLVD_KRD_Output_ERROR 10
 
 #define BLVD_KRD_OpType  (uint32_t)48
-#define BLVD_KRD_MAX_acc (uint32_t)1000
-#define BLVD_KRD_MAX_dec (uint32_t)1000
+#define BLVD_KRD_MAX_acc (uint32_t)10
+#define BLVD_KRD_MAX_dec (uint32_t)10
 #define BLVD_KRD_Trigger (int32_t)-4
 
 /* Define End */

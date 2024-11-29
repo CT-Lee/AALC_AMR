@@ -121,6 +121,7 @@ include_directories(
 # include
 	${catkin_INCLUDE_DIRS}
 	./include/${PROJECT_NAME}
+	../cas2ndagv_io_controller/include/cas2ndagv_io_controller
 )
 
 ## Declare a C++ library

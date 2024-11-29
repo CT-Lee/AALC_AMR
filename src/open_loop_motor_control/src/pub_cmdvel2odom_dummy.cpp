@@ -42,7 +42,7 @@
 double random_number;
 std::random_device rd;
 std::mt19937 gen(rd());
-std::uniform_real_distribution<> dis(-0.2, 0.2);
+std::uniform_real_distribution<> dis(-0.002, 0.002);
 ros::Publisher pub_odometry;
 ros::Subscriber sub_cmd_vel;
 nav_msgs::Odometry odom_msg;

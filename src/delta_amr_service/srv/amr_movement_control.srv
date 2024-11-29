@@ -2,13 +2,13 @@
 
 # Request
 
-int64 targetSpeed
-int64 endVx
-int64 distance
-int64 acc_dec
+float64 targetSpeed
+float64 endVx
+float64 distance
+float64 acc_dec
 
 ---
 
 # Response
 
-int64 endVx
+float64 endVx

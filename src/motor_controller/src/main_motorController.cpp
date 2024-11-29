@@ -96,7 +96,7 @@ int main(int argc, char **argv)
 	/* 建立topic-Subscriber物件並初始化 */
 	ros::Subscriber twist_sub = nh.subscribe("/cmd_vel", 100, twist_callback);
 	/* 建立計時物件並初始化計時中斷 */
-	ros::Timer timer = nh.createTimer(ros::Duration(0.01), timer_callback);
+	ros::Timer timer = nh.createTimer(ros::Duration(0.1), timer_callback);
 	/* 初始化motor_fb物件 */
 	motor_fb = nh.advertise<motor_feedback_msgs::motor_feedback>("/motor_feedback",100);
 	/* 建立delay用物件 */
@@ -105,6 +105,11 @@ int main(int argc, char **argv)
 	sleep(1);
 	/* motor Init - 事先將觸發方式(-4)等參數set,後續更新速度即可即時變化 */
 	rc = BKC.motorInit(BLVD_KRD_OpType, BLVD_KRD_MAX_acc, BLVD_KRD_MAX_dec, BLVD_KRD_Trigger);
+	if(rc!=0)
+	ROS_ERROR("motorInit return code = %d",rc);
+	else
+	ROS_INFO("motorInit Success!");
+
 	sleep(1);
 
 	current_time = ros::Time::now();
@@ -116,16 +121,16 @@ int main(int argc, char **argv)
 		dt = (current_time - last_time).toSec();
 		// ROS_INFO("%lf\n",dt);
 		// BKC.readActualPosition(position);
-		// BKC.readActualVelocity(velocity_A);
+		BKC.readActualVelocity(velocity_A);
 		BKC.readDemandVelocity(velocity_D);
 
 		mf.header.stamp = current_time;
 		mf.positionL = 0;
 		mf.positionR = 0;
-		mf.AvelocityL = velocity_D[0];
-		mf.AvelocityR = velocity_D[1];
-		// mf.DvelocityL = velocity_D[0];
-		// mf.DvelocityR = velocity_D[1];
+		mf.AvelocityL = velocity_A[0];
+		mf.AvelocityR = velocity_A[1];
+		mf.DvelocityL = velocity_D[0];
+		mf.DvelocityR = velocity_D[1];
 		// printf("%010d(%010d) , %010d(%010d)\n",velocity_D[0],velocity_A[0],velocity_D[1],velocity_A[1]);
 
 		motor_fb.publish(mf);
@@ -153,11 +158,14 @@ void twist_callback(const geometry_msgs::Twist& twist_msg)
 	//else if(twist_last.linear.x<(-1.2)) twist_last.linear.x=(-1.2);
 	//if(twist_last.angular.z>1.0) twist_last.angular.z=1.0;
 	//else if(twist_last.angular.z<(-1.0)) twist_last.angular.z=(-1.0);
+	mf.vx = twist_last.linear.x;
+	mf.vth = twist_last.angular.z;
 	velLtmp = twist_last.linear.x - (twist_last.angular.z/2) ;
 	velRtmp = twist_last.linear.x + (twist_last.angular.z/2) ;
 	// printf("%lf , %lf\n",velLtmp,velRtmp);
 	velL = (int32_t)(velLtmp*ms_to_rpm);
 	velR = (int32_t)(velRtmp*ms_to_rpm);
+	// ROS_INFO("velL = %d , velR= %d",velL, velR);
 	BKC.writeVelocity(velL,velR);
 }
 
