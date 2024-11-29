@@ -43,6 +43,7 @@
 /* Variables Begin */
 
 /* enc to mm to M parameter */
+const double rpm_to_ms = 0.0003420833333333333333;
 const double enc_to_mm = 0.0005599597921296297;
 const double mm_to_M = 0.001;
 const double AMR_width = 0.5476;
@@ -212,8 +213,10 @@ void motor_feedback_callback(const motor_feedback_msgs::motor_feedback& motor_in
 	encodom.AvelocityL = motor_info.AvelocityL;
 	encodom.AvelocityR = motor_info.AvelocityR;
 
-	AvelocityL_M = motor_info.AvelocityL*enc_to_mm*mm_to_M;
-	AvelocityR_M = motor_info.AvelocityR*enc_to_mm*mm_to_M;
+	// AvelocityL_M = motor_info.AvelocityL*enc_to_mm*mm_to_M;
+	// AvelocityR_M = motor_info.AvelocityR*enc_to_mm*mm_to_M;
+	AvelocityL_M = (double)(motor_info.AvelocityL)*rpm_to_ms;
+	AvelocityR_M = (double)(motor_info.AvelocityR)*rpm_to_ms;
 
 	AvelocityL_lpf = (low_pass_filter*AvelocityL_M)+((1.0-low_pass_filter)*AvelocityL_lpf);
 	AvelocityR_lpf = (low_pass_filter*AvelocityR_M)+((1.0-low_pass_filter)*AvelocityR_lpf);
@@ -223,7 +226,7 @@ void motor_feedback_callback(const motor_feedback_msgs::motor_feedback& motor_in
 	encodom.AvelocityL_lpf = AvelocityL_lpf;
 	encodom.AvelocityR_lpf = AvelocityR_lpf;
 
-	vx = ((AvelocityL_M+AvelocityR_M)/2);
+	vx = ((AvelocityL_M+AvelocityR_M)/(double)(2.0));
 	vth = ((AvelocityR_M-AvelocityL_M)/AMR_width);
 
 	mf_last = motor_info;

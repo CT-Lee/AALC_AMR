@@ -109,7 +109,7 @@ void movement_control::straight_profile(double targetSpeed, double endVx, double
 	double decelerationRequired;
 	double curVx = 0;
 	wait_running_cycle=true;
-	// ROS_INFO("%lf, %lf, %lf, %lf", targetSpeed, endVx, distance, acc_dec);
+	ROS_INFO("%lf, %lf, %lf, %lf", targetSpeed, endVx, distance, acc_dec);
 	while( distance>0 )
 	{
 		while(wait_running_cycle){ros::spinOnce();}	wait_running_cycle=true;
@@ -124,7 +124,7 @@ void movement_control::straight_profile(double targetSpeed, double endVx, double
 			ROS_INFO("%s",cas2ndagv_io2status_in_msg.lidarOSSD.c_str());
 			curVx = curVx/10.0;
 		}
-		twist_msg.linear.x = curVx;
+		twist_msg.linear.x = curVx/running_cycle;
 		ROS_INFO("%lf,%lf",twist_msg.linear.x, odom_msg.twist.twist.linear.x);
 		pub_cmd_vel.publish(twist_msg);
 	}

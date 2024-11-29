@@ -56,7 +56,7 @@ motor_feedback_msgs::motor_feedback mf;
 /* 宣告左右輪速度 */
 int32_t velL=0,velR=0;
 
-const double ms_to_rpm = 2976.40418132187;
+const double ms_to_rpm = 2923.2541066552534857768688169595;
 
 /* Variables End */
 
@@ -127,6 +127,8 @@ int main(int argc, char **argv)
 		mf.header.stamp = current_time;
 		mf.positionL = 0;
 		mf.positionR = 0;
+		mf.vx = twist_last.linear.x;
+		mf.vth = twist_last.angular.z;
 		mf.AvelocityL = velocity_A[0];
 		mf.AvelocityR = velocity_A[1];
 		mf.DvelocityL = velocity_D[0];
@@ -158,8 +160,6 @@ void twist_callback(const geometry_msgs::Twist& twist_msg)
 	//else if(twist_last.linear.x<(-1.2)) twist_last.linear.x=(-1.2);
 	//if(twist_last.angular.z>1.0) twist_last.angular.z=1.0;
 	//else if(twist_last.angular.z<(-1.0)) twist_last.angular.z=(-1.0);
-	mf.vx = twist_last.linear.x;
-	mf.vth = twist_last.angular.z;
 	velLtmp = twist_last.linear.x - (twist_last.angular.z/2) ;
 	velRtmp = twist_last.linear.x + (twist_last.angular.z/2) ;
 	// printf("%lf , %lf\n",velLtmp,velRtmp);
