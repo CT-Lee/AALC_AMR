@@ -10,6 +10,7 @@ from delta_amr_service.srv import amr_srv, amr_srvResponse
 from delta_amr_service.srv import realsense_srv, realsense_srvResponse
 from delta_amr_service.srv import robot_control_srv, robot_control_srvResponse
 from delta_amr_service.srv import upload_srv, upload_srvResponse
+from delta_amr_service.srv import amr_movement_control, amr_movement_controlResponse
 
 # Need to add function: Realsense detect human distance
 def human_detect(img_process_type_realsense):
@@ -64,11 +65,11 @@ class AMR_Mov(smach.State):
     def execute(self, userdata):
         rospy.loginfo('Executing state AMR_Mov')
         try:
-            rospy.wait_for_service('amr_srv', timeout = None)
-            amr_move = rospy.ServiceProxy('amr_srv', amr_srv)
-            response = amr_move('forward')
-            if response.amr_status == 'stop':
-                return 'Start_Pic'
+            rospy.wait_for_service('ser_amr_movement_control_straight', timeout = None)
+            amr_move = rospy.ServiceProxy('ser_amr_movement_control_straight', amr_movement_control)
+            response = amr_move(0.2, 0.0, 1.0, 0.1)
+            # if response.amr_status == 'stop':
+            return 'Start_Pic'
         except rospy.ROSException as e:
             rospy.logerr(f"Service call failed: {e}")
             return 'Moving'
@@ -140,11 +141,14 @@ class AMR_Back(smach.State):
         rospy.loginfo('Executing state AMR_Back')
         rospy.sleep(1.0)
         try:
-            rospy.wait_for_service('amr_srv', timeout = None)
-            amr_move = rospy.ServiceProxy('amr_srv', amr_srv)
-            response = amr_move('backward')
-            if response.amr_status == 'stop':
-                return 'Start_Upload'
+            rospy.wait_for_service('ser_amr_movement_control_straight', timeout = None)
+            amr_move = rospy.ServiceProxy('ser_amr_movement_control_straight', amr_movement_control)
+            response = amr_move(-0.2, 0.0, 1.0, 0.1)
+            # rospy.wait_for_service('amr_srv', timeout = None)
+            # amr_move = rospy.ServiceProxy('amr_srv', amr_srv)
+            # response = amr_move('backward')
+            # if response.amr_status == 'stop':
+            return 'Start_Upload'
         except rospy.ROSException as e:
             rospy.logerr(f"Service call failed: {e}")
             return 'Moving'

@@ -7,14 +7,13 @@
 <launch>
 
 	<!-- AMR walk -->
-	<node name="main_motorController" 
-		  pkg="motor_controller"
-		  type="main_motorController"
+	<include file="$(find open_loop_motor_control)/launch/straight_test.launch" />
+
+	<!-- realsense_camera -->
+	<node name="realsense_camera_aruco_node" 
+		  pkg="realsense_camera"
+		  type="realsense_camera_aruco_node.py"
 		  output="screen" >
-	</node>
-	<node name="open_loop_controller" 
-		  pkg="open_loop_motor_control"
-		  type="open_loop_controller.py" >
 	</node>
 
 	<!-- D-bot control -->
@@ -27,6 +26,13 @@
 	<node name="state_machine_node" 
 		  pkg="state_machine"
 		  type="state_machine_node.py"
+		  output="screen" >
+	</node>
+
+	<!-- data upload -->
+	<node name="upload_node" 
+		  pkg="upload_img"
+		  type="upload_node.py"
 		  output="screen" >
 	</node>
 	
