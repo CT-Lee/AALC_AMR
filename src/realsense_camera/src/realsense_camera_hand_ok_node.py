@@ -21,22 +21,20 @@ class RealsenseCameraNode:
 
         # 設定回應 'human_detect' 服務
         self.service = rospy.Service('realsense_srv', realsense_srv, self.camera_action_callback)
-        self.pub_image = rospy.Publisher('/realsense_rgb_img', Image, queue_size=10)
-        
-        rospy.loginfo("Realsense Camera Node initialized.")
+        # self.pub_image = rospy.Publisher('/realsense_rgb_img', Image, queue_size=10)
         
         self.bridge = CvBridge()
         # setup realsense
-        self.bag = 'realsense_1124.bag'
+        # self.bag = 'realsense_1124.bag'
         self.pipeline = rs.pipeline()
         self.config = rs.config()
         #config.enable_device_from_file(bag_file)# for bag testing
-        self.config.enable_stream(rs.stream.color, 1280, 720, rs.format.bgr8, 30)  # Color stream at 640x480 resolution
-        self.config.enable_stream(rs.stream.depth, 1280, 720, rs.format.z16, 30)  # Depth stream at 640x480 resolution
+        self.config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)  # Color stream at 640x480 resolution
+        # self.config.enable_stream(rs.stream.depth, 1280, 720, rs.format.z16, 30)  # Depth stream at 640x480 resolution
         self.pipeline.start(self.config)
         self.align_to = rs.stream.color
         self.align = rs.align(self.align_to)
-        self.pc = rs.pointcloud()
+        # self.pc = rs.pointcloud()
         self.count = 1
 
         # Initialize Mediapipe Hands module
@@ -49,7 +47,8 @@ class RealsenseCameraNode:
         self.absolute_path = os.path.dirname(__file__)
         self.relative_path = "data_upload_node/realsense_imgs"
         self.ftp_dir = os.path.join(self.absolute_path[:-21], self.relative_path)# Remote directory for image upload
-        
+        rospy.loginfo("Realsense Camera Node initialized.")
+
     def camera_action_callback(self, req):
         rospy.loginfo(f"Received human detection request with process type: {req.img_process_type_realsense}")
         
@@ -75,14 +74,14 @@ class RealsenseCameraNode:
             # Align the depth frame to the color frame
             aligned_frames = self.align.process(frames)
             # Get aligned frames
-            aligned_depth_frame = aligned_frames.get_depth_frame()
+            # aligned_depth_frame = aligned_frames.get_depth_frame()
             color_frame = aligned_frames.get_color_frame()
-            if aligned_depth_frame and color_frame:
+            if color_frame:
                 break
         
         # Convert the aligned frames to numpy arrays
         color_image = np.asanyarray(color_frame.get_data())
-        aligned_depth_image = np.asanyarray(aligned_depth_frame.get_data())
+        # aligned_depth_image = np.asanyarray(aligned_depth_frame.get_data())
         
         # Save the images
         #cv2.imwrite('Aligned RealSense'+str(self.count)+'.png', aligned_depth_image, [cv2.IMWRITE_PNG_COMPRESSION, 5])
@@ -124,7 +123,7 @@ class RealsenseCameraNode:
         
         filename = os.path.join(self.ftp_dir, str(uuid.uuid4()) + '_color.png')
         cv2.imwrite(filename, color_image, [cv2.IMWRITE_PNG_COMPRESSION, 5])
-        rospy.loginfo(f"Image saved to temporary file: {img_path}")
+        rospy.loginfo(f"Image saved to temporary file: {filename}")
         return 0
 
 if __name__ == '__main__':

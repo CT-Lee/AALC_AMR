@@ -6,15 +6,37 @@
 
 <launch>
 
+	<arg name="realsense_setup" default="enable"/>
+	<arg name="realsense_mode" default="aruco"/>
+
 	<!-- AMR walk -->
 	<include file="$(find open_loop_motor_control)/launch/straight_test.launch" />
 
 	<!-- realsense_camera -->
-	<node name="realsense_camera_aruco_node" 
-		  pkg="realsense_camera"
-		  type="realsense_camera_aruco_node.py"
-		  output="screen" >
-	</node>
+	<group if="$(eval realsense_setup=='enable')">
+		<group if="$(eval realsense_mode=='aruco')">
+			<node name="realsense_camera_aruco_node" 
+				pkg="realsense_camera"
+				type="realsense_camera_aruco_node.py"
+				output="screen" >
+			</node>
+		</group>
+		<group if="$(eval realsense_mode=='body')">
+			<node name="realsense_camera_body_pose_node" 
+				pkg="realsense_camera"
+				type="realsense_camera_body_pose_node.py"
+				output="screen" >
+			</node>
+		</group>
+		<group if="$(eval realsense_mode=='hand')">
+			<node name="realsense_camera_hand_ok_node" 
+				pkg="realsense_camera"
+				type="realsense_camera_hand_ok_node.py"
+				output="screen" >
+			</node>
+		</group>
+	</group>
+
 
 	<!-- D-bot control -->
 	<node name="robot_control_node" 
@@ -30,9 +52,9 @@
 	</node>
 
 	<!-- data upload -->
-	<node name="upload_node" 
-		  pkg="upload_img"
-		  type="upload_node.py"
+	<node name="ftp_client_node" 
+		  pkg="data_upload_node"
+		  type="ftp_client_node.py"
 		  output="screen" >
 	</node>
 	

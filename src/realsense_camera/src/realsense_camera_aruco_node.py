@@ -26,7 +26,7 @@ class RealsenseCameraNode:
         # self.align_to = rs.stream.color
         # self.align = rs.align(self.align_to)
         # self.pc = rs.pointcloud()
-        self.count = 1
+        self.target_process = ""
 
         # 圖像存儲路徑（可自定義）
         self.absolute_path = os.path.dirname(__file__)
@@ -46,21 +46,21 @@ class RealsenseCameraNode:
         
         if req.img_process_type_realsense == 'human_detect':
                op = self.hand_pose_detection()
-               return realsense_srvResponse(camera_status_realsense=0, human_dist=op)
+               return realsense_srvResponse(target_process = self.target_process, execute_bool = op)
 		
         elif req.img_process_type_realsense == 'take_pic':
             self.take_pic()
             print("realsense take pic!!!")
-            return realsense_srvResponse(camera_status_realsense=1, human_dist=0.0)
+            return realsense_srvResponse(target_process = self.target_process, execute_bool = False)
 
         else:
             rospy.logwarn("Unknown process type requested.")
-            return realsense_srvResponse(camera_status_realsense=-1, human_dist=0.0)
+            return realsense_srvResponse(target_process = "invalid srv callback", execute_bool = False)
         
     def hand_pose_detection(self):
 
-        op = 1
-
+        op = False
+        self.target_process = ""
         while True:
             print("Taking frame")
             frames = self.pipeline.wait_for_frames(	timeout_ms = 5000)
@@ -77,9 +77,20 @@ class RealsenseCameraNode:
         # 如果檢測到 ArUco 標籤
         if ids is not None:
             for i, id in enumerate(ids):
-                if id[0] == 6:  # 檢測到 ID 為 6 的標籤
-                    print("detect")
-                    op = 0
+                if id[0] == 1:  # 檢測到 ID 為 1 的標籤
+                    print("detect_stage_A01")
+                    self.target_process = "A01"
+                    op = True
+                elif id[0] == 2:  # 檢測到 ID 為 2 的標籤
+                    print("detect_stage_A02")
+                    self.target_process = "A02"
+                    op = True
+                elif id[0] == 3:  # 檢測到 ID 為 3 的標籤
+                    print("detect_stage_A03")
+                    self.target_process = "A03"
+                    op = True
+                else:
+                    print("invalid_target_process!!!")
         
         return op
 
@@ -93,7 +104,7 @@ class RealsenseCameraNode:
                 color_image = np.asanyarray(color_frame.get_data())
                 break
         
-        filename = os.path.join(self.ftp_dir, str(uuid.uuid4()) + '_color.png')
+        filename = os.path.join(self.ftp_dir, self.check_stage + str(uuid.uuid4()) + '_color.png')
         cv2.imwrite(filename, color_image, [cv2.IMWRITE_PNG_COMPRESSION, 5])
         rospy.loginfo(f"Image saved to temporary file: {filename}")
         return 0

@@ -7,6 +7,6 @@ string img_process_type_realsense
 
 # Response
 
-float32 human_dist
+bool execute_bool
 
-int32 camera_status_realsense
+string target_process

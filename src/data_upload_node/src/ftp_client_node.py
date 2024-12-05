@@ -16,8 +16,8 @@ class ImageUploader:
         self.bridge = CvBridge()
 
         # FTP server information
-        self.ftp_host = "192.168.1.88"  # Replace with your FTP server address
-        self.ftp_port = 21
+        self.ftp_host = "192.168.1.254"  # Replace with your FTP server address
+        self.ftp_port = 20
         self.ftp_user = "user"    # FTP username
         self.ftp_pass = "password"  # FTP password
         global ftp

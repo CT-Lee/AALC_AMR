@@ -18,7 +18,7 @@ def human_detect(img_process_type_realsense):
         rospy.wait_for_service('realsense_srv', timeout = 2)
         image_process = rospy.ServiceProxy('realsense_srv', realsense_srv)
         response = image_process(img_process_type_realsense)
-        return response.human_dist, response.camera_status_realsense
+        return response.execute_bool, response.target_process
     except rospy.ROSException as e:
         rospy.logerr(f"Service call failed: {e}")
         return None, None
@@ -29,8 +29,13 @@ class Watch_OP(smach.State):
         self.counter = 0
         
     def execute(self, userdata):
+        # rospy.sleep(5.0)
+        # rospy.loginfo('For test: just go')
+        # return 'Start_Mov'
+        
         img_process_type_realsense = 'human_detect'
-        human_dist, camera_status_realsense = human_detect(img_process_type_realsense)
+        execute_bool, target_process = human_detect(img_process_type_realsense)
+
         if cas2ndag_in.lidarOSSD == 'emergency_stop':
             rospy.loginfo('lidarOSSD = emergency_stop')
             cas2ndag_out.lidarMAP = 'workstation1'
@@ -48,8 +53,10 @@ class Watch_OP(smach.State):
             pub_cas2ndagv_io2status_out.publish(cas2ndag_out)
         rospy.loginfo('Executing state Watch_OP')
         rospy.sleep(1)
-        if human_dist == 0:
+        if execute_bool == 1:
             rospy.loginfo('OP has leaved')
+            rospy.loginfo('target process is: ', target_process)
+            userdata.shared_data = target_process
             return 'Start_Mov'
         else:
             rospy.loginfo('OP is working')
@@ -67,7 +74,7 @@ class AMR_Mov(smach.State):
         try:
             rospy.wait_for_service('ser_amr_movement_control_straight', timeout = None)
             amr_move = rospy.ServiceProxy('ser_amr_movement_control_straight', amr_movement_control)
-            response = amr_move(0.2, 0.0, 1.0, 0.1)
+            response = amr_move(0.2, 0.0, 1.7, 0.1)
             # if response.amr_status == 'stop':
             return 'Start_Pic'
         except rospy.ROSException as e:
@@ -93,37 +100,41 @@ class Robot_Pic(smach.State):
         
     def execute(self, userdata):
         rospy.loginfo('Executing state Robot_Pic')
-        
+        target_process = userdata.shared_data  # 接收來自 Watch_OP 的變數
+        rospy.loginfo(f"Received data: {target_process}")
+
         normal_speed_bool = True
-        num_pic = 3
-        for i in range(num_pic):
+        
+        move_pt_dict = {"A01":["P2"], "A02":["P3", "P4", "P5"], "A03":["P6"]}
+
+        for i in move_pt_dict[target_process]:
             robot_mov_type = 'MovL'
-            robot_mov_point = 'P' + str(i + 2)
+            robot_mov_point = i
             robot_mov_speed = 0.25
             robot_mov_speed_low = 0.01
             _ = robot_move(robot_mov_type, robot_mov_point,robot_mov_speed)
             
             while True:
-                
+                move_cnt += 1
                 if cas2ndag_in.lidarOSSD  == 'emergency_stop':
                     _ = robot_move('stop', robot_mov_point,robot_mov_speed)
                     normal_speed_bool = False
-                elif cas2ndag_in.lidarOSSD  == 'slow_stop':
-                    _ = robot_move('stop', robot_mov_point,robot_mov_speed)
-                    _ = robot_move('MovL', robot_mov_point,robot_mov_speed_low)
-                    normal_speed_bool = False
-                elif cas2ndag_in.lidarOSSD  == 'normal' and normal_speed_bool == False:
-                    _ = robot_move('stop', robot_mov_point,robot_mov_speed)
-                    _ = robot_move('MovL', robot_mov_point,robot_mov_speed)
-                    normal_speed_bool = True
+                #elif cas2ndag_in.lidarOSSD  == 'slow_stop':
+                #   _ = robot_move('stop', robot_mov_point,robot_mov_speed)
+                #   _ = robot_move('MovL', robot_mov_point,robot_mov_speed_low)
+                #    normal_speed_bool = False
+                else:
+                    if normal_speed_bool == False:
+                        _ = robot_move('stop', robot_mov_point,robot_mov_speed)
+                        _ = robot_move('MovL', robot_mov_point,robot_mov_speed)
+                        normal_speed_bool = True
                 
-                print(robot_move('is_reached', robot_mov_point,robot_mov_speed))
+                # print(robot_move('is_reached', robot_mov_point,robot_mov_speed))
                 if robot_move('is_reached', robot_mov_point,robot_mov_speed) == 'reached':
                     break
-                rospy.sleep(0.1)
+                rospy.sleep(0.01)
             
             # Take pic
-#            img_process_type_realsense = 'take_pic'
             img_process_type_realsense = 'take_pic'
             human_dist, camera_status_realsense = human_detect(img_process_type_realsense)
             
@@ -143,7 +154,7 @@ class AMR_Back(smach.State):
         try:
             rospy.wait_for_service('ser_amr_movement_control_straight', timeout = None)
             amr_move = rospy.ServiceProxy('ser_amr_movement_control_straight', amr_movement_control)
-            response = amr_move(-0.2, 0.0, 1.0, 0.1)
+            response = amr_move(-0.2, 0.0, 1.7, 0.1)
             # rospy.wait_for_service('amr_srv', timeout = None)
             # amr_move = rospy.ServiceProxy('amr_srv', amr_srv)
             # response = amr_move('backward')
@@ -195,13 +206,15 @@ def main():
         # Add states to the container
         smach.StateMachine.add('Watch_OP', Watch_OP(), 
                                transitions={'watching':'Watch_OP',
-                                            'Start_Mov':'AMR_Mov'})
+                                            'Start_Mov':'AMR_Mov'},
+                           remapping={'shared_data':'shared_data'})
         smach.StateMachine.add('AMR_Mov', AMR_Mov(), 
                                transitions={'Moving':'AMR_Mov',
                                             'Start_Pic':'Robot_Pic'})
         smach.StateMachine.add('Robot_Pic', Robot_Pic(), 
                                transitions={'Picturing':'Robot_Pic',
-                                            'Start_Back':'AMR_Back'})
+                                            'Start_Back':'AMR_Back'},
+                           remapping={'shared_data':'shared_data'})
         smach.StateMachine.add('AMR_Back', AMR_Back(), 
                                transitions={'Moving':'AMR_Back',
                                             'Start_Upload':'IPC_Upload'})

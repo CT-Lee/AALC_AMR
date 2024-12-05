@@ -46,6 +46,16 @@ class RobotControlNode:
                 rospy.loginfo("Joint move command executed.")
                 return robot_control_srvResponse(robot_running_status = 'running')
             
+            elif robot_mov_type == "MovP":
+                Joint_data_now = self.robot.robot_status("jointAngles")
+                Joint_data_target = self.robot.get_point(robot_mov_point,representation="Joint")
+                print("Joint_data_now: ", Joint_data_now)
+                print("Joint_data_target: ", Joint_data_target)
+                joint_property["target_joint"] = [Joint_data_now, Joint_data_target]
+                self.robot.move_joint(**joint_property)
+                rospy.loginfo("Joint move command executed.")
+                return robot_control_srvResponse(robot_running_status = 'running')
+            
             elif robot_mov_type == "stop":
                 self.robot.stop()
                 print("Robot Stop")

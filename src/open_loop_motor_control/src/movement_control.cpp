@@ -130,8 +130,6 @@ void movement_control::straight_profile(double targetSpeed, double endVx, double
 				else
 					targetSpeed_true = (double)(-1.0)*(slow_stop_speed*running_cycle);
 			}
-			else if( cas2ndagv_io2status_in_msg.lidarOSSD == CAS2ndAGV_IO_status.lidarOSSD.emergency_stop )
-				curVx = 0;
 		}
 
 		/* update curVx command */
@@ -140,13 +138,15 @@ void movement_control::straight_profile(double targetSpeed, double endVx, double
 			if(curVx < targetSpeed_true) curVx += acc_dec;
 			if(curVx > targetSpeed_true) curVx -= acc_dec;
 		}
+		else
+			curVx = 0;
 
 		/* update distance */
 		if(sw) distance = distance - fabs(curVx);
-		if(distance<=0) {distance=0;curVx=0;}
+		if(distance<=acc_dec) {distance=0;curVx=0;}
 
 		twist_msg.linear.x = curVx/running_cycle;
-		// ROS_INFO("%lf,%lf,%lf,%lf",distance,targetSpeed_true,twist_msg.linear.x, odom_msg.twist.twist.linear.x);
+		ROS_INFO("%lf,%lf,%lf,%s",distance, targetSpeed_true, twist_msg.linear.x, cas2ndagv_io2status_in_msg.lidarOSSD.c_str());
 		pub_cmd_vel.publish(twist_msg);
 		sw = true;
 	}
