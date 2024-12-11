@@ -41,7 +41,8 @@
 	<!-- D-bot control -->
 	<node name="robot_control_node" 
 		  pkg="robot_control"
-		  type="robot_control_node.py" >
+		  type="robot_control_node.py"
+		  output="screen" >
 	</node>
 
 	<!-- state_machine -->

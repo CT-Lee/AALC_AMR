@@ -20,25 +20,30 @@ class ImageUploader:
         self.ftp_port = 20
         self.ftp_user = "user"    # FTP username
         self.ftp_pass = "password"  # FTP password
-        global ftp
+        #global ftp
         self.absolute_path = os.path.dirname(__file__)
         self.relative_path = "realsense_imgs"
         self.ftp_dir = os.path.join(self.absolute_path[:-4], self.relative_path)# Remote directory for image upload
+        self.ftp = FTP()
         
-        # Connect to the FTP server
-        ftp = FTP()
-        ftp.connect(self.ftp_host,self.ftp_port)
-        ftp.login(self.ftp_user, self.ftp_pass)
-
         # Subscribe to the image topic
         self.service = rospy.Service('upload_srv', upload_srv, self.upload_srv_callback)
 
     def upload_srv_callback(self, req):
         rospy.loginfo(f"State machine triggered: {req.upload_cmd}")
-
+        self.connect_ftp_server()
         # Upload the image to the FTP server
         self.upload_image()
+        self.disconnect_ftp_server()
         return upload_srvResponse(upload_status = "done")
+
+    def connect_ftp_server(self):
+        # Connect to the FTP server
+        self.ftp.connect(self.ftp_host,self.ftp_port)
+        self.ftp.login(self.ftp_user, self.ftp_pass)
+
+    def disconnect_ftp_server(self):
+        self.ftp.quit()
 
     def upload_image(self):
         start_time = time.time()
@@ -50,7 +55,7 @@ class ImageUploader:
                     # Open the PNG file in binary mode for reading
                     with open(file_path, 'rb') as f:
                         # Use the STOR command to upload the file
-                        ftp.storbinary(f"STOR {remote_filename}", f)
+                        self.ftp.storbinary(f"STOR {remote_filename}", f)
                     rospy.loginfo(f"Successfully uploaded {filename} to {remote_filename}")
                     os.remove(file_path)
                 except Exception as e:

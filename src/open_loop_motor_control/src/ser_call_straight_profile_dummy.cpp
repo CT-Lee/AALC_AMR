@@ -59,7 +59,7 @@
 int main(int argc, char **argv)
 {
 	ros::init(argc, argv, "ser_call_straight_profile_dummy");
-	if (argc != 5)
+	if (argc != 6)
 	{
 		ROS_INFO("input parameters required by [%s] must include targetSpeed, endVx, distance, acc_dec", SERVICE_amr_movement_control_straight);
 		return 1;
@@ -71,6 +71,7 @@ int main(int argc, char **argv)
 	ser_mc.request.endVx = atof(argv[2]);
 	ser_mc.request.distance = atof(argv[3]);
 	ser_mc.request.acc_dec = atof(argv[4]);
+	ser_mc.request.point_type = atoi(argv[5]);
 	// ROS_INFO("%5ld, %5ld, %5ld, %5ld", ser_mc.request.targetSpeed, ser_mc.request.endVx, ser_mc.request.distance, ser_mc.request.acc_dec);
 	if (client.call(ser_mc))
 	{

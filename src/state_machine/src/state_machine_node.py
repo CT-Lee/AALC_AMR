@@ -25,7 +25,7 @@ def human_detect(img_process_type_realsense):
         
 class Watch_OP(smach.State):
     def __init__(self):
-        smach.State.__init__(self, outcomes=['watching', 'Start_Mov'])
+        smach.State.__init__(self, outcomes=['watching', 'Start_Mov'],output_keys=['shared_data'])
         self.counter = 0
         
     def execute(self, userdata):
@@ -38,24 +38,24 @@ class Watch_OP(smach.State):
 
         if cas2ndag_in.lidarOSSD == 'emergency_stop':
             rospy.loginfo('lidarOSSD = emergency_stop')
-            cas2ndag_out.lidarMAP = 'workstation1'
+            # cas2ndag_out.lidarMAP = 'workstation1'
             cas2ndag_out.light = 'reverse'
             pub_cas2ndagv_io2status_out.publish(cas2ndag_out)
         elif cas2ndag_in.lidarOSSD == 'slow_stop':
             rospy.loginfo('lidarOSSD = slow_stop')
-            cas2ndag_out.lidarMAP = 'workstation1'
+            # cas2ndag_out.lidarMAP = 'workstation1'
             cas2ndag_out.light = 'handshake'
             pub_cas2ndagv_io2status_out.publish(cas2ndag_out)
         elif cas2ndag_in.lidarOSSD == 'normal':
             rospy.loginfo('lidarOSSD = normal')
-            cas2ndag_out.lidarMAP = 'workstation1'
+            # cas2ndag_out.lidarMAP = 'workstation1'
             cas2ndag_out.light = 'standby'
             pub_cas2ndagv_io2status_out.publish(cas2ndag_out)
         rospy.loginfo('Executing state Watch_OP')
         rospy.sleep(1)
         if execute_bool == 1:
             rospy.loginfo('OP has leaved')
-            rospy.loginfo('target process is: ', target_process)
+            # rospy.loginfo('target process is: ', target_process)
             userdata.shared_data = target_process
             return 'Start_Mov'
         else:
@@ -74,7 +74,7 @@ class AMR_Mov(smach.State):
         try:
             rospy.wait_for_service('ser_amr_movement_control_straight', timeout = None)
             amr_move = rospy.ServiceProxy('ser_amr_movement_control_straight', amr_movement_control)
-            response = amr_move(0.2, 0.0, 1.7, 0.1)
+            response = amr_move(0.2, 0.0, 1.7, 0.1, 1)
             # if response.amr_status == 'stop':
             return 'Start_Pic'
         except rospy.ROSException as e:
@@ -95,7 +95,7 @@ def robot_move(robot_mov_type, robot_mov_point, robot_mov_speed):
 # Need to add function: Integrate LiDAR slow down and stop
 class Robot_Pic(smach.State):
     def __init__(self):
-        smach.State.__init__(self, outcomes=['Picturing','Start_Back'])
+        smach.State.__init__(self, outcomes=['Picturing','Start_Back'], input_keys=['shared_data'])
         self.counter = 0
         
     def execute(self, userdata):
@@ -104,18 +104,21 @@ class Robot_Pic(smach.State):
         rospy.loginfo(f"Received data: {target_process}")
 
         normal_speed_bool = True
+        prepare_pt_dict = {"A02":["P2.0"], "A03":["P3.0"]}
+        move_pt_dict = {"A02":["P2.1", "P2.2", "P2.3"], "A03":["P3.0","P3.1", "P3.2", "P3.3"]}
         
-        move_pt_dict = {"A01":["P2"], "A02":["P3", "P4", "P5"], "A03":["P6"]}
+        pic_bool = False
 
         for i in move_pt_dict[target_process]:
-            robot_mov_type = 'MovL'
+            robot_mov_type = 'MovP'
             robot_mov_point = i
-            robot_mov_speed = 0.25
-            robot_mov_speed_low = 0.01
+            robot_mov_speed = 0.1
+            robot_mov_speed_low = 0.005
+            print("robot_mov_point: ", robot_mov_point)
             _ = robot_move(robot_mov_type, robot_mov_point,robot_mov_speed)
-            
+            print("Finished")
             while True:
-                move_cnt += 1
+                # move_cnt += 1
                 if cas2ndag_in.lidarOSSD  == 'emergency_stop':
                     _ = robot_move('stop', robot_mov_point,robot_mov_speed)
                     normal_speed_bool = False
@@ -126,7 +129,7 @@ class Robot_Pic(smach.State):
                 else:
                     if normal_speed_bool == False:
                         _ = robot_move('stop', robot_mov_point,robot_mov_speed)
-                        _ = robot_move('MovL', robot_mov_point,robot_mov_speed)
+                        _ = robot_move('MovP', robot_mov_point,robot_mov_speed)
                         normal_speed_bool = True
                 
                 # print(robot_move('is_reached', robot_mov_point,robot_mov_speed))
@@ -134,11 +137,38 @@ class Robot_Pic(smach.State):
                     break
                 rospy.sleep(0.01)
             
-            # Take pic
-            img_process_type_realsense = 'take_pic'
-            human_dist, camera_status_realsense = human_detect(img_process_type_realsense)
+            # Take pic, First point is prepare point
+            if pic_bool:
+                img_process_type_realsense = 'take_pic'
+                human_dist, camera_status_realsense = human_detect(img_process_type_realsense)
+            pic_bool = True
             
-        _ = robot_move('MovL', 'P1',robot_mov_speed)
+        _ = robot_move('MovP', move_pt_dict[target_process][0], robot_mov_speed)
+        while True:
+            if cas2ndag_in.lidarOSSD  == 'emergency_stop':
+                    _ = robot_move('stop', move_pt_dict[target_process][0],robot_mov_speed)
+                    normal_speed_bool = False
+            else:
+                if normal_speed_bool == False:
+                    _ = robot_move('stop', move_pt_dict[target_process][0],robot_mov_speed)
+                    _ = robot_move('MovP', move_pt_dict[target_process][0],robot_mov_speed)
+                    normal_speed_bool = True
+            if robot_move('is_reached', move_pt_dict[target_process][0],robot_mov_speed) == 'reached':
+                    break
+            rospy.sleep(0.01)
+        _ = robot_move('MovP', "aoihome", robot_mov_speed)
+        while True:
+            if cas2ndag_in.lidarOSSD  == 'emergency_stop':
+                    _ = robot_move('stop', "aoihome",robot_mov_speed)
+                    normal_speed_bool = False
+            else:
+                if normal_speed_bool == False:
+                    _ = robot_move('stop', "aoihome",robot_mov_speed)
+                    _ = robot_move('MovP', "aoihome",robot_mov_speed)
+                    normal_speed_bool = True
+            if robot_move('is_reached', "aoihome",robot_mov_speed) == 'reached':
+                    break
+            rospy.sleep(0.01)
         return 'Start_Back'
         
         
@@ -154,7 +184,7 @@ class AMR_Back(smach.State):
         try:
             rospy.wait_for_service('ser_amr_movement_control_straight', timeout = None)
             amr_move = rospy.ServiceProxy('ser_amr_movement_control_straight', amr_movement_control)
-            response = amr_move(-0.2, 0.0, 1.7, 0.1)
+            response = amr_move(-0.2, 0.0, 1.7, 0.1, 1)
             # rospy.wait_for_service('amr_srv', timeout = None)
             # amr_move = rospy.ServiceProxy('amr_srv', amr_srv)
             # response = amr_move('backward')

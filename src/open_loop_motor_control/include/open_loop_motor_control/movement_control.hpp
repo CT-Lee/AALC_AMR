@@ -20,6 +20,7 @@
 /* User Includes Begin */
 #include "adam_for_cas2ndagv_IO_def.h"
 #include "delta_amr_message/cas2ndagv_io2state_in.h"
+#include "delta_amr_message/cas2ndagv_io2state_out.h"
 /* User Includes End */
 
 
@@ -59,10 +60,14 @@ private:
 	ros::Rate loop_rate;
 	/* create cmd_vel publisher object */
 	ros::Publisher pub_cmd_vel;
+	/* create cas2ndagv io2state out publisher object */
+	ros::Publisher pub_io2status_out;
 	/* create odometry subscriber object */
 	ros::Subscriber sub_odometry;
 	/* create sub_io2status_in subscriber object */
 	ros::Subscriber sub_io2status_in;
+	/* create sub_io2status_out subscriber object */
+	ros::Subscriber sub_io2status_out;
 	/* create straight_profile serviceServer object */
 	ros::ServiceServer ser_amr_movement_control_straight;
 	/* create ros timer interrupt object */
@@ -74,17 +79,20 @@ private:
 	nav_msgs::Odometry odom_msg;
 	/* create cmd_vel(twist) message data structure */
 	geometry_msgs::Twist twist_msg;
-	/* create cmd_vel(twist) message data structure */
+	/* create cas2ndagv_io2state_in message data structure */
 	delta_amr_message::cas2ndagv_io2state_in cas2ndagv_io2status_in_msg;
+	/* create cas2ndagv_io2state_out message data structure */
+	delta_amr_message::cas2ndagv_io2state_out cas2ndagv_io2status_out_msg;
 
 	/*  */
 	bool ser_straight_profile_callbac(delta_amr_service::amr_movement_control::Request &amr_movement_control_req,
 									  delta_amr_service::amr_movement_control::Response &amr_movement_control_res);
-	void straight_profile(double targetSpeed, double endSpeed, double distance, double acc_dec);
+	void straight_profile(double targetSpeed, double endSpeed, double distance, double acc_dec, int8_t point_type);
 
 	void Sub_TOPIC_odometry_callback(const nav_msgs::Odometry& odom);
 	void time_interrupter_callback(const ros::TimerEvent& time);
 	void Sub_TOPIC_cas2ndagv_io2state_in_callback(const delta_amr_message::cas2ndagv_io2state_in& io2s_in);
+	void Sub_TOPIC_cas2ndagv_io2state_out_callback(const delta_amr_message::cas2ndagv_io2state_out& io2s_out);
 
 /* public member */
 public:

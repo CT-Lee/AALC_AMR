@@ -31,9 +31,9 @@ class RobotControlNode:
         
         # 设置运动属性
         joint_property = {
-            "speed": robot_mov_speed,
-            "rotation_speed":robot_mov_speed,
-            "acceleration": 0.25,  # 默认加速度
+            "speed": 25.0,
+            "rotation_speed":25.0,
+            "acceleration": 2,  # 默认加速度
             "non_blocking": True
         }
 
@@ -52,6 +52,7 @@ class RobotControlNode:
                 print("Joint_data_now: ", Joint_data_now)
                 print("Joint_data_target: ", Joint_data_target)
                 joint_property["target_joint"] = [Joint_data_now, Joint_data_target]
+                rospy.sleep(0.1)
                 self.robot.move_joint(**joint_property)
                 rospy.loginfo("Joint move command executed.")
                 return robot_control_srvResponse(robot_running_status = 'running')

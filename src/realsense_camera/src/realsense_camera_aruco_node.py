@@ -78,15 +78,15 @@ class RealsenseCameraNode:
         if ids is not None:
             for i, id in enumerate(ids):
                 if id[0] == 1:  # 檢測到 ID 為 1 的標籤
-                    print("detect_stage_A01")
+                    print("detect_target_process_A01")
                     self.target_process = "A01"
                     op = True
                 elif id[0] == 2:  # 檢測到 ID 為 2 的標籤
-                    print("detect_stage_A02")
+                    print("detect_target_process_A02")
                     self.target_process = "A02"
                     op = True
                 elif id[0] == 3:  # 檢測到 ID 為 3 的標籤
-                    print("detect_stage_A03")
+                    print("detect_target_process_A03")
                     self.target_process = "A03"
                     op = True
                 else:
@@ -104,7 +104,7 @@ class RealsenseCameraNode:
                 color_image = np.asanyarray(color_frame.get_data())
                 break
         
-        filename = os.path.join(self.ftp_dir, self.check_stage + str(uuid.uuid4()) + '_color.png')
+        filename = os.path.join(self.ftp_dir, self.target_process + str(uuid.uuid4()) + '_color.png')
         cv2.imwrite(filename, color_image, [cv2.IMWRITE_PNG_COMPRESSION, 5])
         rospy.loginfo(f"Image saved to temporary file: {filename}")
         return 0
