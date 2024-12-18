@@ -19,6 +19,7 @@
 /* User Includes --------------------------------------------*/
 /* User Includes Begin */
 #include "adam_for_cas2ndagv_IO_def.h"
+#include "motor_feedback_msgs/motor_feedback.h"
 #include "delta_amr_message/cas2ndagv_io2state_in.h"
 #include "delta_amr_message/cas2ndagv_io2state_out.h"
 /* User Includes End */
@@ -30,6 +31,7 @@
 #define SERVICE_amr_movement_control_straight "ser_amr_movement_control_straight"
 #define TOPIC_cmd_vel "cmd_vel"
 #define TOPIC_odom "odom"
+#define TOPIC_encoder "encoder"
 #define queue_size 100
 #define running_cycle (double)0.1
 #define slow_stop_speed (double)0.1
@@ -64,6 +66,8 @@ private:
 	ros::Publisher pub_io2status_out;
 	/* create odometry subscriber object */
 	ros::Subscriber sub_odometry;
+	/* create encoder subscriber object */
+	ros::Subscriber sub_encoder;
 	/* create sub_io2status_in subscriber object */
 	ros::Subscriber sub_io2status_in;
 	/* create sub_io2status_out subscriber object */
@@ -75,6 +79,8 @@ private:
 	/*  */
 	CAS2ndAGV_IO_status_struct CAS2ndAGV_IO_status;
 
+	/* create Odometry message data structure */
+	motor_feedback_msgs::motor_feedback encoder_msg;
 	/* create Odometry message data structure */
 	nav_msgs::Odometry odom_msg;
 	/* create cmd_vel(twist) message data structure */
@@ -89,6 +95,7 @@ private:
 									  delta_amr_service::amr_movement_control::Response &amr_movement_control_res);
 	void straight_profile(double targetSpeed, double endSpeed, double distance, double acc_dec, int8_t point_type);
 
+	void Sub_TOPIC_encoder_callback(const motor_feedback_msgs::motor_feedback& enc);
 	void Sub_TOPIC_odometry_callback(const nav_msgs::Odometry& odom);
 	void time_interrupter_callback(const ros::TimerEvent& time);
 	void Sub_TOPIC_cas2ndagv_io2state_in_callback(const delta_amr_message::cas2ndagv_io2state_in& io2s_in);

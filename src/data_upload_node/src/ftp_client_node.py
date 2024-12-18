@@ -10,14 +10,15 @@ from pathlib import Path
 from delta_amr_service.srv import upload_srv, upload_srvResponse
 import time
 
+
 class ImageUploader:
     def __init__(self):
         # Initialize the CvBridge for converting ROS images
         self.bridge = CvBridge()
 
         # FTP server information
-        self.ftp_host = "192.168.1.254"  # Replace with your FTP server address
-        self.ftp_port = 20
+        self.ftp_host = "192.168.1.66"  # Replace with your FTP server address
+        self.ftp_port = 2121
         self.ftp_user = "user"    # FTP username
         self.ftp_pass = "password"  # FTP password
         #global ftp
@@ -40,6 +41,7 @@ class ImageUploader:
     def connect_ftp_server(self):
         # Connect to the FTP server
         self.ftp.connect(self.ftp_host,self.ftp_port)
+        print("here!!!")
         self.ftp.login(self.ftp_user, self.ftp_pass)
 
     def disconnect_ftp_server(self):

@@ -67,6 +67,10 @@ cas2ndagv_io2status::cas2ndagv_io2status():
 	sub_adam_input = nh.subscribe(cas2ndagv_input_pin_topic, cas2ndagv_io2state_queue_size, &cas2ndagv_io2status::Sub_TOPIC_adam_input_callback, this);
 	/* init timer interrupt object */
 	time_interrupter = nh.createTimer(ros::Duration(running_cycle), &cas2ndagv_io2status::time_interrupter_callback, this);
+
+	cas2ndagv_io2status_out_msg.lidarMAP == CAS2ndAGV_IO_status.lidarMAP.normal_walking;
+	cas2ndagv_io2status_out_msg.light == CAS2ndAGV_IO_status.light.standby;
+
 	/* display program running */
 	ROS_INFO("[cas2ndagv_io2status_ROS] node startup completed. cas2ndagv_io2status_ROS running...");
 }

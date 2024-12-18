@@ -56,7 +56,7 @@ motor_feedback_msgs::motor_feedback mf;
 /* 宣告左右輪速度 */
 int32_t velL=0,velR=0;
 
-const double ms_to_rpm = 2931.0;
+const double ms_to_rpm = 2932.0;
 
 /* Variables End */
 

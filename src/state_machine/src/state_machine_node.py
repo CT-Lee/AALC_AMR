@@ -32,25 +32,12 @@ class Watch_OP(smach.State):
         # rospy.sleep(5.0)
         # rospy.loginfo('For test: just go')
         # return 'Start_Mov'
-        
+        cas2ndag_out.lidarMAP = 'normal_walking'
+        cas2ndag_out.light = 'standby'
+        pub_cas2ndagv_io2status_out.publish(cas2ndag_out)
         img_process_type_realsense = 'human_detect'
         execute_bool, target_process = human_detect(img_process_type_realsense)
-
-        if cas2ndag_in.lidarOSSD == 'emergency_stop':
-            rospy.loginfo('lidarOSSD = emergency_stop')
-            # cas2ndag_out.lidarMAP = 'workstation1'
-            cas2ndag_out.light = 'reverse'
-            pub_cas2ndagv_io2status_out.publish(cas2ndag_out)
-        elif cas2ndag_in.lidarOSSD == 'slow_stop':
-            rospy.loginfo('lidarOSSD = slow_stop')
-            # cas2ndag_out.lidarMAP = 'workstation1'
-            cas2ndag_out.light = 'handshake'
-            pub_cas2ndagv_io2status_out.publish(cas2ndag_out)
-        elif cas2ndag_in.lidarOSSD == 'normal':
-            rospy.loginfo('lidarOSSD = normal')
-            # cas2ndag_out.lidarMAP = 'workstation1'
-            cas2ndag_out.light = 'standby'
-            pub_cas2ndagv_io2status_out.publish(cas2ndag_out)
+        cas2ndagv_set_light(1)
         rospy.loginfo('Executing state Watch_OP')
         rospy.sleep(1)
         if execute_bool == 1:
@@ -74,7 +61,7 @@ class AMR_Mov(smach.State):
         try:
             rospy.wait_for_service('ser_amr_movement_control_straight', timeout = None)
             amr_move = rospy.ServiceProxy('ser_amr_movement_control_straight', amr_movement_control)
-            response = amr_move(0.2, 0.0, 1.7, 0.1, 1)
+            response = amr_move(-0.2, 0.0, 0.95, 0.1, 1)
             # if response.amr_status == 'stop':
             return 'Start_Pic'
         except rospy.ROSException as e:
@@ -100,24 +87,30 @@ class Robot_Pic(smach.State):
         
     def execute(self, userdata):
         rospy.loginfo('Executing state Robot_Pic')
-        target_process = userdata.shared_data  # 接收來自 Watch_OP 的變數
-        rospy.loginfo(f"Received data: {target_process}")
-
+        # target_process = userdata.shared_data  # 接收來自 Watch_OP 的變數
+        # rospy.loginfo(f"Received data: {target_process}")
+        target_process = "A02"
         normal_speed_bool = True
-        prepare_pt_dict = {"A02":["P2.0"], "A03":["P3.0"]}
-        move_pt_dict = {"A02":["P2.1", "P2.2", "P2.3"], "A03":["P3.0","P3.1", "P3.2", "P3.3"]}
+        # prepare_pt_dict = {"A02":["P2.0"], "A03":["P3.0"]}
+        move_pt_dict = {"A02":["Apart1", "A1.0", "P1.1", "A1.0", "A2.0",\
+                               "P2.1", "P2.2", "A2.0", "A3.0",\
+                               "P3.1", "P3.2", "P3.3", "A3.0", "Apart1","aoihome"]} #, "A03":["P3.0","P3.1", "P3.2", "P3.3"]}
         
-        pic_bool = False
+        # pic_bool = False
 
         for i in move_pt_dict[target_process]:
+            cas2ndag_out.light = 'workstation'
+            cas2ndagv_set_light(0)
             robot_mov_type = 'MovP'
             robot_mov_point = i
-            robot_mov_speed = 0.1
-            robot_mov_speed_low = 0.005
+            robot_mov_speed = 40
+            # robot_mov_speed_low = 0.005
             print("robot_mov_point: ", robot_mov_point)
             _ = robot_move(robot_mov_type, robot_mov_point,robot_mov_speed)
             print("Finished")
             while True:
+                cas2ndag_out.light = 'workstation'
+                cas2ndagv_set_light(0)
                 # move_cnt += 1
                 if cas2ndag_in.lidarOSSD  == 'emergency_stop':
                     _ = robot_move('stop', robot_mov_point,robot_mov_speed)
@@ -134,15 +127,23 @@ class Robot_Pic(smach.State):
                 
                 # print(robot_move('is_reached', robot_mov_point,robot_mov_speed))
                 if robot_move('is_reached', robot_mov_point,robot_mov_speed) == 'reached':
+                    cas2ndag_out.light = 'standby'
+                    pub_cas2ndagv_io2status_out.publish(cas2ndag_out)
                     break
                 rospy.sleep(0.01)
             
             # Take pic, First point is prepare point
-            if pic_bool:
-                img_process_type_realsense = 'take_pic'
+            if i[0] == "P":
+                img_process_type_realsense = "A0" + i[1]
+                print("img_process_type_realsense: ", img_process_type_realsense)
+                # img_process_type_realsense = 'take_pic'
                 human_dist, camera_status_realsense = human_detect(img_process_type_realsense)
-            pic_bool = True
-            
+
+                rospy.loginfo('Executing state IPC_Upload')
+                upload_result = upload_img()
+                rospy.sleep(1.0)
+            # pic_bool = True
+        '''
         _ = robot_move('MovP', move_pt_dict[target_process][0], robot_mov_speed)
         while True:
             if cas2ndag_in.lidarOSSD  == 'emergency_stop':
@@ -169,6 +170,7 @@ class Robot_Pic(smach.State):
             if robot_move('is_reached', "aoihome",robot_mov_speed) == 'reached':
                     break
             rospy.sleep(0.01)
+        '''
         return 'Start_Back'
         
         
@@ -184,7 +186,7 @@ class AMR_Back(smach.State):
         try:
             rospy.wait_for_service('ser_amr_movement_control_straight', timeout = None)
             amr_move = rospy.ServiceProxy('ser_amr_movement_control_straight', amr_movement_control)
-            response = amr_move(-0.2, 0.0, 1.7, 0.1, 1)
+            response = amr_move(0.2, 0.0, 0.94, 0.1, 0)
             # rospy.wait_for_service('amr_srv', timeout = None)
             # amr_move = rospy.ServiceProxy('amr_srv', amr_srv)
             # response = amr_move('backward')
@@ -197,8 +199,12 @@ class AMR_Back(smach.State):
 def upload_img():
     try:
         rospy.wait_for_service('upload_srv', timeout = 2)
+        cas2ndag_out.light = 'handshake'
+        pub_cas2ndagv_io2status_out.publish(cas2ndag_out)
         upload = rospy.ServiceProxy('upload_srv', upload_srv)
         response = upload("start")
+        cas2ndag_out.light = 'standby'
+        pub_cas2ndagv_io2status_out.publish(cas2ndag_out)
         return response.upload_status
     except rospy.ROSException as e:
         rospy.logerr(f"Service call failed: {e}")
@@ -210,6 +216,10 @@ class IPC_Upload(smach.State):
         self.counter = 0
         
     def execute(self, userdata):
+        rospy.loginfo('Skip upload')
+        return 'Start_Watch_OP'
+        
+        '''
         rospy.loginfo('Executing state IPC_Upload')
         upload_result = upload_img()
         rospy.sleep(1.0)
@@ -223,7 +233,7 @@ class IPC_Upload(smach.State):
             rospy.logerr(f"upload failed")
             self.counter += 1
             return 'Uploading'
-         
+         '''
 # main
 def main():
     rospy.init_node('smach_example_state_machine')
@@ -277,10 +287,29 @@ def sub_cas2ndagv_io2status_in_callback(data):
     # rospy.loginfo('lidarOSSD = %s', data.lidarOSSD)
     # rospy.loginfo('lidarMAP = %s', data.EMS)
 
+def sub_cas2ndagv_io2status_out_callback(data):
+    cas2ndag_out.lidarMAP = data.lidarMAP
+    cas2ndag_out.light = data.light
+
+def cas2ndagv_set_light(sw):
+    if cas2ndag_in.lidarOSSD == 'emergency_stop':
+        cas2ndag_out.light = 'error'
+    elif cas2ndag_in.EMS == 'emergency_stop':
+        cas2ndag_out.light = 'error'
+    if(sw==1):
+        if cas2ndag_in.lidarOSSD == 'normal':
+            cas2ndag_out.light = 'standby'
+        elif cas2ndag_in.lidarOSSD == 'slow_stop':
+            cas2ndag_out.light = 'standby'
+        elif cas2ndag_in.EMS == 'normal':
+            cas2ndag_out.light = 'standby'
+    pub_cas2ndagv_io2status_out.publish(cas2ndag_out)
+
 cas2ndag_out = cas2ndagv_io2state_out()
-cas2ndag_in = cas2ndagv_io2state_in()
+cas2ndag_in = cas2ndagv_io2state_in()           
 pub_cas2ndagv_io2status_out = rospy.Publisher('TOPIC_cas2ndagv_io2state_out', cas2ndagv_io2state_out, queue_size=100)
 sub_cas2ndagv_io2status_in = rospy.Subscriber('TOPIC_cas2ndagv_io2state_in', cas2ndagv_io2state_in, sub_cas2ndagv_io2status_in_callback)
+sub_cas2ndagv_io2status_out = rospy.Subscriber('TOPIC_cas2ndagv_io2state_out', cas2ndagv_io2state_out, sub_cas2ndagv_io2status_out_callback)
 if __name__ == '__main__':
     main()
 

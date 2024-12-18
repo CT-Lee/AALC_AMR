@@ -15,9 +15,9 @@
 	<!-- realsense_camera -->
 	<group if="$(eval realsense_setup=='enable')">
 		<group if="$(eval realsense_mode=='aruco')">
-			<node name="realsense_camera_aruco_node" 
+			<node name="realsense_camera_aruco_all_process_node" 
 				pkg="realsense_camera"
-				type="realsense_camera_aruco_node.py"
+				type="realsense_camera_aruco_all_process_node.py"
 				output="screen" >
 			</node>
 		</group>

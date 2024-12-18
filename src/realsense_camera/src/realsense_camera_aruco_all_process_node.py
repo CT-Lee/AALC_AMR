@@ -8,8 +8,8 @@ import time
 import uuid
 import pyrealsense2 as rs
 import numpy as np
-import mediapipe as mp
 import joblib
+import cv2.aruco as aruco
 
 # Load the saved SVM model using pickle
 script_path = os.path.dirname(__file__)
@@ -24,19 +24,18 @@ class RealsenseCameraNode:
         self.pipeline = rs.pipeline()
         self.config = rs.config()
         #config.enable_device_from_file(bag_file)# for bag testing
-        self.config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)  # Color stream at 640x480 resolution
+        self.config.enable_stream(rs.stream.color, 1280, 720, rs.format.bgr8, 30)  # Color stream at 640x480 resolution
         # self.config.enable_stream(rs.stream.depth, 1280, 720, rs.format.z16, 30)  # Depth stream at 640x480 resolution
         self.pipeline.start(self.config)
         # 設定回應 'human_detect' 服務
         self.service = rospy.Service('realsense_srv', realsense_srv, self.camera_action_callback)
         self.target_process = ""
 
-        # Initialize Mediapipe Hands module
-        self.mp_hands = mp.solutions.hands
-        self.hands = self.mp_hands.Hands(max_num_hands=5, min_detection_confidence=0.5, min_tracking_confidence=0.5)
-        self.mp_drawing = mp.solutions.drawing_utils
-        self.hand_ok = None
-        self.matrices = []
+        # 定義 ArUco 標籤的字典
+        # self.aruco_dict = aruco.Dictionary_get(aruco.DICT_6X6_250)
+        self.aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_6X6_250)
+        # 初始化 ArUco 標籤檢測參數
+        self.parameters = cv2.aruco.DetectorParameters()
 
         # 圖像存儲路徑（可自定義）
         self.absolute_path = os.path.dirname(__file__)
@@ -74,47 +73,20 @@ class RealsenseCameraNode:
         
         # Convert the aligned frames to numpy arrays
         color_image = np.asanyarray(color_frame.get_data())
-        
-        # Get the dimensions of the image
-        height, width, channels = color_image.shape
-        # Calculate the center of the image
-        center_x, center_y = width // 2, height // 2
-        # Define the size of the cropped region (640x640)
-        crop_size = 500
-        # Calculate the crop region based on the center
-        x1 = center_x - crop_size // 2
-        x2 = center_x + crop_size // 2
-        y1 = center_y - crop_size // 2
-        y2 = center_y + crop_size // 2
-        # Ensure that the coordinates stay within the image bounds
-        x1 = max(0, x1)
-        x2 = min(width, x2)
-        y1 = max(0, y1)
-        y2 = min(height, y2)
-        # Crop the image to the 640x640 region from the center
-        color_image = color_image[y1:y2, x1:x2]
+        gray = cv2.cvtColor(color_image, cv2.COLOR_BGR2GRAY)
 
-        rgb_image = cv2.cvtColor(color_image, cv2.COLOR_BGR2RGB)
-        results = self.hands.process(rgb_image)
+        # 檢測 ArUco 標籤
+        corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, self.aruco_dict, parameters=self.parameters)
 
-        if results.multi_hand_landmarks:
-            for landmarks in results.multi_hand_landmarks:
-                self.mp_drawing.draw_landmarks(color_image, landmarks, self.mp_hands.HAND_CONNECTIONS)
-                landmarks_array = []
-                for landmark in landmarks.landmark:
-                    landmarks_array.append([landmark.x, landmark.y, landmark.z])
-                landmarks_np = np.array(landmarks_array, dtype="O").flatten()
-                test_data = np.array(landmarks_np).reshape(1, -1)
-                #y_pred = svm_classifier.predict(test_data)
-                y_pred = (svm_classifier.predict_proba(test_data)[:,1] <= 0.5).astype(bool) # set threshold as 0.3
-                # Print the predictions
-                print(f"Predictions: {y_pred}")
-                
-                if y_pred == True:
+        # 如果檢測到 ArUco 標籤
+        if ids is not None:
+            for i, id in enumerate(ids):
+                if id[0] == 1:  # 檢測到 ID 為 1 的標籤
+                    print("detect_target_process_A01")
+                    self.target_process = "A01"
                     op = True
-                    break
                 else:
-                    op = False
+                    print("invalid_target_process!!!")
                     
         return op
 

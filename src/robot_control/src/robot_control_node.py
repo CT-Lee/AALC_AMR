@@ -31,9 +31,9 @@ class RobotControlNode:
         
         # 设置运动属性
         joint_property = {
-            "speed": 25.0,
-            "rotation_speed":25.0,
-            "acceleration": 2,  # 默认加速度
+            "speed": 45.0,
+            "rotation_speed": 45.0,
+            "acceleration": 5,  # 默认加速度
             "non_blocking": True
         }
 

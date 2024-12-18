@@ -43,7 +43,7 @@
 /* Variables Begin */
 
 /* enc to mm to M parameter */
-const double rpm_to_ms = 0.000341180484476288;
+const double rpm_to_ms = 0.0003410641200545703;
 const double enc_to_mm = 0.0005599597921296297;
 const double mm_to_M = 0.001;
 const double AMR_width = 0.5476;
@@ -110,7 +110,7 @@ int main(int argc, char **argv)
 	
 	ros::NodeHandle nh;
 	ros::Publisher odom_pub = nh.advertise<nav_msgs::Odometry>("odom", 100);
-	ros::Publisher encodom_pub = nh.advertise<motor_feedback_msgs::motor_feedback>("encodom", 100);
+	ros::Publisher encodom_pub = nh.advertise<motor_feedback_msgs::motor_feedback>("encoder", 100);
 	ros::Subscriber sub_enc = nh.subscribe("/motor_feedback", 100, motor_feedback_callback);
 	
 	/* 建立tf廣播物件 */

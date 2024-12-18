@@ -62,10 +62,13 @@ movement_control::movement_control():
 	pub_cmd_vel = nh.advertise<geometry_msgs::Twist>(TOPIC_cmd_vel, queue_size, this);
 	/* initialization pub_io2status_out */
 	pub_io2status_out = nh.advertise<delta_amr_message::cas2ndagv_io2state_out>(cas2ndagv_io2state_out_topic, queue_size, this);
+	/* initialization sub_encoder */
+	sub_encoder = nh.subscribe(TOPIC_encoder, queue_size, &movement_control::Sub_TOPIC_encoder_callback, this);
 	/* initialization sub_odometry */
 	sub_odometry = nh.subscribe(TOPIC_odom, queue_size, &movement_control::Sub_TOPIC_odometry_callback, this);
 	/* initialization sub_io2status_in */
 	sub_io2status_in = nh.subscribe(cas2ndagv_io2state_in_topic, queue_size, &movement_control::Sub_TOPIC_cas2ndagv_io2state_in_callback, this);
+	/* initialization sub_io2status_out */
 	sub_io2status_out = nh.subscribe(cas2ndagv_io2state_out_topic, queue_size, &movement_control::Sub_TOPIC_cas2ndagv_io2state_out_callback, this);
 	/* initialization straight_profile */
 	ser_amr_movement_control_straight = nh.advertiseService(SERVICE_amr_movement_control_straight, &movement_control::ser_straight_profile_callbac, this);
@@ -115,6 +118,10 @@ void movement_control::straight_profile(double targetSpeed, double endVx, double
 	double targetSpeed_true = targetSpeed;
 	bool restartSW = false;
 	wait_running_cycle=true;
+	cas2ndagv_io2status_out_msg.lidarMAP = CAS2ndAGV_IO_status.lidarMAP.normal_walking;
+	if(targetSpeed>=0) cas2ndagv_io2status_out_msg.light = CAS2ndAGV_IO_status.light.straight;
+	else  cas2ndagv_io2status_out_msg.light = CAS2ndAGV_IO_status.light.reverse;
+	pub_io2status_out.publish(cas2ndagv_io2status_out_msg);
 	while( distance>0 )
 	{
 		/* wait running cycle */
@@ -122,53 +129,74 @@ void movement_control::straight_profile(double targetSpeed, double endVx, double
 		/* calculate deceleration */
 		decelerationRequired = ( (curVx*curVx)-(endVx*endVx) )/(2*distance);
 		if( decelerationRequired >= acc_dec ) targetSpeed_true = endVx;
-		/* lidar OSSD mechanism  */
-		if(targetSpeed_true != 0)
-		{
-			if( cas2ndagv_io2status_in_msg.lidarOSSD == CAS2ndAGV_IO_status.lidarOSSD.normal )
-				targetSpeed_true = targetSpeed;
-			else if(cas2ndagv_io2status_in_msg.lidarOSSD == CAS2ndAGV_IO_status.lidarOSSD.slow_stop)
-			{
-				if( targetSpeed>0 )
-					targetSpeed_true = slow_stop_speed*running_cycle;
-				else
-					targetSpeed_true = (double)(-1.0)*(slow_stop_speed*running_cycle);
-			}
-		}
 		/* update curVx command */
 		if( cas2ndagv_io2status_in_msg.lidarOSSD != CAS2ndAGV_IO_status.lidarOSSD.emergency_stop )
 		{
+			// if( fabs(curVx)==0 )
+			// {
+			// 	distance=0;
+			// 	curVx=0;
+			// }
+			if(distance<fabs(curVx))
+			{
+				distance=0;
+				curVx=0;
+				ROS_INFO("distance<fabs(curVx)");
+			}
+			if(targetSpeed_true==0 && fabs(curVx)<acc_dec)
+			{
+				distance=0;
+				curVx=0;
+				ROS_INFO("targetSpeed_true==0 && fabs(curVx)<acc_dec");
+			}
+			/* update curVx */
 			if(curVx < targetSpeed_true) curVx += acc_dec;
 			if(curVx > targetSpeed_true) curVx -= acc_dec;
 			/* update distance */
 			if(restartSW) distance = distance - fabs(curVx);
 			if( point_type==1 )
 			{
-				if( distance<0.5 ) 
-					cas2ndagv_io2status_out_msg.lidarMAP = CAS2ndAGV_IO_status.lidarMAP.workstation1;
-				else	
-					cas2ndagv_io2status_out_msg.lidarMAP = CAS2ndAGV_IO_status.lidarMAP.normal_walking;
+				cas2ndagv_io2status_out_msg.lidarMAP = CAS2ndAGV_IO_status.lidarMAP.normal_walking;
+				// if( distance<0.5 ) 
+				// 	cas2ndagv_io2status_out_msg.lidarMAP = CAS2ndAGV_IO_status.lidarMAP.workstation1;
+				// else	
+				// 	cas2ndagv_io2status_out_msg.lidarMAP = CAS2ndAGV_IO_status.lidarMAP.normal_walking;
 			}
-			if( fabs(curVx)<=0 ) {distance=0;curVx=0;}
-			// if(distance<fabs(curVx)) {distance=0;curVx=0;}
-			// if(targetSpeed_true==0 && fabs(curVx)<acc_dec) {distance=0;curVx=0;}
 			twist_msg.linear.x = curVx/running_cycle;
 			restartSW = true;
+			cas2ndagv_io2status_out_msg.light = CAS2ndAGV_IO_status.light.straight;
 		}
 		else
 		{
+			// if(restartSW) distance += 0.03;
+			curVx = 0;
 			restartSW = false;
 			twist_msg.linear.x = 0;
+			cas2ndagv_io2status_out_msg.light = CAS2ndAGV_IO_status.light.error;
 		}
 
-		ROS_INFO("%lf,%lf,%lf,%s",distance, targetSpeed_true, curVx, cas2ndagv_io2status_in_msg.lidarOSSD.c_str());
-		pub_io2status_out.publish(cas2ndagv_io2status_out_msg);
+		ROS_INFO("%lf,%lf,%lf,%lf,%lf",distance, targetSpeed_true, curVx, encoder_msg.AvelocityL_M, encoder_msg.AvelocityR_M);
 		pub_cmd_vel.publish(twist_msg);
+	}
+	ROS_INFO("straight_profile complate!");
+	if(point_type==1)
+	{
+		cas2ndagv_io2status_out_msg.lidarMAP = CAS2ndAGV_IO_status.lidarMAP.workstation1;
+		cas2ndagv_io2status_out_msg.light = CAS2ndAGV_IO_status.light.standby;
+		pub_io2status_out.publish(cas2ndagv_io2status_out_msg);
 	}
 	twist_msg.linear.x = endVx;
 	pub_cmd_vel.publish(twist_msg);
 }
 
+/** * @brief movement_control object encoder subscriber callback function
+	* @param motor_feedback_msgs::motor_feedback& encoder data structure
+ 	* @return none
+**/
+void movement_control::Sub_TOPIC_encoder_callback(const motor_feedback_msgs::motor_feedback& enc)
+{
+	encoder_msg = enc;
+}
 /** * @brief movement_control object odometry subscriber callback function
 	* @param nav_msgs::Odometry& odometry data structure
  	* @return none

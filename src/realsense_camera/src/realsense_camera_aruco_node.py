@@ -18,7 +18,7 @@ class RealsenseCameraNode:
         self.pipeline = rs.pipeline()
         self.config = rs.config()
         #config.enable_device_from_file(bag_file)# for bag testing
-        self.config.enable_stream(rs.stream.color, 1280, 720, rs.format.bgr8, 30)  # Color stream at 640x480 resolution
+        self.config.enable_stream(rs.stream.color, 1280, 720, rs.format.bgr8, 15)  # Color stream at 640x480 resolution
         # self.config.enable_stream(rs.stream.depth, 1280, 720, rs.format.z16, 30)  # Depth stream at 640x480 resolution
         self.pipeline.start(self.config)
         # 設定回應 'human_detect' 服務
